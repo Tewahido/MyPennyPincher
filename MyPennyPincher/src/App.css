@@ -7,6 +7,39 @@
 .text-shadow {
   text-shadow: 4px 4px 4px black;
 }
+.mask-hole-left {
+  -webkit-mask-image: radial-gradient(
+    circle at center,
+    transparent 120px,
+    black 120px
+  );
+  mask-image: radial-gradient(
+    circle at 34.5% 59%,
+    transparent 125px,
+    black 125px
+  );
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+}
+
+.mask-hole {
+  -webkit-mask-image: radial-gradient(
+    circle at center,
+    transparent 120px,
+    black 120px
+  );
+  mask-image: radial-gradient(
+    circle at 50% 44%,
+    transparent 124px,
+    black 124px
+  );
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+}
 
 /* 
 #root {

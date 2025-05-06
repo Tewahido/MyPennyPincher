@@ -1,23 +1,8 @@
 import { Link } from "react-router-dom";
 import Logo from "../assets/GrabbingMoneyColor_Icon.png";
 import MoneyImage from "../assets/background_image.jpeg";
-import { useEffect, useState } from "react";
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    function handleScroll() {
-      setScrolled(window.scrollY > 0);
-    }
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   return (
     <div
       className="flex flex-col fixed top-0 left-0 w-full z-10 bg-cover bg-center bg-fixed"
@@ -25,7 +10,7 @@ export default function Navbar() {
         backgroundImage: `url(${MoneyImage})`,
       }}
     >
-      <nav className="flex justify-between h-20 mx-10 ">
+      <nav className="flex justify-between h-20 mx-10 backdrop-blur-sm">
         <div className="flex items-end h-full ">
           <img
             src={Logo}
@@ -54,7 +39,7 @@ export default function Navbar() {
           </Link>
         </div>
       </nav>
-      {scrolled && <div className=" mx-auto h-0.5 w-[90vw] bg-white"></div>}
+      <div className=" mx-auto h-0.5 w-[90vw] bg-white"></div>
     </div>
   );
 }
