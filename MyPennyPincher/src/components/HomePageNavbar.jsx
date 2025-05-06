@@ -1,8 +1,23 @@
 import { Link } from "react-router-dom";
 import Logo from "../assets/GrabbingMoneyColor_Icon.png";
 import MoneyImage from "../assets/background_image.jpeg";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    function handleScroll() {
+      setScrolled(window.scrollY > 0);
+    }
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div
       className="flex flex-col fixed top-0 left-0 w-full z-10 bg-cover bg-center bg-fixed"
@@ -19,7 +34,7 @@ export default function Navbar() {
           />
           <Link
             to="/"
-            className="text-white font-bold text-xl md:text-2xl lg:text-3xl mb-3 hover:text-green-600 transition duration-150"
+            className="text-gray-200 font-bold text-xl md:text-2xl lg:text-3xl mb-3 hover:text-white transition duration-150"
           >
             MyPennyPincher
           </Link>
@@ -27,19 +42,19 @@ export default function Navbar() {
         <div className=" flex items-end h-full gap-10 mr-1 md:mr-3 lg:mr-5">
           <Link
             to="/dashboard"
-            className="text-white font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
+            className="text-gray-200 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
           >
             Dashboard
           </Link>
           <Link
             to="/logout"
-            className="text-white font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
+            className="text-gray-200 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
           >
             Logout
           </Link>
         </div>
       </nav>
-      <div className=" mx-auto h-0.5 w-[90vw] bg-white"></div>
+      {scrolled && <div className=" mx-auto h-0.5 w-[90vw] bg-white"></div>}
     </div>
   );
 }

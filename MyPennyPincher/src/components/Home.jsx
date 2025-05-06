@@ -10,12 +10,12 @@ export default function Home() {
             backgroundImage: `url(${MoneyImage})`,
           }}
         >
-          <div className="flex justify-center h-150 w-full bg-green-800/50 mt-20">
+          <div className="flex justify-center h-150 w-full rounded-4xl bg-green-800/70 mt-20">
             <div className="flex flex-col w-[50vw] justify-center items-center p-10 ">
-              <h1 className=" text-center text-white md:text-2xl lg:text-5xl font-extrabold m-5 ">
+              <h1 className="text-center text-white text-4xl md:text-6xl lg:text-8xl font-extrabold m-5 text-stroke text-shadow">
                 Welcome to MyPennyPincher
               </h1>
-              <p className="text-center text-sm italic text-white">
+              <p className="text-center text-lg italic text-white">
                 Where you can make cents off your chaos
               </p>
             </div>
