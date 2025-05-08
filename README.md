@@ -61,7 +61,7 @@ mypennypincher/
 git clone https://github.com/your-username/mypennypincher.git
 cd mypennypincher
 ```
-###2. Set Up the Database
+### 2. Set Up the Database
 
 - Create a new SQL Server database (e.g. `MyPennyPincherDb`).
 - Update the connection string in `backend/appsettings.json`.
@@ -69,13 +69,13 @@ cd mypennypincher
 ```bash
 dotnet ef database update
 ```
-- Run the backend
+### 3. Run the backend
 ```bash
 cd MyPennyPincher_API
 dotnet rum
 ```
 
-- Run the frontend
+### 4. Run the frontend
 ```bash
 cd MyPennyPincher_Client
 npm install
