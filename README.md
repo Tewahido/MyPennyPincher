@@ -1,6 +1,6 @@
 # MyPennyPincher
 
-**MyPennyPincher** is a full-stack personal finance management application designed to help users gain better control over their money. Track your income, expenses, and subscriptions, categorize transactions with custom tags, and analyze your spending patterns with rich visual dashboards.
+**MyPennyPincher** is a full-stack personal finance management application designed to help users gain better control over their money. Track your income, expenses, categorize transactions with pre-determined tags, and analyze your spending patterns with rich visual dashboards.
 
 ---
 
@@ -11,8 +11,6 @@
 - 🏷️ **Tag expenses** with categories like `Groceries`, `Transport`, `Rent`, etc.
 - 👥 Support for **multiple users and accounts**
 - 📊 Real-time **analytics dashboard** with charts and insights
-- 💳 Track **subscriptions**, debts, and money others owe you
-- 📅 Filter by **month and year**
 - 🔐 Secure, authenticated access
 
 ---
