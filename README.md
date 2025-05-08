@@ -60,8 +60,23 @@ mypennypincher/
 ```bash
 git clone https://github.com/your-username/mypennypincher.git
 cd mypennypincher
-
+```
 ###2. Set Up the Database
-Create a new SQL Server database (e.g. `MyPennyPincherDb`).
 
-Update the connection string in `backend/appsettings.json`.
+- Create a new SQL Server database (e.g. `MyPennyPincherDb`).
+- Update the connection string in `backend/appsettings.json`.
+- Run Entity Framework Core Migrations
+```bash
+dotnet ef database update
+```
+- Run the backend
+```bash
+cd MyPennyPincher_API
+dotnet rum
+```
+
+- Run the frontend
+```bash
+cd MyPennyPincher_Client
+npm install
+npm run dev
