@@ -23,5 +23,5 @@ export default function DiagonalLine({ color }) {
     ctx.stroke();
   }, []);
 
-  return <canvas ref={canvasRef} className="w-full h-full bg-transparent" />;
+  return <canvas ref={canvasRef} className="w-full h-full bg-transparent " />;
 }

@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
-import Logo from "../assets/GrabbingMoneyColor_Icon.png";
-import MoneyImage from "../assets/background_image.jpeg";
+import Logo from "../../public/GrabbingMoneyColor_Icon.png";
 import GreenBg from "../assets/Plain_Green_Background_Wallpaper.jpg";
 import { useState, useEffect } from "react";
 
@@ -35,7 +34,7 @@ export default function Navbar() {
           />
           <Link
             to="/"
-            className="text-gray-200 font-bold text-xl md:text-2xl lg:text-3xl mb-3 hover:text-white transition duration-150"
+            className="text-gray-300 font-bold text-xl md:text-2xl lg:text-3xl mb-3 hover:text-white transition duration-150 "
           >
             MyPennyPincher
           </Link>
@@ -43,19 +42,19 @@ export default function Navbar() {
         <div className=" flex items-end h-full gap-10 mr-1 md:mr-3 lg:mr-5">
           <Link
             to="/dashboard"
-            className="text-gray-200 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
+            className="text-gray-300 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
           >
             Dashboard
           </Link>
           <Link
             to="/logout"
-            className="text-gray-200 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
+            className="text-gray-300 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
           >
             Logout
           </Link>
         </div>
       </nav>
-      {scrolled && <div className=" mx-auto h-0.5 w-[90vw] bg-white"></div>}
+      {scrolled && <div className=" mx-auto h-0.5 w-[90vw] bg-gray-200"></div>}
     </div>
   );
 }
