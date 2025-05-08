@@ -61,3 +61,7 @@ mypennypincher/
 git clone https://github.com/your-username/mypennypincher.git
 cd mypennypincher
 
+###2. Set Up the Database
+Create a new SQL Server database (e.g. `MyPennyPincherDb`).
+
+Update the connection string in `backend/appsettings.json`.
