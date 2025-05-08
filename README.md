@@ -29,16 +29,16 @@
 ---
 
 ## 📦 Project Structure
-mypennypincher/
-├── backend/
-│ ├── Controllers/
-│ ├── Models/
-│ ├── Services/
-│ └── Data/
-├── frontend/
-│ ├── src/
-│ │ ├── components/
-└── README.md
+mypennypincher/  
+├── backend/  
+│ ├── Controllers/  
+│ ├── Models/  
+│ ├── Services/  
+│ └── Data/  
+├── frontend/  
+│ ├── src/  
+│ │ ├── components/  
+└── README.md  
 
 ---
 
