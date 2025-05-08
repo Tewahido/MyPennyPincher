@@ -40,6 +40,7 @@ mypennypincher/
 │ │ ├── components/
 └── README.md
 
+---
 
 ---
 
@@ -50,34 +51,13 @@ mypennypincher/
 - Node.js and npm
 - C# and .NET SDK (compatible version with your project)
 - SQL Server
-- Visual Studio Code or preferred IDE
+- Visual Studio Code or your preferred IDE
+
+---
 
 ### 1. Clone the Repository
 
+```bash
+git clone https://github.com/your-username/mypennypincher.git
+cd mypennypincher
 
-`git clone https://github.com/your-username/mypennypincher.git
-cd mypennypincher`
-2. Setup the Database
-Create a new SQL Server database (e.g. MyPennyPincherDb)
-
-Update the connection string in backend/appsettings.json
-
-Run database migrations:
-
-bash
-Copy
-Edit
-dotnet ef database update
-3. Run the Backend
-bash
-Copy
-Edit
-cd backend
-dotnet run
-4. Run the Frontend
-bash
-Copy
-Edit
-cd frontend
-npm install
-npm run dev
