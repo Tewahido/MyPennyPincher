@@ -53,8 +53,8 @@ export default function Home() {
           }}
         >
           <div className="backdrop-blur-3xl w-full h-full">
-            <div className="flex flex-col lg:flex-row justify-center lg:h-200 w-full mt-20 text-white">
-              <div className="flex flex-col w-[100%] justify-center items-center p-10 text-center ">
+            <section className="flex flex-col lg:flex-row justify-center lg:h-200 w-full mt-20 text-white">
+              <div className="flex flex-col w-[100%] justify-center items-center p-10 text-center">
                 <h1 className="  text-2xl md:text-4xl lg:text-6xl font-extrabold p-10  ">
                   Your all-in-one personal finance manager
                 </h1>
@@ -69,7 +69,7 @@ export default function Home() {
                     Get Started
                   </button>
 
-                  <p className=" underline m-5 text-center cursor-pointer transition-all duration-150 hover:scale-105 hover:text-white">
+                  <p className=" underline underline-offset-2 decoration-0 m-5 text-center cursor-pointer transition-all duration-300 hover:scale-105 hover:text-white hover:underline-offset-4">
                     View our services
                   </p>
                 </div>
@@ -97,8 +97,8 @@ export default function Home() {
                   Target.
                 </h1>
               </div>
-            </div>
-            <div className="p-3">
+            </section>
+            <section className="p-3">
               <motion.div
                 variants={fadeInSection}
                 initial="hidden"
@@ -123,8 +123,35 @@ export default function Home() {
                   })}
                 </div>
               </motion.div>
-            </div>
-            <div className="h-200 "></div>
+            </section>
+            <section className="h-200 p-3">
+              <div className="flex flex-col h-full w-full rounded-2xl">
+                <div className="flex justify-center w-full ">
+                  <h1 className="text-white font-bold text-6xl m-5">
+                    Want to know more?
+                  </h1>
+                </div>
+                <div className="flex justify-center w-full h-full">
+                  <div className="p-5 ">
+                    <div className="flex flex-col w-150 h-full border-2 border-white bg-green-950 rounded-2xl items-center justify-center ">
+                      <h1 className="text-white text-center font-bold text-5xl m-5">
+                        Contact us
+                      </h1>
+                    </div>
+                  </div>
+                  <div className="flex border-2 border-white items-center justify-center">
+                    <h1 className="text-white font-bold text-6xl m-5">OR</h1>
+                  </div>
+                  <div className="p-5 ">
+                    <div className="flex flex-col w-150 h-full border-2 border-white bg-green-950 rounded-2xl items-center justify-center ">
+                      <h1 className="text-white text-center font-bold text-5xl m-5">
+                        Sign-Up For Our Newsletter
+                      </h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
       </div>
