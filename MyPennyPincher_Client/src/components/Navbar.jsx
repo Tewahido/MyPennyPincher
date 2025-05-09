@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Logo from "../../public/GrabbingMoneyColor_Icon.png";
+import Logo from "/GrabbingMoneyColor_Icon.png";
 import { useState, useEffect } from "react";
 
 export default function Navbar() {
