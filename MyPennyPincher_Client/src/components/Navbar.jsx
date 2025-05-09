@@ -18,7 +18,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <div className="flex flex-col fixed top-0 left-0 w-full z-10 bg-white">
+    <div className="flex flex-col fixed top-0 left-0 w-full z-10 bg-green-100">
       <nav className="flex justify-between h-20 mx-25 ">
         <div className="flex items-end h-full ">
           <img
