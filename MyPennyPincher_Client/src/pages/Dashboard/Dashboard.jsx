@@ -1,4 +1,4 @@
-import SummarySection from "./SummarySection";
+import SummarySection from "./components/SummarySection";
 
 export default function Dashboard() {
   return (

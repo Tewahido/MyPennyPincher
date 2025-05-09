@@ -1,13 +1,13 @@
-import GreenBg from "../assets/Plain_Green_Background_Wallpaper.jpg";
-import ServiceCard from "./ServiceCard.jsx";
-import IncomeIcon from "../assets/Incomes.png";
-import ExpenseIcon from "../assets/Expenses.png";
-import ComingSoonIcon from "../assets/ComingSoon.png";
+import GreenBg from "../../assets/Plain_Green_Background_Wallpaper.jpg";
+import ServiceCard from "./components/ServiceCard.jsx";
+import IncomeIcon from "../../assets/Incomes.png";
+import ExpenseIcon from "../../assets/Expenses.png";
+import ComingSoonIcon from "../../assets/ComingSoon.png";
 import { motion } from "motion/react";
 import { useRef } from "react";
-import ContactUsForm from "./ContactUsForm.jsx";
-import NewsletterForm from "./NewsletterForm.jsx";
-import HeroBanner from "./HeroBanner.jsx";
+import ContactUsForm from "./components/ContactUsForm.jsx";
+import NewsletterForm from "./components/NewsletterForm.jsx";
+import HeroBanner from "./components/HeroBanner.jsx";
 
 const services = [
   {

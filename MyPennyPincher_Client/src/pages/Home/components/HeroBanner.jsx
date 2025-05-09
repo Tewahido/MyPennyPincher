@@ -1,6 +1,6 @@
 import DiagonalLine from "./DiagonalLine";
 import SniperReticle from "./SniperReticle";
-import MoneyImage from "../assets/background_image.jpeg";
+import MoneyImage from "../../../assets/background_image.jpeg";
 
 export default function HeroBanner({ servicesRef }) {
   const handleClick = () => {

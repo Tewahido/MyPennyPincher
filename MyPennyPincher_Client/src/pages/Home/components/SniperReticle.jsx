@@ -1,7 +1,6 @@
-import GreenBg from "../assets/Plain_Green_Background_Wallpaper.jpg";
-import Reticle from "../assets/Scope.png";
+import Reticle from "../../../assets/Scope.png";
 
-export default function SniperReticle({ maskBg }) {
+export default function SniperReticle() {
   return (
     <div className="flex relative h-75 justify-center bg-transparent rounded-full">
       <div className="flex absolute justify-center w-full h-full mask-hole z-10"></div>
