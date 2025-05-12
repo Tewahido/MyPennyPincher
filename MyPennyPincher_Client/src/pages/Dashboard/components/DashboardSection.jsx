@@ -83,7 +83,17 @@ const options = {
   },
 };
 
-export default function DashboardSection() {
+export default function DashboardSection({ incomes, expenses }) {
+  const totalIncome = incomes.reduce((sum, income) => sum + income.Amount, 0);
+  const totalExpenses = expenses.reduce(
+    (sum, expense) => sum + expense.Amount,
+    0
+  );
+
+  const netIncome = totalIncome - totalExpenses;
+
+  const netColour = netIncome > 0 ? "text-green-700" : "text-red-700";
+
   return (
     <div className="flex justify-evenly w-full h-150 px-20">
       <div className="flex flex-col items-center h-full bg-white m-1 rounded-xl w-[60%] px-15 pb-15">
@@ -94,22 +104,35 @@ export default function DashboardSection() {
           <Doughnut data={data} options={options} />
         </div>
       </div>
-      <div className="w-full h-full ">
-        <div className="flex flex-col gap-2 h-full w-full ">
-          <div className="flex h-[50%]   ">
-            <div className="h-full w-[33%] bg-white m-1 rounded-xl"></div>
-            <div className="h-full w-[33%] bg-white m-1 rounded-xl"></div>
-            <div className="h-full w-[33%] bg-white m-1 rounded-xl"></div>
+      <div className="flex flex-col gap-2 h-full w-full ">
+        <div className="flex lg:h-[50%]">
+          <div className="flex flex-col items-center h-full w-[33%] bg-white m-1 rounded-xl p-5">
+            <h1 className="text-4xl font-bold  text-center">Total Income</h1>
+            <h1 className="text-8xl text-green-700/85 font-semibold">
+              R{totalIncome}
+            </h1>
           </div>
-          <div className="flex h-full w-full">
-            <div className=" flex flex-col h-full w-[50%] m-1 bg-white rounded-xl gap-10 p-10">
-              <h1 className="text-center text-green-700 text-4xl font-bold ">
-                Monthly spending
-              </h1>
-              <Bar data={barData} options={barOptions} />
-            </div>
-            <div className="h-full w-[50%] m-1 bg-white rounded-xl"></div>
+          <div className="flex flex-col items-center h-full w-[33%] bg-white m-1 rounded-xl p-5">
+            <h1 className="text-4xl font-bold  text-center">Total Expenses</h1>
+            <h1 className="text-8xl text-red-700/85 font-semibold">
+              R{totalExpenses}
+            </h1>
           </div>
+          <div className="flex flex-col items-center h-full w-[33%] bg-white m-1 rounded-xl p-5">
+            <h1 className="text-4xl font-bold  text-center">Net Income</h1>
+            <h1 className={`text-8xl ${netColour}/85 font-semibold`}>
+              R{netIncome}
+            </h1>
+          </div>
+        </div>
+        <div className="flex h-full w-full">
+          <div className=" flex flex-col h-full w-[50%] m-1 bg-white rounded-xl gap-10 p-10">
+            <h1 className="text-center text-green-700 text-4xl font-bold ">
+              Monthly spending
+            </h1>
+            <Bar data={barData} options={barOptions} />
+          </div>
+          <div className="h-full w-[50%] m-1 bg-white rounded-xl"></div>
         </div>
       </div>
     </div>

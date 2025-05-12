@@ -12,7 +12,7 @@ export default function ServiceCard({ service, textcolor }) {
         >
           {service.title}
         </h1>
-        <img src={service.icon} alt="Icon" className="h-10 mb-5" />
+        <img src={service.icon} alt="Icon" className="h-10 mb-5 " />
         <p className="italic text-lg font-semibold text-black w-[75%] ">
           {service.content}
         </p>
