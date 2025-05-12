@@ -1,13 +1,13 @@
-import SummarySection from "./components/SummarySection";
+import DashboardSection from "./components/DashboardSection";
 
 export default function Dashboard() {
   return (
     <div className="w-full bg-green-100 flex flex-col mt-10">
       <div className="w-[50%] h-50 flex items-end justify-center mb-10 mx-10">
-        <h1 className="text-8xl font-extrabold text-green-700"> MySummary</h1>
+        <h1 className="text-8xl font-extrabold text-green-700"> MyDashboard</h1>
       </div>
       <div className="w-full ">
-        <SummarySection />
+        <DashboardSection />
       </div>
       <hr className="bg-green-700 h-0.5 w-[70%] mx-auto my-5" />
       <div className="p-3">

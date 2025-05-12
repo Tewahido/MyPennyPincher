@@ -18,7 +18,7 @@ export default function HeroBanner({ servicesRef }) {
   return (
     <>
       <div className="flex flex-col w-[100%] justify-center items-center p-10 text-center">
-        <h1 className="  text-2xl md:text-4xl lg:text-6xl font-extrabold p-10  ">
+        <h1 className="  text-3xl md:text-5xl lg:text-6xl font-extrabold p-10  ">
           Your all-in-one personal finance manager
         </h1>
         <hr className="flex h-0.5 w-[75%] mx-auto m-7.5 bg-white" />
@@ -44,7 +44,7 @@ export default function HeroBanner({ servicesRef }) {
       </div>
       <div className="flex flex-col w-[100%] items-center justify-center ">
         <div className="flex flex-col p-5 w-full justify-start items-center  z-1">
-          <h1 className=" w-[80%] font-extrabold text-2xl md:text-3xl lg:text-4xl text-center ">
+          <h1 className=" w-[80%] font-extrabold  text-3xl md:text-5xl lg:text-4xl text-center ">
             Never lose sight of what Really matters.
           </h1>
         </div>

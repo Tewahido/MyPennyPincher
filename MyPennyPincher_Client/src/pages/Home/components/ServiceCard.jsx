@@ -1,7 +1,7 @@
 export default function ServiceCard({ service, textcolor }) {
   return (
     <div
-      className="group relative h-70 w-110 rounded-4xl hover:shadow-2xl z-10 hover:outline-2 outline-black/45 hover:bg-black/45 transition duration-50 bg-white outline-0"
+      className="group relative h-70 w-110 rounded-4xl hover:shadow-2xl z-10 hover:outline-2 outline-black/45 hover:bg-black/45 transition duration-50 bg-white outline-0 m-5"
       style={{
         transition: "0.1s ease-out",
       }}

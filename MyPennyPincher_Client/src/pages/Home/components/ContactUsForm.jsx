@@ -2,7 +2,9 @@ export default function ContactUsForm() {
   return (
     <>
       {" "}
-      <h1 className="text-white text-center font-bold text-5xl ">Contact us</h1>
+      <h1 className="text-white text-center font-bold text-3xl lg:text-5xl ">
+        Contact us
+      </h1>
       <div className="flex flex-col items-start gap-4 w-100  bg-green-950 rounded-2xl  p-10 mt-10">
         <div className="flex flex-col items-center gap-4 w-full">
           <input

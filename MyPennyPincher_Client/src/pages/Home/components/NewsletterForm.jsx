@@ -1,7 +1,7 @@
 export default function NewsletterForm() {
   return (
     <>
-      <h1 className="text-white text-center font-bold text-5xl ">
+      <h1 className="text-white text-center font-bold text-3xl lg:text-5xl ">
         Sign-Up For Our Newsletter
       </h1>
       <p className=" italic text-white mt-5 text-center">

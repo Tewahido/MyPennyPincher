@@ -83,7 +83,7 @@ const options = {
   },
 };
 
-export default function SummarySection() {
+export default function DashboardSection() {
   return (
     <div className="flex justify-evenly w-full h-150 px-20">
       <div className="flex flex-col items-center h-full bg-white m-1 rounded-xl w-[60%] px-15 pb-15">
