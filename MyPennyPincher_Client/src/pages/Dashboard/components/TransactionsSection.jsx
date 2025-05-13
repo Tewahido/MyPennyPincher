@@ -41,7 +41,7 @@ export default function TransactionsSection({ incomes, expenses }) {
                 alt="Plus Icon"
                 className="mx-1 h-full cursor-pointer transition duration-300 hover:scale-110 z-10"
                 onClick={handleAddIncome}
-              />{" "}
+              />
               <span
                 className="absolute bottom-full mb-1 left-1/2  
                  bg-gray-700 text-white text-xs px-2 py-1 rounded 
@@ -71,7 +71,7 @@ export default function TransactionsSection({ incomes, expenses }) {
               alt="Plus Icon"
               className="mx-1 h-full cursor-pointer transition duration-300 hover:scale-110"
               onClick={handleAddExpense}
-            />{" "}
+            />
             <span
               className="absolute bottom-full mb-1 left-1/2  
                  bg-gray-700 text-white text-xs px-2 py-1 rounded 

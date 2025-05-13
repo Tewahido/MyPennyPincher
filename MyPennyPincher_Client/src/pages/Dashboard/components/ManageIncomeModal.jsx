@@ -15,7 +15,9 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
     };
   });
 
-  function handleAddIncome() {}
+  function handleAddIncome(event) {
+    event.preventDefault();
+  }
 
   function handleClose(event) {
     event.preventDefault();
@@ -56,7 +58,10 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
           >
             Cancel
           </button>
-          <button className="h-10 w-15 bg-green-800 text-green-100 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-green-950">
+          <button
+            onClick={handleAddIncome}
+            className="h-10 w-15 bg-green-800 text-green-100 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-green-950"
+          >
             Add
           </button>
         </div>
