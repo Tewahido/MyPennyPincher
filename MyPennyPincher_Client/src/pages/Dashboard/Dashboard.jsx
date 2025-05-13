@@ -116,36 +116,41 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="w-full bg-green-100 flex flex-col mt-10">
-      <div className="w-full h-50 flex items-end justify-between mb-10 px-30">
-        <h1 className="text-8xl font-extrabold text-green-700"> MyDashboard</h1>
-        <input
-          type="month"
-          onChange={(event) => handleSelectMonth(event)}
-          value={selectedMonth}
-          className="text-3xl m-5 cursor-pointer w-45 "
-        />
-      </div>
-      <div className="w-full ">
-        <DashboardSection
-          totals={{ incomes: incomeData, expenses: expenseData }}
-          currentMonthIncomes={currentMonthIncomes}
-          currentMonthExpenses={currentMonthExpenses}
-          setSelectedMonth={setSelectedMonth}
-        />
-      </div>
-      <hr className="bg-green-700 h-0.5 w-[70%] mx-auto my-5" />
-      <div className="p-3">
-        <h1 className="text-6xl text-center font-extrabold text-green-700 mb-10">
-          My Transactions
-        </h1>
-        <div className="flex flex-col items-center bg-white h-200 rounded-4xl ">
-          <TransactionsSection
-            incomes={currentMonthIncomes}
-            expenses={currentMonthExpenses}
+    <>
+      <div className="w-full bg-green-100 flex flex-col mt-10">
+        <div className="w-full h-50 flex items-end justify-between mb-10 px-30">
+          <h1 className="text-8xl font-extrabold text-green-700">
+            {" "}
+            MyDashboard
+          </h1>
+          <input
+            type="month"
+            onChange={(event) => handleSelectMonth(event)}
+            value={selectedMonth}
+            className="text-3xl m-5 cursor-pointer "
           />
         </div>
+        <div className="w-full ">
+          <DashboardSection
+            totals={{ incomes: incomeData, expenses: expenseData }}
+            currentMonthIncomes={currentMonthIncomes}
+            currentMonthExpenses={currentMonthExpenses}
+            setSelectedMonth={setSelectedMonth}
+          />
+        </div>
+        <hr className="bg-green-700 h-0.5 w-[70%] mx-auto my-5" />
+        <div className="p-3">
+          <h1 className="text-6xl text-center font-extrabold text-green-700 mb-10">
+            My Transactions
+          </h1>
+          <div className="flex flex-col items-center bg-white h-200 rounded-4xl ">
+            <TransactionsSection
+              incomes={currentMonthIncomes}
+              expenses={currentMonthExpenses}
+            />
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
