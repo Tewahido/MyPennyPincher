@@ -1,4 +1,6 @@
 import TransactionEntry from "./TransactionEntry";
+import AddIncomeIcon from "../../../assets/add_income_icon.png";
+import AddExpenseIcon from "../../../assets/add_expense_icon.png";
 
 export default function TransactionsSection({ incomes, expenses }) {
   return (
@@ -7,7 +9,7 @@ export default function TransactionsSection({ incomes, expenses }) {
         <h1 className="text-center text-6xl font-bold text-green-700 mb-10">
           Incomes
         </h1>
-        <div className="flex flex-col h-full w-full">
+        <div className="flex flex-col items-center h-full w-full">
           {incomes.map((income, index) => (
             <TransactionEntry
               type="income"
@@ -16,10 +18,24 @@ export default function TransactionsSection({ incomes, expenses }) {
               key={income.IncomeId}
             />
           ))}
+          <div className="flex justify-center relative group h-15 my-5 w-22">
+            <img
+              src={AddIncomeIcon}
+              alt="Plus Icon"
+              className="mx-1 h-full cursor-pointer transition duration-300 hover:scale-110"
+            />{" "}
+            <span
+              className="absolute bottom-full mb-1 left-1/2  
+                 bg-gray-700 text-white text-xs px-2 py-1 rounded 
+                 opacity-0 group-hover:opacity-100 transition-opacity duration-400 w-full"
+            >
+              New Income
+            </span>
+          </div>
         </div>
       </div>
       <div className="h-[80%] my-auto w-0.5 bg-green-700"></div>
-      <div className=" flex flex-col h-full w-[50%] p-3">
+      <div className=" flex flex-col items-center h-full w-[50%] p-3">
         <h1 className="text-center text-6xl font-bold text-red-700 mb-10">
           Expenses
         </h1>
@@ -31,6 +47,20 @@ export default function TransactionsSection({ incomes, expenses }) {
             key={expense.ExpenseId}
           />
         ))}
+        <div className="flex justify-center relative group h-15 my-5 w-22">
+          <img
+            src={AddExpenseIcon}
+            alt="Plus Icon"
+            className="mx-1 h-full cursor-pointer transition duration-300 hover:scale-110"
+          />{" "}
+          <span
+            className="absolute bottom-full mb-1 left-1/2  
+                 bg-gray-700 text-white text-xs px-2 py-1 rounded 
+                 opacity-0 group-hover:opacity-100 transition-opacity duration-400 w-full"
+          >
+            New Expense
+          </span>
+        </div>
       </div>
     </div>
   );

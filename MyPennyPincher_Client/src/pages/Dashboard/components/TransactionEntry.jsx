@@ -4,17 +4,22 @@ import DeleteIcon from "../../../assets/delete_icon.png";
 export default function TransactionEntry({ type, entry, index }) {
   let entryTitle;
   let amountColour;
+  let entryColour;
 
   if (type === "income") {
     entryTitle = entry.Source;
     amountColour = "text-green-700";
+    entryColour = "bg-green-100";
   } else {
     entryTitle = entry.Description;
     amountColour = "text-red-700";
+    entryColour = "bg-red-100";
   }
 
   return (
-    <div className="flex items-center justify-evenly bg-green-100 w-full rounded-xl p-5 ">
+    <div
+      className={`flex items-center justify-evenly ${entryColour} w-full rounded-xl p-5 `}
+    >
       <h1 className="w-[25%] text-lg font-bold">{index}</h1>
 
       <h1 className="w-[40%] text-lg font-bold">{entryTitle}</h1>

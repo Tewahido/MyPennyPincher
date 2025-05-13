@@ -99,15 +99,16 @@ export default function Dashboard() {
   const [currentYear, currentMonth] = selectedMonth.split("-");
   const currentMonthIncomes = incomeData.filter((income) => {
     const incomeMonth = new Date(income.Date).getMonth() + 1;
-    console.log(currentMonth);
-    console.log(incomeMonth);
+    const incomeYear = new Date(income.Date).getFullYear();
 
-    return incomeMonth == currentMonth;
+    return incomeMonth == currentMonth && incomeYear == currentYear;
   });
 
   const currentMonthExpenses = expenseData.filter((expense) => {
     const expenseMonth = new Date(expense.Date).getMonth() + 1;
-    return expenseMonth == currentMonth;
+    const expenseYear = new Date(expense.Date).getFullYear();
+
+    return expenseMonth == currentMonth && expenseYear == currentYear;
   });
 
   function handleSelectMonth(event) {
@@ -122,13 +123,14 @@ export default function Dashboard() {
           type="month"
           onChange={(event) => handleSelectMonth(event)}
           value={selectedMonth}
-          className="text-3xl m-5 cursor-pointer"
+          className="text-3xl m-5 cursor-pointer w-45 "
         />
       </div>
       <div className="w-full ">
         <DashboardSection
-          incomes={currentMonthIncomes}
-          expenses={currentMonthExpenses}
+          totals={{ incomes: incomeData, expenses: expenseData }}
+          currentMonthIncomes={currentMonthIncomes}
+          currentMonthExpenses={currentMonthExpenses}
           setSelectedMonth={setSelectedMonth}
         />
       </div>

@@ -35,23 +35,6 @@ const data = {
     },
   ],
 };
-const barData = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-  datasets: [
-    {
-      label: "Total Income",
-      data: [3000, 3200, 2900, 3100, 3400],
-      backgroundColor: "rgba(0, 77, 64, 1)",
-      borderRadius: 5,
-    },
-    {
-      label: "Total Expenses",
-      data: [1800, 1900, 1750, 2000, 1950],
-      backgroundColor: "rgba(200, 230, 201, 1)",
-      borderRadius: 5,
-    },
-  ],
-};
 
 const barOptions = {
   responsive: true,
@@ -83,12 +66,72 @@ const options = {
   },
 };
 
-export default function DashboardSection({ incomes, expenses }) {
-  const totalIncome = incomes.reduce((sum, income) => sum + income.Amount, 0);
-  const totalExpenses = expenses.reduce(
-    (sum, expense) => sum + expense.Amount,
-    0
-  );
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+let barData;
+
+function setBarGraphData(labels, incomes, expenses) {
+  barData = {
+    labels: labels,
+    datasets: [
+      {
+        label: "Total Income",
+        data: incomes,
+        backgroundColor: "rgba(0, 77, 64, 1)",
+        borderRadius: 5,
+      },
+      {
+        label: "Total Expenses",
+        data: expenses,
+        backgroundColor: "rgba(200, 230, 201, 1)",
+        borderRadius: 5,
+      },
+    ],
+  };
+}
+
+function getTotal(transactions) {
+  return transactions.reduce((sum, transaction) => sum + transaction.Amount, 0);
+}
+
+function getAmounts(transactions) {
+  return transactions.map((transaction) => {
+    return transaction.Amount;
+  });
+}
+
+export default function DashboardSection({
+  totals,
+  currentMonthIncomes,
+  currentMonthExpenses,
+}) {
+  const totalIncome = getTotal(currentMonthIncomes);
+
+  const totalExpenses = getTotal(currentMonthExpenses);
+
+  const months = totals.incomes.map((income) => {
+    const date = new Date(income.Date);
+    return monthNames[date.getMonth()];
+  });
+
+  const totalIncomeAmounts = getAmounts(totals.incomes);
+
+  const totalExpenseAmounts = getAmounts(totals.expenses);
+
+  setBarGraphData(months, totalIncomeAmounts, totalExpenseAmounts);
 
   const netIncome = totalIncome - totalExpenses;
 
