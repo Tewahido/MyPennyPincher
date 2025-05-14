@@ -29,13 +29,16 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
       className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop:bg-black/50 p-6 rounded-2xl bg-green-300 shadow-lg w-[25%]"
     >
       <form onSubmit={handleAddIncome} className="flex flex-col">
-        <h1 className=" text-4xl font-bold text-center my-5">Add Income</h1>
+        <h1 className=" text-4xl font-bold text-center my-5">
+          {!income ? "Add Income" : "Edit Income"}
+        </h1>
         <label className="flex h-10 p-1 items-center justify-between">
           <p className="font-bold ">Source:</p>
           <input
             type="text"
             name="Source"
             className="h-full w-[75%] bg-green-100 text-green-900 rounded-lg mx-3 p-3 focus:outline-none"
+            defaultValue={income && income.Source}
           />
         </label>
         <label className="flex h-10 p-1 items-center justify-between">
@@ -44,11 +47,17 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
             type="number"
             name="Amount"
             className="h-full w-[75%] bg-green-100 text-green-900  rounded-lg mx-3 p-3 focus:outline-none"
+            defaultValue={income && income.Amount}
           />
         </label>
         <label className="flex h-10 p-1 items-center justify-start">
           <p className="font-bold">Monthly :</p>
-          <input type="checkbox" name="Monthly" className="mx-5" />
+          <input
+            type="checkbox"
+            name="Monthly"
+            className="mx-5"
+            checked={income && income.Monthly}
+          />
         </label>
 
         <div className="flex w-full justify-end gap-5 mt-10">
@@ -60,9 +69,9 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
           </button>
           <button
             onClick={handleAddIncome}
-            className="h-10 w-15 bg-green-800 text-green-100 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-green-950"
+            className="h-10 p-2 bg-green-800 text-green-100 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-green-950"
           >
-            Add
+            <p className="mx-2">{income ? "Confirm" : "Add"}</p>
           </button>
         </div>
       </form>

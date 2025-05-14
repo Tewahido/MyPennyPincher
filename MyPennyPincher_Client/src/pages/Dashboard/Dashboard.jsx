@@ -111,7 +111,7 @@ export default function Dashboard() {
     return expenseMonth == currentMonth && expenseYear == currentYear;
   });
 
-  function handleSelectMonth(event) {
+  function handleChangeMonth(event) {
     setSelectedMonth(event.target.value);
   }
 
@@ -125,7 +125,7 @@ export default function Dashboard() {
           </h1>
           <input
             type="month"
-            onChange={(event) => handleSelectMonth(event)}
+            onChange={(event) => handleChangeMonth(event)}
             value={selectedMonth}
             className="text-3xl m-5 cursor-pointer "
           />

@@ -1,0 +1,51 @@
+import { forwardRef, useRef, useImperativeHandle } from "react";
+import { createPortal } from "react-dom";
+
+const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
+  { entry, type },
+  ref
+) {
+  const dialog = useRef(ref);
+
+  useImperativeHandle(ref, () => {
+    return {
+      open() {
+        dialog.current.showModal();
+      },
+    };
+  });
+
+  function handleClose(event) {
+    event.preventDefault();
+    dialog.current.close();
+  }
+
+  return createPortal(
+    <dialog
+      ref={dialog}
+      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop:bg-black/50 p-6 rounded-xl bg-gray-300 shadow-lg w-[25%]"
+    >
+      <div className="flex flex-col items-center text-center gap-5">
+        <h1 className="text-4xl font-semibold">Are you sure?</h1>
+        <p className="text-xl font-semibold ">
+          You are about to delete this {type}:{" "}
+          {entry && type === "income" ? entry.Source : entry.Description}
+        </p>
+      </div>
+      <div className="flex w-full justify-end gap-5 mt-10">
+        <button
+          onClick={handleClose}
+          className="h-10 w-20 bg-gray-100 text-gray-900 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-white hover:text-gray-500  focus:outline-none"
+        >
+          Cancel
+        </button>
+        <button className="h-10 bg-red-800 text-gray-300 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-red-950 hover:text-white focus:outline-none">
+          <p className="mx-2"> Delete</p>
+        </button>
+      </div>
+    </dialog>,
+    document.getElementById("modal")
+  );
+});
+
+export default DeletConfirmationModal;

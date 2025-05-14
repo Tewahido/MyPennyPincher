@@ -3,11 +3,9 @@ import ManageIncomeModal from "./ManageIncomeModal";
 import ManageExpenseModal from "./ManageExpenseModal";
 import AddIncomeIcon from "../../../assets/add_income_icon.png";
 import AddExpenseIcon from "../../../assets/add_expense_icon.png";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 export default function TransactionsSection({ incomes, expenses }) {
-  const [selectedIncome, setSelectedIncome] = useState(null);
-  const [selectedExpense, setSelectedExpense] = useState(null);
   const manageIncomeDialog = useRef();
   const manageExpenseDialog = useRef();
 
@@ -19,8 +17,8 @@ export default function TransactionsSection({ incomes, expenses }) {
   }
   return (
     <>
-      <ManageIncomeModal ref={manageIncomeDialog} income={selectedIncome} />
-      <ManageExpenseModal ref={manageExpenseDialog} income={selectedIncome} />
+      <ManageIncomeModal ref={manageIncomeDialog} />
+      <ManageExpenseModal ref={manageExpenseDialog} />
       <div className="flex h-full w-full p-3">
         <div className=" flex flex-col h-full w-[50%] p-3">
           <h1 className="text-center text-6xl font-bold text-green-700 mb-10">
