@@ -3,6 +3,8 @@ import Navbar from "./Navbar.jsx";
 import HomePageNavbar from "./HomePageNavbar.jsx";
 import App from "../App.jsx";
 import Footer from "./Footer.jsx";
+import { Provider } from "react-redux";
+import { store } from "../store/store.js";
 
 export default function AppWrapper() {
   const location = useLocation();
@@ -10,9 +12,11 @@ export default function AppWrapper() {
 
   return (
     <>
-      {isHome ? <HomePageNavbar /> : <Navbar />}
-      <App />
-      <Footer />
+      <Provider store={store}>
+        {isHome ? <HomePageNavbar /> : <Navbar />}
+        <App />
+        <Footer />
+      </Provider>
     </>
   );
 }

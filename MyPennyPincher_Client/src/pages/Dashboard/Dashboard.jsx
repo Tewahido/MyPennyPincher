@@ -128,6 +128,8 @@ export default function Dashboard() {
             onChange={(event) => handleChangeMonth(event)}
             value={selectedMonth}
             className="text-3xl m-5 cursor-pointer "
+            max={new Date().toISOString().slice(0, 7)}
+            min="2020-01"
           />
         </div>
         <div className="w-full ">

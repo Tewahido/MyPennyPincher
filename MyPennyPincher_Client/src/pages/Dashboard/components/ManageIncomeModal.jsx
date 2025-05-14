@@ -47,7 +47,8 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
             type="number"
             name="Amount"
             className="h-full w-[75%] bg-green-100 text-green-900  rounded-lg mx-3 p-3 focus:outline-none"
-            defaultValue={income && income.Amount}
+            defaultValue={income ? income.Amount : 0}
+            min={0}
           />
         </label>
         <label className="flex h-10 p-1 items-center justify-start">

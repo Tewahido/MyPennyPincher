@@ -46,7 +46,8 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
             type="number"
             name="Amount"
             className="h-full w-[70%] bg-red-100 text-red-900  rounded-lg mx-3 p-3 focus:outline-none"
-            defaultValue={expense && expense.Amount}
+            defaultValue={expense ? expense.Amount : 0}
+            min={0}
           />
         </label>
         <label className="flex h-10 p-1 items-center justify-start">

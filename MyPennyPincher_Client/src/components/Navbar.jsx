@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import Logo from "/GrabbingMoneyColor_Icon.png";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export default function Navbar() {
+  const user = useSelector((state) => state.user);
+
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -41,10 +44,10 @@ export default function Navbar() {
             Dashboard
           </Link>
           <Link
-            to="/logout"
+            to={user.LoggedIn ? "/logout" : "/login"}
             className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
           >
-            Logout
+            {user.LoggedIn ? "Logout" : "Login"}
           </Link>
         </div>
       </nav>
