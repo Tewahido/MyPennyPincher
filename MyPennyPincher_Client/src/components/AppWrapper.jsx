@@ -11,12 +11,12 @@ export default function AppWrapper() {
   const isHome = location.pathname === "/";
 
   return (
-    <>
+    <div className="font-[Roboto]">
       <Provider store={store}>
         {isHome ? <HomePageNavbar /> : <Navbar />}
         <App />
         <Footer />
       </Provider>
-    </>
+    </div>
   );
 }

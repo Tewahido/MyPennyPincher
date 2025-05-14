@@ -50,10 +50,10 @@ export default function Navbar() {
             Dashboard
           </Link>
           <Link
-            to={user.LoggedIn ? "/logout" : "/login"}
+            to={user.loggedIn ? "/logout" : "/login"}
             className="text-gray-300 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
           >
-            {user.LoggedIn ? "Logout" : "Login"}
+            {user.loggedIn ? "Logout" : "Login"}
           </Link>
         </div>
       </nav>
