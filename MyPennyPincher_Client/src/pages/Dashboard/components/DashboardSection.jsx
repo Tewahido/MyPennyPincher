@@ -11,7 +11,7 @@ import {
   LineElement,
   Title,
 } from "chart.js";
-import { Doughnut, PolarArea, Bar, Line } from "react-chartjs-2";
+import { Doughnut, Bar, Line } from "react-chartjs-2";
 import TotalDisplay from "./TotalDisplay";
 
 ChartJS.register(
@@ -185,7 +185,7 @@ export default function DashboardSection({
 
   return (
     <div className="flex flex-col bg-green-100 items-center 2xl:flex-row justify-evenly w-full h-full 2xl:h-150 ">
-      <div className="flex flex-col items-center h-full bg-white m-1 rounded-xl w-[60%] px-15 pb-15">
+      <div className=" hidden 2xl:flex flex-col items-center h-full bg-white m-1 rounded-xl w-[60%] px-15 pb-15">
         <h1 className=" font-bold text-3xl xl:text-4xl black my-10  mx-auto text-center">
           Current month spending
         </h1>
@@ -193,7 +193,7 @@ export default function DashboardSection({
           <Doughnut data={donutData} options={donutOptions} />
         </div>
       </div>
-      <div className="flex flex-col gap-2 h-full w-full ">
+      <div className="flex flex-col gap-3 h-full w-full ">
         <div className="flex flex-col items-center md:flex-row  xl:items-start xl:flex-row lg:h-[50%]">
           <TotalDisplay
             title="Income"

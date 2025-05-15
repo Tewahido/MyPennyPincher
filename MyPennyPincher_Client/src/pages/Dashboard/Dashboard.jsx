@@ -118,16 +118,15 @@ export default function Dashboard() {
   return (
     <>
       <div className="w-full bg-green-100 flex flex-col mt-10 p-10">
-        <div className="w-full h-50 flex items-end justify-between mb-10 px-30">
-          <h1 className="text-8xl font-extrabold text-green-700">
-            {" "}
+        <div className="w-full h-50 flex flex-col lg:flex-row justify-end items-center gap-10 lg:gap-0 lg:items-end lg:justify-between mb-10 px-30">
+          <h1 className="text-4xl md:text-6xl xl:text-8xl font-extrabold text-green-700">
             MyDashboard
           </h1>
           <input
             type="month"
             onChange={(event) => handleChangeMonth(event)}
             value={selectedMonth}
-            className="text-3xl m-5 cursor-pointer font-extrabold"
+            className=" text-md border-2 rounded-xl md:text-xl xl:text-3xl cursor-pointer font-extrabold p-2"
             max={new Date().toISOString().slice(0, 7)}
             min="2020-01"
           />

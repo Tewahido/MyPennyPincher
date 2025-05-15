@@ -28,10 +28,10 @@ export default function SignUpForm() {
         />
         <div className="w-full flex flex-col gap-3">
           <div className="w-full flex justify-between">
-            <p>Already have an account?</p>
+            <p className="text-sm">Already have an account?</p>
             <Link
               to={"/login"}
-              className="text-green-700 underline transition-all duration-100 hover:underline-offset-2 hover:text-green-500"
+              className="text-sm text-green-700 underline transition-all duration-100 hover:underline-offset-2 hover:text-green-600"
             >
               Login
             </Link>
