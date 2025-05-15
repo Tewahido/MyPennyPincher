@@ -32,7 +32,7 @@ export default function Login() {
             <img src={Logo} alt="Logo" className="h-20 w-20" />
             <hr className="h-0.5 bg-white w-[90%]" />
             <p className="text-6xl text-white font-semibold text-center mb-10">
-              Your money's waiting...
+              Your future's waiting...
             </p>
             <p className="text-2xl italic text-white font-medium text-center">
               Login and let's manage it right

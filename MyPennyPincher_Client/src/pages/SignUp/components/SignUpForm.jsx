@@ -15,13 +15,13 @@ export default function SignUpForm() {
           placeholder="Email"
         />
         <input
-          type="text"
+          type="password"
           className="outline-2 px-5 py-3 rounded-md text-green-600 outline-gray-500 transition-all duration-50 hover:outline-4"
           name="password"
           placeholder="Password"
         />
         <input
-          type="text"
+          type="password"
           className="outline-2 px-5 py-3 rounded-md text-green-600 outline-gray-500 transition-all duration-50 hover:outline-4"
           name="confirmPassword"
           placeholder="Confirm Password"

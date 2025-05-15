@@ -31,6 +31,9 @@ let donutData;
 
 const barOptions = {
   responsive: true,
+  layout: {
+    padding: 5,
+  },
   scales: {
     y: {
       beginAtZero: true,
@@ -47,6 +50,9 @@ const barOptions = {
 const donutOptions = {
   responsive: true,
   cutout: "40%",
+  layout: {
+    padding: 5,
+  },
   plugins: {
     legend: {
       position: "bottom",
@@ -76,6 +82,9 @@ const monthNames = [
 
 const lineOptions = {
   responsive: true,
+  layout: {
+    padding: 5,
+  },
   plugins: {
     legend: {
       display: false,
@@ -193,8 +202,8 @@ export default function DashboardSection({
           <Doughnut data={donutData} options={donutOptions} />
         </div>
       </div>
-      <div className="flex flex-col gap-3 h-full w-full ">
-        <div className="flex flex-col items-center md:flex-row  xl:items-start xl:flex-row lg:h-[50%]">
+      <div className="flex flex-col gap-3 h-full  ">
+        <div className="flex flex-col items-center lg:justify-between md:flex-row gap-2 xl:items-start xl:flex-row lg:h-[50%]">
           <TotalDisplay
             title="Income"
             total={totalIncome}
@@ -211,14 +220,14 @@ export default function DashboardSection({
             textcolour={netColour}
           />
         </div>
-        <div className="flex flex-col justify-center items-center md:flex-row h-full w-full">
-          <div className=" flex flex-col h-full w-full md:w-[50%] m-1 bg-white rounded-xl gap-10 p-10">
+        <div className="flex flex-col justify-between items-center md:flex-row h-full w-full">
+          <div className=" flex flex-col h-full w-full m-1 bg-white rounded-xl gap-10 p-5">
             <h1 className="text-center text-black text-3xl xl:text-4xl font-bold ">
               Monthly spending
             </h1>
             <Bar data={barData} options={barOptions} />
           </div>
-          <div className=" flex flex-col h-full w-full md:w-[50%] m-1 bg-white rounded-xl gap-10 p-10">
+          <div className=" flex flex-col h-full w-full m-1 bg-white rounded-xl gap-10 p-5">
             <h1 className="text-center text-black text-3xl xl:text-4xl font-bold ">
               Monthly Net Income
             </h1>
