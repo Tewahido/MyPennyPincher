@@ -7,8 +7,12 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
+  PointElement,
+  LineElement,
+  Title,
 } from "chart.js";
-import { Doughnut, PolarArea, Bar } from "react-chartjs-2";
+import { Doughnut, PolarArea, Bar, Line } from "react-chartjs-2";
+import TotalDisplay from "./TotalDisplay";
 
 ChartJS.register(
   ArcElement,
@@ -17,24 +21,13 @@ ChartJS.register(
   RadialLinearScale,
   BarElement,
   CategoryScale,
-  LinearScale
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title
 );
 
-const data = {
-  labels: ["Rent", "Groceries", "Transport"],
-  datasets: [
-    {
-      label: "Monthly Expendture",
-      data: [500, 300, 200],
-      backgroundColor: [
-        "rgba(0, 77, 64, 1)",
-        "rgba(56, 142, 60, 1)",
-        "rgba(200, 230, 201, 1)",
-      ],
-      borderWidth: 3,
-    },
-  ],
-};
+let donutData;
 
 const barOptions = {
   responsive: true,
@@ -51,7 +44,7 @@ const barOptions = {
   },
 };
 
-const options = {
+const donutOptions = {
   responsive: true,
   cutout: "40%",
   plugins: {
@@ -81,7 +74,21 @@ const monthNames = [
   "December",
 ];
 
+const lineOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false,
+    },
+    title: {
+      display: false,
+    },
+  },
+};
+
 let barData;
+
+let lineData;
 
 function setBarGraphData(labels, incomes, expenses) {
   barData = {
@@ -96,8 +103,43 @@ function setBarGraphData(labels, incomes, expenses) {
       {
         label: "Total Expenses",
         data: expenses,
-        backgroundColor: "rgba(200, 230, 201, 1)",
+        backgroundColor: "rgba(185, 28, 28, 1)",
         borderRadius: 5,
+      },
+    ],
+  };
+}
+
+function setLineChartData(labels, incomes, expenses) {
+  let netIncomes = [];
+
+  for (let i = 0; i < incomes.length; i++) {
+    netIncomes.push(incomes[i] - expenses[i]);
+  }
+
+  lineData = {
+    labels: labels,
+    datasets: [
+      {
+        label: "Net Income",
+        data: netIncomes,
+        borderColor: "rgba(0, 77, 64, 1)",
+        backgroundColor: "rgba(0, 77, 64, 0.5)",
+        tension: 0.001,
+      },
+    ],
+  };
+}
+
+function setDonutChartData(income, expenses) {
+  donutData = {
+    labels: ["Income", "Expenses"],
+    datasets: [
+      {
+        label: "Monthly Transactions",
+        data: [income, expenses],
+        backgroundColor: ["rgba(0, 77, 64, 1)", "rgba(185, 28, 28, 1)"],
+        borderWidth: 3,
       },
     ],
   };
@@ -133,49 +175,55 @@ export default function DashboardSection({
 
   setBarGraphData(months, totalIncomeAmounts, totalExpenseAmounts);
 
+  setLineChartData(months, totalIncomeAmounts, totalExpenseAmounts);
+
+  setDonutChartData(totalIncome, totalExpenses);
+
   const netIncome = totalIncome - totalExpenses;
 
   const netColour = netIncome > 0 ? "text-green-700" : "text-red-700";
 
   return (
-    <div className="flex justify-evenly w-full h-150 px-20">
+    <div className="flex flex-col bg-green-100 items-center 2xl:flex-row justify-evenly w-full h-full 2xl:h-150 ">
       <div className="flex flex-col items-center h-full bg-white m-1 rounded-xl w-[60%] px-15 pb-15">
-        <h1 className=" font-bold text-4xl text-green-700 my-10  mx-auto text-center">
-          Current month spending{" "}
+        <h1 className=" font-bold text-3xl xl:text-4xl black my-10  mx-auto text-center">
+          Current month spending
         </h1>
-        <div className="flex justify-center h-[80%] w-full">
-          <Doughnut data={data} options={options} />
+        <div className="flex justify-center h-full xl:h-[80%] w-full">
+          <Doughnut data={donutData} options={donutOptions} />
         </div>
       </div>
       <div className="flex flex-col gap-2 h-full w-full ">
-        <div className="flex lg:h-[50%]">
-          <div className="flex flex-col items-center h-full w-[33%] bg-white m-1 rounded-xl p-5">
-            <h1 className="text-4xl font-bold  text-center">Total Income</h1>
-            <h1 className="text-8xl text-green-700/85 font-semibold">
-              R{totalIncome}
-            </h1>
-          </div>
-          <div className="flex flex-col items-center h-full w-[33%] bg-white m-1 rounded-xl p-5">
-            <h1 className="text-4xl font-bold  text-center">Total Expenses</h1>
-            <h1 className="text-8xl text-red-700/85 font-semibold">
-              R{totalExpenses}
-            </h1>
-          </div>
-          <div className="flex flex-col items-center h-full w-[33%] bg-white m-1 rounded-xl p-5">
-            <h1 className="text-4xl font-bold  text-center">Net Income</h1>
-            <h1 className={`text-8xl ${netColour}/85 font-semibold`}>
-              R{netIncome}
-            </h1>
-          </div>
+        <div className="flex flex-col items-center md:flex-row  xl:items-start xl:flex-row lg:h-[50%]">
+          <TotalDisplay
+            title="Income"
+            total={totalIncome}
+            textcolour="text-green-700/85"
+          />
+          <TotalDisplay
+            title="Expenses"
+            total={totalExpenses}
+            textcolour="text-red-700/85"
+          />
+          <TotalDisplay
+            title="Net Income"
+            total={netIncome}
+            textcolour={netColour}
+          />
         </div>
-        <div className="flex h-full w-full">
-          <div className=" flex flex-col h-full w-[50%] m-1 bg-white rounded-xl gap-10 p-10">
-            <h1 className="text-center text-green-700 text-4xl font-bold ">
+        <div className="flex flex-col justify-center items-center md:flex-row h-full w-full">
+          <div className=" flex flex-col h-full w-full md:w-[50%] m-1 bg-white rounded-xl gap-10 p-10">
+            <h1 className="text-center text-black text-3xl xl:text-4xl font-bold ">
               Monthly spending
             </h1>
             <Bar data={barData} options={barOptions} />
           </div>
-          <div className="h-full w-[50%] m-1 bg-white rounded-xl"></div>
+          <div className=" flex flex-col h-full w-full md:w-[50%] m-1 bg-white rounded-xl gap-10 p-10">
+            <h1 className="text-center text-black text-3xl xl:text-4xl font-bold ">
+              Monthly Net Income
+            </h1>
+            <Line options={lineOptions} data={lineData} />
+          </div>
         </div>
       </div>
     </div>

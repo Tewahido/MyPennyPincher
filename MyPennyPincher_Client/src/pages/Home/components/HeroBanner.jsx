@@ -1,6 +1,7 @@
 import DiagonalLine from "./DiagonalLine";
 import SniperReticle from "./SniperReticle";
 import MoneyImage from "../../../assets/background_image.jpeg";
+import { Link } from "react-router-dom";
 
 export default function HeroBanner({ servicesRef }) {
   const handleClick = () => {
@@ -27,9 +28,12 @@ export default function HeroBanner({ servicesRef }) {
         </p>
 
         <div className="flex flex-row h-15 justify-center items-center w-full mt-10">
-          <button className="h-full w-35 bg-white rounded-lg cursor-pointer text-green-800 font-bold border-2 border-green-850 transition-all duration-200 hover:bg-green-800 hover: hover:border-white hover:text-white">
+          <Link
+            to="/login"
+            className="flex items-center justify-center h-full w-35 bg-white rounded-lg cursor-pointer text-green-800 font-bold border-2 border-green-850 transition-all duration-200 hover:bg-green-800 hover: hover:border-white hover:text-white"
+          >
             Get Started
-          </button>
+          </Link>
 
           <p
             onClick={handleClick}

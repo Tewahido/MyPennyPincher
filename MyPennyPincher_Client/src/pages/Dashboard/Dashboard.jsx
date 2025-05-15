@@ -117,7 +117,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="w-full bg-green-100 flex flex-col mt-10">
+      <div className="w-full bg-green-100 flex flex-col mt-10 p-10">
         <div className="w-full h-50 flex items-end justify-between mb-10 px-30">
           <h1 className="text-8xl font-extrabold text-green-700">
             {" "}
@@ -127,7 +127,7 @@ export default function Dashboard() {
             type="month"
             onChange={(event) => handleChangeMonth(event)}
             value={selectedMonth}
-            className="text-3xl m-5 cursor-pointer "
+            className="text-3xl m-5 cursor-pointer font-extrabold"
             max={new Date().toISOString().slice(0, 7)}
             min="2020-01"
           />

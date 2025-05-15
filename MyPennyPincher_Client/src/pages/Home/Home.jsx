@@ -66,17 +66,17 @@ export default function Home() {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, amount: 0.4 }}
-                  className="flex  flex-col justify-center items-center rounded-2xl h-full w-full bg-green-950 py-5 "
+                  className="flex  flex-col justify-center items-center rounded-2xl h-full w-full bg-green-950 py-5"
                 >
                   <div
                     ref={servicesRef}
-                    className="flex  h-25 mt-20 mb-30 lg:mb-15 lg:mt-10 items-center "
+                    className="flex  h-25 mt-20 mb-30 lg:mb-15 lg:mt-10 items-center"
                   >
-                    <h1 className="text-gray-200 capitalize text-5xl font-bold ">
+                    <h1 className="text-gray-200 capitalize text-5xl font-bold">
                       Our Services
                     </h1>
                   </div>
-                  <div className="flex items-center justify-around flex-col lg:flex-row mb-25 h-300 lg:h-full w-full ">
+                  <div className="flex items-center justify-around flex-col lg:flex-row mb-25 h-300 lg:h-full w-full">
                     {services.map((service, index) => {
                       return (
                         <ServiceCard
