@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "hnOlc2YXoyM=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\TewahidoTefera\\source\\repos\\MyPennyPincher\\MyPennyPincher_API\\MyPennyPincher_API\\MyPennyPincher_API.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\TewahidoTefera\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.3\\microsoft.aspnetcore.openapi.9.0.3.nupkg.sha512",
+    "C:\\Users\\TewahidoTefera\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
