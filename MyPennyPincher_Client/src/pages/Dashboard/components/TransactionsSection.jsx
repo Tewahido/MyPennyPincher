@@ -19,8 +19,8 @@ export default function TransactionsSection({ incomes, expenses }) {
     <>
       <ManageIncomeModal ref={manageIncomeDialog} />
       <ManageExpenseModal ref={manageExpenseDialog} />
-      <div className="flex h-full w-full p-3">
-        <div className=" flex flex-col h-full w-[50%] p-3">
+      <div className="flex flex-col items-center md:flex-row h-full w-full p-3">
+        <div className=" flex flex-col h-250 md:h-full w-full md:w-[50%] p-3">
           <h1 className="text-center text-6xl font-bold text-green-700 mb-10">
             Incomes
           </h1>
@@ -50,8 +50,8 @@ export default function TransactionsSection({ incomes, expenses }) {
             </div>
           </div>
         </div>
-        <div className="h-[80%] my-auto w-0.5 bg-green-700"></div>
-        <div className=" flex flex-col items-center h-full w-[50%] p-3">
+        <div className="w-[80%] h-0.5 md:h-[80%] my-auto md:w-0.5 bg-green-700"></div>
+        <div className=" flex flex-col items-center h-250 md:h-full w-full md:w-[50%] p-3">
           <h1 className="text-center text-6xl font-bold text-red-700 mb-10">
             Expenses
           </h1>

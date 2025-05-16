@@ -23,7 +23,7 @@ const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
   return createPortal(
     <dialog
       ref={dialog}
-      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop:bg-black/50 p-6 rounded-xl bg-gray-300 shadow-lg w-[25%]"
+      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop:bg-black/50 p-6 rounded-xl bg-white shadow-lg w-[25%]"
     >
       <div className="flex flex-col items-center text-center gap-5">
         <h1 className="text-4xl font-semibold">Are you sure?</h1>
@@ -35,11 +35,11 @@ const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
       <div className="flex w-full justify-end gap-5 mt-10">
         <button
           onClick={handleClose}
-          className="h-10 w-20 bg-gray-100 text-gray-900 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-white hover:text-gray-500  focus:outline-none"
+          className="h-10 w-20 bg-gray-500 text-white font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-gray-400 hover:text-gray-800 focus:outline-none"
         >
           Cancel
         </button>
-        <button className="h-10 bg-red-800 text-gray-300 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-red-950 hover:text-white focus:outline-none">
+        <button className="h-10 bg-red-700/85 text-black/85 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-red-800 hover:text-white focus:outline-none">
           <p className="mx-2"> Delete</p>
         </button>
       </div>
