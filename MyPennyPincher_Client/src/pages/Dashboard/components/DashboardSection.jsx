@@ -159,9 +159,22 @@ function getTotal(transactions) {
 }
 
 function getAmounts(transactions) {
-  return transactions.map((transaction) => {
-    return transaction.Amount;
+  let monthTotals = [];
+
+  transactions.map((transaction) => {
+    const date = new Date(transaction.Date);
+    const monthName = monthNames[date.getMonth()];
+    const existing = monthTotals.find((m) => m.month === monthName);
+
+    if (existing) {
+      existing.amount += transaction.Amount;
+      return;
+    }
+
+    monthTotals.push({ month: monthName, amount: transaction.Amount });
   });
+
+  return monthTotals.map((monthTotal) => monthTotal.amount);
 }
 
 export default function DashboardSection({
@@ -173,9 +186,13 @@ export default function DashboardSection({
 
   const totalExpenses = getTotal(currentMonthExpenses);
 
-  const months = totals.incomes.map((income) => {
+  let months = [];
+
+  totals.incomes.map((income) => {
     const date = new Date(income.Date);
-    return monthNames[date.getMonth()];
+    if (!months.includes(monthNames[date.getMonth()])) {
+      months.push(monthNames[date.getMonth()]);
+    }
   });
 
   const totalIncomeAmounts = getAmounts(totals.incomes);
