@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MyPennyPincher_API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e911db19131170a9910d29e104750649b2d9b885")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a9ebab0f9ad530960584fa22db71f6ad2bb7142d")]
 [assembly: System.Reflection.AssemblyProductAttribute("MyPennyPincher_API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MyPennyPincher_API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
