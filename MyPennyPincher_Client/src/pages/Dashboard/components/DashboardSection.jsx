@@ -190,18 +190,19 @@ export default function DashboardSection({
 
   totals.incomes.map((income) => {
     const date = new Date(income.Date);
+
     if (!months.includes(monthNames[date.getMonth()])) {
       months.push(monthNames[date.getMonth()]);
     }
   });
 
-  const totalIncomeAmounts = getAmounts(totals.incomes);
+  const monthlyIncomeAmounts = getAmounts(totals.incomes);
 
-  const totalExpenseAmounts = getAmounts(totals.expenses);
+  const monthlyExpenseAmounts = getAmounts(totals.expenses);
 
-  setBarGraphData(months, totalIncomeAmounts, totalExpenseAmounts);
+  setBarGraphData(months, monthlyIncomeAmounts, monthlyExpenseAmounts);
 
-  setLineChartData(months, totalIncomeAmounts, totalExpenseAmounts);
+  setLineChartData(months, monthlyIncomeAmounts, monthlyExpenseAmounts);
 
   setDonutChartData(totalIncome, totalExpenses);
 

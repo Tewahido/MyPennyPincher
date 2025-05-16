@@ -24,7 +24,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
   return createPortal(
     <dialog
       ref={dialog}
-      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop:bg-black/50 p-6 rounded-2xl bg-red-300 shadow-lg w-[25%]"
+      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop:bg-black/50 p-6 rounded-2xl bg-red-300 shadow-lg min-w-100"
     >
       <form onSubmit={handleAddIncome} className="flex flex-col">
         <h1 className=" text-4xl font-bold text-center my-5">
