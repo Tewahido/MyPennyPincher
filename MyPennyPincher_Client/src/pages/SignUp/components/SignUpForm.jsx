@@ -97,7 +97,7 @@ export default function SignUpForm() {
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
-          isDataValid={isDataValid}
+          isDataValid={isDataValid.email}
           errorMessage="Please enter a valid email."
         />
         <Input
@@ -106,7 +106,7 @@ export default function SignUpForm() {
           placeholder="Full Name"
           value={formData.fullName}
           onChange={handleChange}
-          isDataValid={isDataValid}
+          isDataValid={isDataValid.fullName}
           errorMessage="Please enter your name."
         />
         <Input
@@ -115,7 +115,7 @@ export default function SignUpForm() {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
-          isDataValid={isDataValid}
+          isDataValid={isDataValid.password}
           errorMessage="Please enter a stronger password"
         />
         <Input
@@ -124,7 +124,7 @@ export default function SignUpForm() {
           placeholder="Confirm Password"
           value={formData.confirmPassword}
           onChange={handleChange}
-          isDataValid={isDataValid}
+          isDataValid={isDataValid.confirmPassword}
           errorMessage="Passwords do not match."
         />
         <div className="w-full flex flex-col gap-3">
