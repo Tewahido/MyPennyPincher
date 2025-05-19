@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Services;
 
@@ -38,7 +39,7 @@ public class IncomeController : ControllerBase
         return Ok(incomes);
     }
 
-    [HttpPost]
+    [HttpPost("addIncome")]
     public async Task<ActionResult> AddIncome([FromBody] Income income)
     {
         await _incomeService.AddIncome(income);
@@ -50,6 +51,14 @@ public class IncomeController : ControllerBase
     public async Task<ActionResult> DeleteIncome(Income income)
     {
         await _incomeService.DeleteIncome(income);
+
+        return Ok();
+    }
+
+    [HttpPost("editIncome")]
+    public async Task<ActionResult> EditIncome([FromBody] Income income)
+    {
+        await _incomeService.EditIncome(income);
 
         return Ok();
     }

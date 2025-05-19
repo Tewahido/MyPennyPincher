@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { SignUp } from "../../../services/apiService";
 import { useState } from "react";
 import ErrorMessage from "./ErrorMessage";
-import Input from "./Input";
+import Input from "../../../components/Input";
 
 const emailDomain = [".com", ".co.za", ".org"];
 

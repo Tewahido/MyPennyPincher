@@ -34,13 +34,13 @@ export default function SignUp() {
           className="hidden lg:flex flex-col justify-center items-center w-120 bg-cover  rounded-se-4xl rounded-ee-4xl"
           style={{ backgroundImage: `url(${SignUpBg})` }}
         >
-          <div className=" flex flex-col items-center  h-full w-full bg-green-700/90 rounded-r-4xl  gap-10 p-10">
+          <div className=" flex flex-col items-center  h-full w-full bg-green-700/90 rounded-r-4xl gap-7 p-10">
             <img src={Logo} alt="Logo" className="h-20 w-20" />
             <hr className="h-0.5 bg-white w-[90%]" />
-            <p className="text-6xl text-white font-semibold text-center mb-10">
+            <p className="text-6xl text-white font-semibold text-center mb-5">
               Your financial future starts now...
             </p>
-            <p className="text-2xl italic text-white font-medium text-center">
+            <p className="text-2xl w-[75%] italic text-white font-medium text-center">
               Sign up and outsmart your spending
             </p>
           </div>

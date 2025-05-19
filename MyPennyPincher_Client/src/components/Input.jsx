@@ -1,4 +1,4 @@
-import ErrorMessage from "./ErrorMessage";
+import ErrorMessage from "../pages/SignUp/components/ErrorMessage";
 
 export default function Input({ isDataValid, errorMessage, ...props }) {
   return (

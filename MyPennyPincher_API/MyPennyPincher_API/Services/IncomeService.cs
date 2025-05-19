@@ -36,12 +36,12 @@ public class IncomeService
         await _context.SaveChangesAsync();
     }
 
-    public async Task EditIncomee(Income updatedIncome)
+    public async Task EditIncome(Income updatedIncome)
     {
         var existingIncome = await _context.Incomes.FirstOrDefaultAsync(income => income.IncomeId == updatedIncome.IncomeId);
 
         if(existingIncome != null)
-    {
+        {
             existingIncome.Amount = updatedIncome.Amount;
             existingIncome.Source = updatedIncome.Source;
             existingIncome.Date = updatedIncome.Date;

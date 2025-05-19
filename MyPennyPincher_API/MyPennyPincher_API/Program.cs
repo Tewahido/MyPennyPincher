@@ -15,6 +15,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<IncomeService>();
+builder.Services.AddScoped<ExpenseService>();
 
 builder.Services.AddOpenApi();
 
