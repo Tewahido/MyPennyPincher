@@ -24,7 +24,6 @@ public class AuthController : ControllerBase
 
         if (registredUser == null)
         {
-            Console.WriteLine("User is null, unable to register user");
             return BadRequest("Could not register user");
         }
 
@@ -43,7 +42,7 @@ public class AuthController : ControllerBase
 
         string token = _authService.GenerateToken(user);
 
-        LoggedInUser loggedInUser = new LoggedInUser
+        LoginResponse loginResponse= new LoginResponse
         {
             UserId = user.UserId,
             FullName = user.FullName,
@@ -51,6 +50,6 @@ public class AuthController : ControllerBase
             Token = token,
         };
 
-        return Ok(loggedInUser);
+        return Ok(loginResponse);
     }
 }
