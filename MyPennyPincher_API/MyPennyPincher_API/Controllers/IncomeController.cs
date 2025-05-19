@@ -1,0 +1,42 @@
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Services;
+
+namespace MyPennyPincher_API.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+[Authorize]
+public class IncomeController : ControllerBase
+{
+    private readonly IncomeService _incomeService;
+
+    public IncomeController(IncomeService incomeService)
+    {
+        _incomeService = incomeService;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<ICollection<Income>>> GetUserIncomes()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+
+        var incomes = await _incomeService.GetUserIncomes(userId);
+
+        if(incomes == null || incomes.Count() == 0)
+        {
+            return NotFound("No user incomes found");
+        }
+
+        return Ok(incomes);
+    }
+
+
+}

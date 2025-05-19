@@ -202,7 +202,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="w-full bg-green-100 flex flex-col p-10">
+      <div className="w-full bg-green-100 flex flex-col p-10 overflow-x-hidden">
         <div className="w-full h-50 flex flex-col lg:flex-row justify-end items-center gap-10 lg:gap-0 lg:items-end lg:justify-between mb-10 px-30">
           <h1 className="text-4xl md:text-6xl xl:text-8xl font-extrabold text-green-700">
             MyDashboard

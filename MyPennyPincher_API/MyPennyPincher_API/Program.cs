@@ -14,6 +14,7 @@ builder.Services.AddDbContext<MyPennyPincherDbContext>(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<IncomeService>();
 
 builder.Services.AddOpenApi();
 

@@ -13,7 +13,6 @@ public class AuthService
     private readonly MyPennyPincherDbContext _context;
     private readonly IConfiguration _config;
 
-
     public AuthService(MyPennyPincherDbContext context, IConfiguration config) 
     {  
         _context = context;
@@ -61,19 +60,25 @@ public class AuthService
 
     public string GenerateToken(User user)
     {
+
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+        var userId = user.UserId.ToString();
+
         var claims = new[]
         {
+            new Claim(ClaimTypes.NameIdentifier, userId),
             new Claim(ClaimTypes.Name, user.FullName)
         };
+
+        var tokenValidityTime = DateTime.Now.AddHours(_config.GetValue<double>("Jwt:TokenValidityHrs"));
 
         var token = new JwtSecurityToken(
             issuer: _config["Jwt:Issuer"],
             audience: _config["Jwt:Issuer"],
             claims: claims,
-            expires: DateTime.Now.AddHours(1),
+            expires: tokenValidityTime,
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

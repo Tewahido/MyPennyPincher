@@ -9,10 +9,12 @@ namespace MyPennyPincher_API.Controllers;
 public class AuthController : ControllerBase
 {
     private AuthService _authService;
+    private readonly IConfiguration _config;
 
-    public AuthController( AuthService authService)
+    public AuthController( AuthService authService, IConfiguration config)
     {
         _authService = authService;
+        _config = config;
     }
 
     [HttpPost("register")]
@@ -46,7 +48,8 @@ public class AuthController : ControllerBase
             UserId = user.UserId,
             FullName = user.FullName,
             Email = user.Email,
-            Token = token
+            Token = token,
+            ExpiresAt = DateTime.Now.AddHours(_config.GetValue<double>("Jwt:TokenValidityHrs"))
         };
 
         return Ok(loggedInUser);
