@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Services;
 
@@ -32,18 +31,21 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<User?>> Login([FromBody] Login login)
     {
-        User? user = await _authService.Login(login.Email, login.Password);
+        var user = await _authService.Login(login.Email, login.Password);
 
         if(user == null)
         {
             return Unauthorized("Invalid Credentials");
         }
 
+        string token = _authService.GenerateToken(user);
+
         LoggedInUser loggedInUser = new LoggedInUser
         {
             UserId = user.UserId,
             FullName = user.FullName,
-            Email = user.Email
+            Email = user.Email,
+            Token = token
         };
 
         return Ok(loggedInUser);
