@@ -1,6 +1,6 @@
-@MyPennyPincher_API_HostAddress = http://localhost:5000
+@MyPennyPincher_API_HostAddress = https://localhost:7053
 
-GET {{MyPennyPincher_API_HostAddress}}/auth/1
+POST {{MyPennyPincher_API_HostAddress}}/Auth/register/{Email:"1", FullName:"2", Password:"3"}
 Accept: application/json
 
 ###

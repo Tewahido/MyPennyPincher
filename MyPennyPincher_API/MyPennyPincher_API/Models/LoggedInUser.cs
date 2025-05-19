@@ -9,4 +9,5 @@ public class LoggedInUser
     public string Email { get; set; } = null!;
 
     public string Token { get; set; }
+    public DateTime ExpiresAt { get; set; }
 }

@@ -1,8 +1,38 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { SignUp } from "../../../services/apiService";
+import { useState } from "react";
 
 export default function SignUpForm() {
-  function handleSubmit(event) {
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const navigate = useNavigate();
+
+  async function handleSubmit(event) {
     event.preventDefault();
+
+    const signUpStatus = await SignUp(
+      formData.fullName,
+      formData.email,
+      formData.password
+    );
+
+    console.log(formData);
+
+    if (signUpStatus === 200) {
+      navigate("/login");
+    }
   }
 
   return (
@@ -13,12 +43,24 @@ export default function SignUpForm() {
           className="outline-2 px-5 py-3 rounded-md text-green-600 outline-gray-500 transition-all duration-50 hover:outline-4"
           name="email"
           placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          className="outline-2 px-5 py-3 rounded-md text-green-600 outline-gray-500 transition-all duration-50 hover:outline-4"
+          name="fullName"
+          placeholder="Full Name"
+          value={formData.fullName}
+          onChange={handleChange}
         />
         <input
           type="password"
           className="outline-2 px-5 py-3 rounded-md text-green-600 outline-gray-500 transition-all duration-50 hover:outline-4"
           name="password"
           placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
         />
         <input
           type="password"
