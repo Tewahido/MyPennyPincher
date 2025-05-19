@@ -16,8 +16,8 @@ public class IncomeService
     public async Task<ICollection<Income>?> GetUserIncomes(string userId)
     {
         var user = await _context.Users
-            .Include(u => u.Incomes)
-            .FirstOrDefaultAsync(u => u.UserId.ToString() == userId);
+            .Include(user => user.Incomes)
+            .FirstOrDefaultAsync(user => user.UserId.ToString() == userId);
 
         return user?.Incomes ?? null;
     }
@@ -38,7 +38,7 @@ public class IncomeService
 
     public async Task EditIncomee(Income updatedIncome)
     {
-        var existingIncome = await _context.Incomes.FirstOrDefaultAsync(i => i.IncomeId == updatedIncome.IncomeId);
+        var existingIncome = await _context.Incomes.FirstOrDefaultAsync(income => income.IncomeId == updatedIncome.IncomeId);
 
         if(existingIncome != null)
     {

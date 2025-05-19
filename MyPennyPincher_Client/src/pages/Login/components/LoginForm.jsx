@@ -31,6 +31,7 @@ export default function LoginForm() {
 
     if (loggedInUser) {
       dispatch(login(loggedInUser));
+
       navigate("/dashboard");
     }
   }

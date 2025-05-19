@@ -38,5 +38,19 @@ public class IncomeController : ControllerBase
         return Ok(incomes);
     }
 
+    [HttpPost]
+    public async Task<ActionResult> AddIncome([FromBody] Income income)
+    {
+        await _incomeService.AddIncome(income);
 
+        return Ok();
+    }
+
+    [HttpDelete]
+    public async Task<ActionResult> DeleteIncome(Income income)
+    {
+        await _incomeService.DeleteIncome(income);
+
+        return Ok();
+    }
 }

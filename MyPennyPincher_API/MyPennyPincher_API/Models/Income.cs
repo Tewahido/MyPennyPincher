@@ -5,6 +5,7 @@ namespace MyPennyPincher_API.Models;
 
 public partial class Income
 {
+
     public int IncomeId { get; set; }
 
     public string Source { get; set; } = null!;

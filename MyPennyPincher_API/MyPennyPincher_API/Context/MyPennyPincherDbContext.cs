@@ -30,6 +30,8 @@ public partial class MyPennyPincherDbContext : DbContext
         {
             entity.HasKey(e => e.ExpenseId).HasName("PK__Expenses__1445CFD380DD5E23");
 
+            entity.Property(e => e.ExpenseId).ValueGeneratedOnAdd();
+
             entity.Property(e => e.Description)
                 .HasMaxLength(150)
                 .IsUnicode(false);
@@ -57,6 +59,8 @@ public partial class MyPennyPincherDbContext : DbContext
         modelBuilder.Entity<Income>(entity =>
         {
             entity.HasKey(e => e.IncomeId).HasName("PK__Incomes__60DFC60C2C10493F");
+
+            entity.Property(i => i.IncomeId).ValueGeneratedOnAdd();
 
             entity.Property(e => e.Source)
                 .HasMaxLength(150)

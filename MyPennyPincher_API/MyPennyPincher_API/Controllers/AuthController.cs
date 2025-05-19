@@ -49,7 +49,6 @@ public class AuthController : ControllerBase
             FullName = user.FullName,
             Email = user.Email,
             Token = token,
-            ExpiresAt = DateTime.Now.AddHours(_config.GetValue<double>("Jwt:TokenValidityHrs"))
         };
 
         return Ok(loggedInUser);

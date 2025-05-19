@@ -17,15 +17,15 @@ const fadeInForm = {
 
 export default function SignUp() {
   return (
-    <div className="w-full h-[calc(100vh-57px)] bg-green-100 flex justify-center items-center">
+    <div className="w-full h-[calc(100vh-57px)] bg-green-100 flex justify-center items-center ">
       <motion.div
         variants={fadeInForm}
         initial="hidden"
         animate="visible"
-        className="flex flex-row capitalize justify-center w-full h-150"
+        className="flex flex-row capitalize justify-center w-full "
       >
-        <div className="flex flex-col justify-center items-center w-120  bg-white/85 rounded-4xl lg:rounded-r-none  ">
-          <h1 className="text-center text-6xl text-green-600 font-bold ">
+        <div className="flex flex-col justify-center  w-120  bg-white/85 rounded-4xl lg:rounded-r-none">
+          <h1 className="text-center text-6xl text-green-600 font-bold mt-10">
             Sign Up
           </h1>
           <SignUpForm />
