@@ -8,7 +8,7 @@ import { useRef } from "react";
 export default function TransactionsSection({ incomes, expenses }) {
   const manageIncomeDialog = useRef();
   const manageExpenseDialog = useRef();
-
+  console.log(incomes);
   function handleAddIncome() {
     manageIncomeDialog.current.open();
   }
@@ -24,14 +24,15 @@ export default function TransactionsSection({ incomes, expenses }) {
           <h1 className="text-center text-6xl font-bold text-green-700  mb-10">
             Incomes
           </h1>
-          {incomes.map((income, index) => (
-            <TransactionEntry
-              type="income"
-              entry={income}
-              index={index + 1}
-              key={income.IncomeId}
-            />
-          ))}
+          {incomes &&
+            incomes.map((income, index) => (
+              <TransactionEntry
+                type="income"
+                entry={income}
+                index={index + 1}
+                key={income.incomeId}
+              />
+            ))}
           <div className="flex justify-center relative group h-15 my-5 w-21 z-1">
             <img
               src={AddIncomeIcon}
@@ -53,14 +54,15 @@ export default function TransactionsSection({ incomes, expenses }) {
           <h1 className="text-center text-6xl font-bold text-red-700 mb-10">
             Expenses
           </h1>
-          {expenses.map((expense, index) => (
-            <TransactionEntry
-              type="expense"
-              entry={expense}
-              index={index + 1}
-              key={expense.ExpenseId}
-            />
-          ))}
+          {expenses &&
+            expenses.map((expense, index) => (
+              <TransactionEntry
+                type="expense"
+                entry={expense}
+                index={index + 1}
+                key={expense.ExpenseId}
+              />
+            ))}
           <div className="flex justify-center relative group h-15 my-5 w-22">
             <img
               src={AddExpenseIcon}

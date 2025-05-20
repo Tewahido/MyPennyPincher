@@ -155,26 +155,31 @@ function setDonutChartData(income, expenses) {
 }
 
 function getTotal(transactions) {
-  return transactions.reduce((sum, transaction) => sum + transaction.Amount, 0);
+  return transactions
+    ? transactions.reduce((sum, transaction) => sum + transaction.amount, 0)
+    : 0;
 }
 
 function getAmounts(transactions) {
-  let monthTotals = [];
+  if (transactions) {
+    let monthTotals = [];
 
-  transactions.map((transaction) => {
-    const date = new Date(transaction.Date);
-    const monthName = monthNames[date.getMonth()];
-    const existing = monthTotals.find((m) => m.month === monthName);
+    transactions.map((transaction) => {
+      const date = new Date(transaction.date);
+      const monthName = monthNames[date.getMonth()];
+      const existing = monthTotals.find((m) => m.month === monthName);
 
-    if (existing) {
-      existing.amount += transaction.Amount;
-      return;
-    }
+      if (existing) {
+        existing.amount += transaction.amount;
+        return;
+      }
 
-    monthTotals.push({ month: monthName, amount: transaction.Amount });
-  });
+      monthTotals.push({ month: monthName, amount: transaction.amount });
+    });
 
-  return monthTotals.map((monthTotal) => monthTotal.amount);
+    return monthTotals.map((monthTotal) => monthTotal.amount);
+  }
+  return 0;
 }
 
 export default function DashboardSection({
@@ -188,14 +193,15 @@ export default function DashboardSection({
 
   let months = [];
 
-  totals.incomes.map((income) => {
-    const date = new Date(income.Date);
+  if (totals.incomes) {
+    totals.incomes.map((income) => {
+      const date = new Date(income.Date);
 
-    if (!months.includes(monthNames[date.getMonth()])) {
-      months.push(monthNames[date.getMonth()]);
-    }
-  });
-
+      if (!months.includes(monthNames[date.getMonth()])) {
+        months.push(monthNames[date.getMonth()]);
+      }
+    });
+  }
   const monthlyIncomeAmounts = getAmounts(totals.incomes);
 
   const monthlyExpenseAmounts = getAmounts(totals.expenses);
@@ -221,7 +227,7 @@ export default function DashboardSection({
         </div>
       </div>
       <div className="flex flex-col gap-2 h-full w-full">
-        <div className="flex flex-col items-center lg:justify-between md:flex-row gap-2 xl:items-start xl:flex-row lg:h-[50%] mx-1">
+        <div className="flex flex-col items-center lg:justify-between md:flex-row gap-2 xl:items-start xl:flex-row lg:h-[50%] mx-1 ">
           <TotalDisplay
             title="Income"
             total={totalIncome}

@@ -21,25 +21,38 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
 
   async function handleAddIncome(event) {
     event.preventDefault();
-    console.log(month);
     const formData = new FormData(event.target);
 
     const isMonthly = formData.has("monthly");
 
-    const status = await AddIncome(
-      {
-        source: formData.get("source"),
-        amount: formData.get("amount"),
-        date: month,
-        monthly: isMonthly,
-        userId: user.userId,
-      },
-      user.token
-    );
+    let status;
+
+    if (!income) {
+      status = await AddIncome(
+        {
+          source: formData.get("source"),
+          amount: formData.get("amount"),
+          date: month,
+          monthly: isMonthly,
+          userId: user.userId,
+        },
+        user.token
+      );
+    } else {
+      status = await EditIncome(
+        {
+          source: formData.get("source"),
+          amount: formData.get("amount"),
+          date: month,
+          monthly: isMonthly,
+          userId: user.userId,
+        },
+        user.token
+      );
+    }
 
     if (status == 200) {
-      console.log("Successfully added income");
-      dialog.current.close();
+      handleClose();
     }
   }
 

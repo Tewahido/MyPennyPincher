@@ -1,91 +1,93 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardSection from "./components/DashboardSection";
 import TransactionsSection from "./components/TransactionsSection";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setMonth } from "../../store/slices/monthSlice";
+import { GetUserIncomes } from "../../services/incomeService";
+import { setIncomes } from "../../store/slices/incomeSlice";
 
-const incomeData = [
-  {
-    IncomeId: 1,
-    Source: "Salary",
-    Amount: 5000,
-    Date: "2025-01-25",
-    Monthly: true,
-    UserId: 1,
-  },
-  {
-    IncomeId: 2,
-    Source: "Freelance Project",
-    Amount: 1500,
-    Date: "2025-02-10",
-    Monthly: false,
-    UserId: 1,
-  },
-  {
-    IncomeId: 3,
-    Source: "Stock Dividends",
-    Amount: 300,
-    Date: "2025-03-18",
-    Monthly: false,
-    UserId: 1,
-  },
-  {
-    IncomeId: 4,
-    Source: "Bonus",
-    Amount: 2000,
-    Date: "2025-04-05",
-    Monthly: false,
-    UserId: 1,
-  },
-  {
-    IncomeId: 5,
-    Source: "Gift",
-    Amount: 800,
-    Date: "2025-05-12",
-    Monthly: false,
-    UserId: 1,
-  },
-  {
-    IncomeId: 6,
-    Source: "Side Hustle",
-    Amount: 400,
-    Date: "2025-01-15",
-    Monthly: false,
-    UserId: 1,
-  },
-  {
-    IncomeId: 7,
-    Source: "Selling Old Laptop",
-    Amount: 600,
-    Date: "2025-02-22",
-    Monthly: false,
-    UserId: 1,
-  },
-  {
-    IncomeId: 8,
-    Source: "Freelance Design",
-    Amount: 700,
-    Date: "2025-03-03",
-    Monthly: false,
-    UserId: 1,
-  },
-  {
-    IncomeId: 9,
-    Source: "Cashback",
-    Amount: 100,
-    Date: "2025-04-20",
-    Monthly: false,
-    UserId: 1,
-  },
-  {
-    IncomeId: 10,
-    Source: "Consulting",
-    Amount: 1200,
-    Date: "2025-05-05",
-    Monthly: false,
-    UserId: 1,
-  },
-];
+// const incomeData = [
+//   {
+//     IncomeId: 1,
+//     Source: "Salary",
+//     Amount: 5000,
+//     Date: "2025-01-25",
+//     Monthly: true,
+//     UserId: 1,
+//   },
+//   {
+//     IncomeId: 2,
+//     Source: "Freelance Project",
+//     Amount: 1500,
+//     Date: "2025-02-10",
+//     Monthly: false,
+//     UserId: 1,
+//   },
+//   {
+//     IncomeId: 3,
+//     Source: "Stock Dividends",
+//     Amount: 300,
+//     Date: "2025-03-18",
+//     Monthly: false,
+//     UserId: 1,
+//   },
+//   {
+//     IncomeId: 4,
+//     Source: "Bonus",
+//     Amount: 2000,
+//     Date: "2025-04-05",
+//     Monthly: false,
+//     UserId: 1,
+//   },
+//   {
+//     IncomeId: 5,
+//     Source: "Gift",
+//     Amount: 800,
+//     Date: "2025-05-12",
+//     Monthly: false,
+//     UserId: 1,
+//   },
+//   {
+//     IncomeId: 6,
+//     Source: "Side Hustle",
+//     Amount: 400,
+//     Date: "2025-01-15",
+//     Monthly: false,
+//     UserId: 1,
+//   },
+//   {
+//     IncomeId: 7,
+//     Source: "Selling Old Laptop",
+//     Amount: 600,
+//     Date: "2025-02-22",
+//     Monthly: false,
+//     UserId: 1,
+//   },
+//   {
+//     IncomeId: 8,
+//     Source: "Freelance Design",
+//     Amount: 700,
+//     Date: "2025-03-03",
+//     Monthly: false,
+//     UserId: 1,
+//   },
+//   {
+//     IncomeId: 9,
+//     Source: "Cashback",
+//     Amount: 100,
+//     Date: "2025-04-20",
+//     Monthly: false,
+//     UserId: 1,
+//   },
+//   {
+//     IncomeId: 10,
+//     Source: "Consulting",
+//     Amount: 1200,
+//     Date: "2025-05-05",
+//     Monthly: false,
+//     UserId: 1,
+//   },
+// ];
 
 const expenseData = [
   {
@@ -181,26 +183,43 @@ const expenseData = [
 ];
 
 export default function Dashboard() {
-  const dispatch = useDispatch();
+  const incomeData = useSelector((state) => state.income.incomes);
+  const user = useSelector((state) => state.user.user);
 
   const [selectedMonth, setSelectedMonth] = useState("2025-05");
 
-  dispatch(setMonth(selectedMonth));
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setMonth(selectedMonth));
+
+    async function fetchIncomes() {
+      const userIncomes = await GetUserIncomes(user.userId, user.token);
+      dispatch(setIncomes(userIncomes));
+    }
+    fetchIncomes();
+  }, []);
+
   const [currentYear, currentMonth] = selectedMonth.split("-");
+  const currentMonthIncomes = incomeData
+    ? incomeData.filter((income) => {
+        const incomeMonth = new Date(income.date).getMonth() + 1;
+        const incomeYear = new Date(income.date).getFullYear();
 
-  const currentMonthIncomes = incomeData.filter((income) => {
-    const incomeMonth = new Date(income.Date).getMonth() + 1;
-    const incomeYear = new Date(income.Date).getFullYear();
+        return incomeMonth == currentMonth && incomeYear == currentYear;
+      })
+    : null;
 
-    return incomeMonth == currentMonth && incomeYear == currentYear;
-  });
+  console.log(currentMonthIncomes);
 
-  const currentMonthExpenses = expenseData.filter((expense) => {
-    const expenseMonth = new Date(expense.Date).getMonth() + 1;
-    const expenseYear = new Date(expense.Date).getFullYear();
+  const currentMonthExpenses = expenseData
+    ? expenseData.filter((expense) => {
+        const expenseMonth = new Date(expense.date).getMonth() + 1;
+        const expenseYear = new Date(expense.date).getFullYear();
 
-    return expenseMonth == currentMonth && expenseYear == currentYear;
-  });
+        return expenseMonth == currentMonth && expenseYear == currentYear;
+      })
+    : null;
 
   function handleChangeMonth(event) {
     setSelectedMonth(event.target.value);
@@ -227,7 +246,6 @@ export default function Dashboard() {
             totals={{ incomes: incomeData, expenses: expenseData }}
             currentMonthIncomes={currentMonthIncomes}
             currentMonthExpenses={currentMonthExpenses}
-            setSelectedMonth={setSelectedMonth}
           />
         </div>
         <hr className="bg-green-700 h-0.5 w-[70%] mx-auto my-5" />

@@ -19,16 +19,9 @@ public class IncomeController : ControllerBase
         _incomeService = incomeService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<ICollection<Income>>> GetUserIncomes()
+    [HttpPost("getIncomes")]
+    public async Task<ActionResult<ICollection<Income>>> GetUserIncomes([FromBody]string userId)
     {
-        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (userId == null)
-        {
-            return Unauthorized();
-        }
-
         var incomes = await _incomeService.GetUserIncomes(userId);
 
         if(incomes == null || incomes.Count() == 0)

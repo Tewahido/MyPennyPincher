@@ -15,11 +15,11 @@ export default function TransactionEntry({ type, entry, index }) {
   let entryColour;
 
   if (type === "income") {
-    entryTitle = entry.Source;
+    entryTitle = entry.source;
     amountColour = "text-green-700";
     entryColour = "bg-green-100";
   } else {
-    entryTitle = entry.Description;
+    entryTitle = entry.description;
     amountColour = "text-red-700";
     entryColour = "bg-red-100";
   }
@@ -53,7 +53,7 @@ export default function TransactionEntry({ type, entry, index }) {
 
         <h1 className="w-[40%] text-lg font-bold">{entryTitle}</h1>
         <h1 className={`w-[20%] ${amountColour} text-lg font-bold`}>
-          R{entry.Amount}
+          R{entry.amount}
         </h1>
         <div className=" w-[10%] h-[75%] flex justify-between items-center ">
           <div className="relative group">
