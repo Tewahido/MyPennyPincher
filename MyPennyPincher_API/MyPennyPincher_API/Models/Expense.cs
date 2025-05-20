@@ -19,7 +19,4 @@ public partial class Expense
 
     public int ExpenseCategoryId { get; set; }
 
-    public virtual ExpenseCategory? ExpenseCategory { get; set; } = null;
-
-    public virtual User? User { get; set; } = null;
 }

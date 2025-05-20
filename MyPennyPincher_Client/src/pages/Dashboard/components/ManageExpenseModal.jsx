@@ -56,7 +56,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
             type="checkbox"
             name="Recurring"
             className="mx-8"
-            checked={expense && expense.Recurring}
+            defaultChecked={expense && expense.Recurring}
           />
         </label>
 

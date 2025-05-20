@@ -12,17 +12,24 @@ const incomeSlice = createSlice({
     addIncome: (state, action) => {
       state.incomes = [...state.incomes, action.payload];
     },
-    updateIncome: (state, action) => {
-      const index = state.incomes.findIndex((i) => i.id === action.payload.id);
+    editIncome: (state, action) => {
+      const index = state.incomes.findIndex(
+        (income) => income.incomeId === action.payload.incomeId
+      );
+      console.log(index);
       if (index !== -1) {
+        console.log(state.incomes[index]);
         state.incomes[index] = action.payload;
       }
     },
     deleteIncome: (state, action) => {
-      state.incomes = state.incomes.filter((i) => i.id !== action.payload);
+      state.incomes = state.incomes.filter(
+        (income) => income.incomeId !== action.payload.incomeId
+      );
     },
   },
 });
 
-export const { setIncomes, setLoading, setError } = incomeSlice.actions;
+export const { setIncomes, addIncome, editIncome, deleteIncome } =
+  incomeSlice.actions;
 export default incomeSlice.reducer;

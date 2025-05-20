@@ -36,15 +36,6 @@ public partial class MyPennyPincherDbContext : DbContext
                 .HasMaxLength(150)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.ExpenseCategory).WithMany(p => p.Expenses)
-                .HasForeignKey(d => d.ExpenseCategoryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Expenses__Expens__59063A47");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Expenses)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Expenses__UserId__5812160E");
         });
 
         modelBuilder.Entity<ExpenseCategory>(entity =>
@@ -66,10 +57,6 @@ public partial class MyPennyPincherDbContext : DbContext
                 .HasMaxLength(150)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.User).WithMany(p => p.Incomes)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Incomes__UserId__5CD6CB2B");
         });
 
         modelBuilder.Entity<User>(entity =>

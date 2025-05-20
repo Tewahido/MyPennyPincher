@@ -100,6 +100,7 @@ let barData;
 let lineData;
 
 function setBarGraphData(labels, incomes, expenses) {
+  console.log(labels);
   barData = {
     labels: labels,
     datasets: [
@@ -111,7 +112,7 @@ function setBarGraphData(labels, incomes, expenses) {
       },
       {
         label: "Total Expenses",
-        data: expenses,
+        data: expenses && expenses,
         backgroundColor: "rgba(185, 28, 28, 1)",
         borderRadius: 5,
       },
@@ -164,19 +165,19 @@ function getAmounts(transactions) {
   if (transactions) {
     let monthTotals = [];
 
-    transactions.map((transaction) => {
-      const date = new Date(transaction.date);
-      const monthName = monthNames[date.getMonth()];
-      const existing = monthTotals.find((m) => m.month === monthName);
+    monthNames.forEach((month, index) => {
+      const monthTotal = { month: month, amount: 0 };
+      transactions.forEach((transaction) => {
+        const date = new Date(transaction.date);
+        const monthName = monthNames[date.getMonth()];
 
-      if (existing) {
-        existing.amount += transaction.amount;
-        return;
-      }
+        if (monthName === month) {
+          monthTotal.amount += transaction.amount;
+        }
+      });
 
-      monthTotals.push({ month: monthName, amount: transaction.amount });
+      monthTotals.push(monthTotal);
     });
-
     return monthTotals.map((monthTotal) => monthTotal.amount);
   }
   return 0;
@@ -190,12 +191,11 @@ export default function DashboardSection({
   const totalIncome = getTotal(currentMonthIncomes);
 
   const totalExpenses = getTotal(currentMonthExpenses);
-
   let months = [];
 
   if (totals.incomes) {
     totals.incomes.map((income) => {
-      const date = new Date(income.Date);
+      const date = new Date(income.date);
 
       if (!months.includes(monthNames[date.getMonth()])) {
         months.push(monthNames[date.getMonth()]);
@@ -206,9 +206,9 @@ export default function DashboardSection({
 
   const monthlyExpenseAmounts = getAmounts(totals.expenses);
 
-  setBarGraphData(months, monthlyIncomeAmounts, monthlyExpenseAmounts);
+  setBarGraphData(monthNames, monthlyIncomeAmounts, monthlyExpenseAmounts);
 
-  setLineChartData(months, monthlyIncomeAmounts, monthlyExpenseAmounts);
+  setLineChartData(monthNames, monthlyIncomeAmounts, monthlyExpenseAmounts);
 
   setDonutChartData(totalIncome, totalExpenses);
 

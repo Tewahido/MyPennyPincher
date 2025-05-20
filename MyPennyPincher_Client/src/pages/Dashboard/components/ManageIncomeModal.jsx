@@ -1,12 +1,15 @@
 import { forwardRef, useRef, useImperativeHandle } from "react";
 import { createPortal } from "react-dom";
-import { useSelector } from "react-redux";
-import { AddIncome } from "../../../services/incomeService";
+import { useDispatch, useSelector } from "react-redux";
+import { AddIncome, EditIncome } from "../../../services/incomeService";
+import { addIncome, editIncome } from "../../../store/slices/incomeSlice.js";
 
 const ManageIncomeModal = forwardRef(function ManageIncomeModal(
   { income },
   ref
 ) {
+  const dispatch = useDispatch();
+  const incomes = useSelector((state) => state.income.incomes);
   const user = useSelector((state) => state.user.user);
   const month = useSelector((state) => state.month.month) + "-01";
   const dialog = useRef(ref);
@@ -25,39 +28,30 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
 
     const isMonthly = formData.has("monthly");
 
-    let status;
+    const currentIncome = {
+      source: formData.get("source"),
+      amount: formData.get("amount"),
+      date: month,
+      monthly: isMonthly,
+      userId: user.userId,
+    };
+    const status = income
+      ? await EditIncome(
+          { ...currentIncome, incomeId: income.incomeId },
+          user.token
+        )
+      : await AddIncome(currentIncome, user.token);
 
-    if (!income) {
-      status = await AddIncome(
-        {
-          source: formData.get("source"),
-          amount: formData.get("amount"),
-          date: month,
-          monthly: isMonthly,
-          userId: user.userId,
-        },
-        user.token
-      );
-    } else {
-      status = await EditIncome(
-        {
-          source: formData.get("source"),
-          amount: formData.get("amount"),
-          date: month,
-          monthly: isMonthly,
-          userId: user.userId,
-        },
-        user.token
-      );
-    }
-
-    if (status == 200) {
+    if (status != 400 || status != 401) {
+      income
+        ? dispatch(editIncome({ ...currentIncome, incomeId: income.incomeId }))
+        : dispatch(addIncome(currentIncome));
       handleClose();
     }
   }
 
   function handleClose(event) {
-    event.preventDefault();
+    event && event.preventDefault();
     dialog.current.close();
   }
   return createPortal(
@@ -75,7 +69,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
             type="text"
             name="source"
             className="h-full w-[75%] bg-green-100 text-green-900 rounded-lg mx-3 p-3 focus:outline-none"
-            defaultValue={income && income.Source}
+            defaultValue={income && income.source}
           />
         </label>
         <label className="flex h-10 p-1 items-center justify-between">
@@ -84,7 +78,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
             type="number"
             name="amount"
             className="h-full w-[75%] bg-green-100 text-green-900  rounded-lg mx-3 p-3 focus:outline-none"
-            defaultValue={income ? income.Amount : 0}
+            defaultValue={income ? income.amount : 0}
             min={0}
           />
         </label>
@@ -94,7 +88,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
             type="checkbox"
             name="monthly"
             className="mx-5"
-            checked={income && income.Monthly}
+            defaultChecked={income && income.monthly}
           />
         </label>
 

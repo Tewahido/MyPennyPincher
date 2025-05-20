@@ -91,108 +91,105 @@ import { setIncomes } from "../../store/slices/incomeSlice";
 
 const expenseData = [
   {
-    ExpenseId: 1,
-    Description: "Rent",
-    Amount: 1200,
-    Date: "2025-01-01",
-    Recurring: true,
-    CategoryId: 1,
-    UserId: 1,
+    expenseId: 1,
+    description: "Rent",
+    amount: 1200,
+    date: "2025-01-01",
+    recurring: true,
+    categoryId: 1,
+    userId: 1,
   },
   {
-    ExpenseId: 2,
-    Description: "Electricity Bill",
-    Amount: 100,
-    Date: "2025-02-05",
-    Recurring: true,
-    CategoryId: 2,
-    UserId: 1,
+    expenseId: 2,
+    description: "Electricity Bill",
+    amount: 100,
+    date: "2025-02-05",
+    recurring: true,
+    categoryId: 2,
+    userId: 1,
   },
   {
-    ExpenseId: 3,
-    Description: "Groceries",
-    Amount: 450,
-    Date: "2025-03-10",
-    Recurring: true,
-    CategoryId: 3,
-    UserId: 1,
+    expenseId: 3,
+    description: "Groceries",
+    amount: 450,
+    date: "2025-03-10",
+    recurring: true,
+    categoryId: 3,
+    userId: 1,
   },
   {
-    ExpenseId: 4,
-    Description: "New Phone",
-    Amount: 900,
-    Date: "2025-04-15",
-    Recurring: false,
-    CategoryId: 4,
-    UserId: 1,
+    expenseId: 4,
+    description: "New Phone",
+    amount: 900,
+    date: "2025-04-15",
+    recurring: false,
+    categoryId: 4,
+    userId: 1,
   },
   {
-    ExpenseId: 5,
-    Description: "Vacation Trip",
-    Amount: 1500,
-    Date: "2025-05-02",
-    Recurring: false,
-    CategoryId: 5,
-    UserId: 1,
+    expenseId: 5,
+    description: "Vacation Trip",
+    amount: 1500,
+    date: "2025-05-02",
+    recurring: false,
+    categoryId: 5,
+    userId: 1,
   },
   {
-    ExpenseId: 6,
-    Description: "Internet Subscription",
-    Amount: 60,
-    Date: "2025-01-10",
-    Recurring: true,
-    CategoryId: 2,
-    UserId: 1,
+    expenseId: 6,
+    description: "Internet Subscription",
+    amount: 60,
+    date: "2025-01-10",
+    recurring: true,
+    categoryId: 2,
+    userId: 1,
   },
   {
-    ExpenseId: 7,
-    Description: "Gym Membership",
-    Amount: 50,
-    Date: "2025-02-12",
-    Recurring: true,
-    CategoryId: 6,
-    UserId: 1,
+    expenseId: 7,
+    description: "Gym Membership",
+    amount: 50,
+    date: "2025-02-12",
+    recurring: true,
+    categoryId: 6,
+    userId: 1,
   },
   {
-    ExpenseId: 8,
-    Description: "Movie Night",
-    Amount: 30,
-    Date: "2025-03-21",
-    Recurring: false,
-    CategoryId: 7,
-    UserId: 1,
+    expenseId: 8,
+    description: "Movie Night",
+    amount: 30,
+    date: "2025-03-21",
+    recurring: false,
+    categoryId: 7,
+    userId: 1,
   },
   {
-    ExpenseId: 9,
-    Description: "Dining Out",
-    Amount: 75,
-    Date: "2025-04-10",
-    Recurring: false,
-    CategoryId: 7,
-    UserId: 1,
+    expenseId: 9,
+    description: "Dining Out",
+    amount: 75,
+    date: "2025-04-10",
+    recurring: false,
+    categoryId: 7,
+    userId: 1,
   },
   {
-    ExpenseId: 10,
-    Description: "Clothing",
-    Amount: 200,
-    Date: "2025-05-08",
-    Recurring: false,
-    CategoryId: 8,
-    UserId: 1,
+    expenseId: 10,
+    description: "Clothing",
+    amount: 200,
+    date: "2025-05-08",
+    recurring: false,
+    categoryId: 8,
+    userId: 1,
   },
 ];
 
 export default function Dashboard() {
   const incomeData = useSelector((state) => state.income.incomes);
   const user = useSelector((state) => state.user.user);
-
-  const [selectedMonth, setSelectedMonth] = useState("2025-05");
+  const month = useSelector((state) => state.month.month);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setMonth(selectedMonth));
-
     async function fetchIncomes() {
       const userIncomes = await GetUserIncomes(user.userId, user.token);
       dispatch(setIncomes(userIncomes));
@@ -200,7 +197,7 @@ export default function Dashboard() {
     fetchIncomes();
   }, []);
 
-  const [currentYear, currentMonth] = selectedMonth.split("-");
+  const [currentYear, currentMonth] = month.split("-");
   const currentMonthIncomes = incomeData
     ? incomeData.filter((income) => {
         const incomeMonth = new Date(income.date).getMonth() + 1;
@@ -210,19 +207,16 @@ export default function Dashboard() {
       })
     : null;
 
-  console.log(currentMonthIncomes);
+  const currentMonthExpenses = expenseData.filter((expense) => {
+    const expenseMonth = new Date(expense.date).getMonth() + 1;
+    const expenseYear = new Date(expense.date).getFullYear();
 
-  const currentMonthExpenses = expenseData
-    ? expenseData.filter((expense) => {
-        const expenseMonth = new Date(expense.date).getMonth() + 1;
-        const expenseYear = new Date(expense.date).getFullYear();
-
-        return expenseMonth == currentMonth && expenseYear == currentYear;
-      })
-    : null;
+    return expenseMonth == currentMonth && expenseYear == currentYear;
+  });
+  console.log(currentMonthExpenses);
 
   function handleChangeMonth(event) {
-    setSelectedMonth(event.target.value);
+    dispatch(setMonth(event.target.value));
   }
 
   return (
@@ -235,7 +229,7 @@ export default function Dashboard() {
           <input
             type="month"
             onChange={(event) => handleChangeMonth(event)}
-            value={selectedMonth}
+            value={month}
             className=" text-md border-2 rounded-xl md:text-xl xl:text-3xl cursor-pointer font-extrabold p-2"
             max={new Date().toISOString().slice(0, 7)}
             min="2020-01"

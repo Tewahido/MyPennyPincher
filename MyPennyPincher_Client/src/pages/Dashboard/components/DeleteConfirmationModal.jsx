@@ -1,10 +1,16 @@
 import { forwardRef, useRef, useImperativeHandle } from "react";
 import { createPortal } from "react-dom";
+import { DeleteIncome } from "../../../services/incomeService";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteIncome } from "../../../store/slices/incomeSlice";
 
 const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
   { entry, type },
   ref
 ) {
+  const token = useSelector((state) => state.user.user.token);
+  const dispatch = useDispatch();
+
   const dialog = useRef(ref);
 
   useImperativeHandle(ref, () => {
@@ -16,8 +22,17 @@ const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
   });
 
   function handleClose(event) {
-    event.preventDefault();
+    event && event.preventDefault();
     dialog.current.close();
+  }
+
+  async function handleDelete() {
+    const status = type === "income" ? DeleteIncome(entry, token) : null;
+
+    if (status != 400 || status != 401) {
+      type === "income" ? dispatch(deleteIncome(entry)) : null;
+      handleClose();
+    }
   }
 
   return createPortal(
@@ -39,7 +54,10 @@ const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
         >
           Cancel
         </button>
-        <button className="h-10 bg-red-700/85 text-black/85 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-red-800 hover:text-white focus:outline-none">
+        <button
+          onClick={handleDelete}
+          className="h-10 bg-red-700/85 text-black/85 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-red-800 hover:text-white focus:outline-none"
+        >
           <p className="mx-2"> Delete</p>
         </button>
       </div>

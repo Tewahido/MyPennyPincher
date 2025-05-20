@@ -38,7 +38,7 @@ public class IncomeService
 
     public async Task EditIncome(Income updatedIncome)
     {
-        var existingIncome = await _context.Incomes.FirstOrDefaultAsync(income => income.IncomeId == updatedIncome.IncomeId);
+        var existingIncome = _context.Incomes.Where(income => income.IncomeId == updatedIncome.IncomeId).FirstOrDefault();
 
         if(existingIncome != null)
         {
@@ -46,6 +46,7 @@ public class IncomeService
             existingIncome.Source = updatedIncome.Source;
             existingIncome.Date = updatedIncome.Date;
             existingIncome.Monthly = updatedIncome.Monthly;
+            //_context.Entry(existingIncome).CurrentValues.SetValues(updatedIncome);
 
             await _context.SaveChangesAsync();
         }

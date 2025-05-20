@@ -49,7 +49,7 @@ public class IncomeController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("editIncome")]
+    [HttpPut]
     public async Task<ActionResult> EditIncome([FromBody] Income income)
     {
         await _incomeService.EditIncome(income);

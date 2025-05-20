@@ -16,7 +16,6 @@ export const GetUserIncomes = async (data, token) => {
 };
 
 export const AddIncome = async (data, token) => {
-  console.log(data);
   const response = await fetch(`${BASE_URL}/Income/addIncome`, {
     method: "POST",
     headers: {
@@ -39,8 +38,25 @@ export const AddIncome = async (data, token) => {
 };
 
 export const EditIncome = async (data, token) => {
-  const response = await fetch(`${BASE_URL}/Income/editIncome`, {
-    method: "POST",
+  console.log(data);
+  const response = await fetch(`${BASE_URL}/Income`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const status = response.status;
+
+  return status;
+};
+
+export const DeleteIncome = async (data, token) => {
+  console.log(data);
+  const response = await fetch(`${BASE_URL}/Income`, {
+    method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-type": "application/json",
