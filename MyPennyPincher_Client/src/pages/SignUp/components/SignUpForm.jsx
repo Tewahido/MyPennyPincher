@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import { SignUp } from "../../../services/apiService";
+import { SignUp } from "../../../services/authService.js";
 import { useState } from "react";
-import ErrorMessage from "./ErrorMessage";
-import Input from "../../../components/Input";
+import ErrorMessage from "../../../components/ErrorMessage.jsx";
+import SignUpInput from "./SignUpInput.jsx";
 
 const emailDomain = [".com", ".co.za", ".org"];
 
@@ -91,7 +91,7 @@ export default function SignUpForm() {
         onSubmit={handleSubmit}
         className="flex flex-col items-center gap-3"
       >
-        <Input
+        <SignUpInput
           type="text"
           name="email"
           placeholder="Email"
@@ -100,7 +100,7 @@ export default function SignUpForm() {
           isDataValid={isDataValid.email}
           errorMessage="Please enter a valid email."
         />
-        <Input
+        <SignUpInput
           type="text"
           name="fullName"
           placeholder="Full Name"
@@ -109,7 +109,7 @@ export default function SignUpForm() {
           isDataValid={isDataValid.fullName}
           errorMessage="Please enter your name."
         />
-        <Input
+        <SignUpInput
           type="password"
           name="password"
           placeholder="Password"
@@ -118,7 +118,7 @@ export default function SignUpForm() {
           isDataValid={isDataValid.password}
           errorMessage="Please enter a stronger password"
         />
-        <Input
+        <SignUpInput
           type="password"
           name="confirmPassword"
           placeholder="Confirm Password"

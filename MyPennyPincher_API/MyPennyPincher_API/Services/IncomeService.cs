@@ -24,6 +24,7 @@ public class IncomeService
 
     public async Task AddIncome(Income income)
     {
+        Console.WriteLine(income);
         _context.Incomes.Add(income);
 
         await _context.SaveChangesAsync();

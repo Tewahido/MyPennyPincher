@@ -1,4 +1,4 @@
-const BASE_URL = "https://localhost:7053";
+import { BASE_URL } from "../config/config.js";
 
 export const SignUp = async (fullName, email, password) => {
   const response = await fetch(`${BASE_URL}/Auth/register`, {
@@ -32,10 +32,9 @@ export const Login = async (email, password) => {
   if (!response.ok) {
     const error = await response.text();
     console.error("Error:", error);
-    console.log(JSON.stringify(email, fullName, password));
+    return null;
   }
 
   const data = await response.json();
-
   return data;
 };

@@ -1,6 +1,6 @@
 @MyPennyPincher_API_HostAddress = https://localhost:7053
 
-POST {{MyPennyPincher_API_HostAddress}}/Auth/
+POST {{MyPennyPincher_API_HostAddress}}/Income/addIncome
 Accept: application/json
 
 ###

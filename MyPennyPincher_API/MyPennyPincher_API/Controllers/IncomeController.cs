@@ -42,6 +42,7 @@ public class IncomeController : ControllerBase
     [HttpPost("addIncome")]
     public async Task<ActionResult> AddIncome([FromBody] Income income)
     {
+        Console.WriteLine(income.Source + income.Amount);
         await _incomeService.AddIncome(income);
 
         return Ok();

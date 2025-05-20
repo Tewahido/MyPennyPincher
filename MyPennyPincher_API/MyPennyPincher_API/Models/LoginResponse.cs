@@ -1,6 +1,6 @@
 ﻿namespace MyPennyPincher_API.Models;
 
-public class LoggedInUser
+public class LoginResponse
 {
     public Guid UserId { get; set; }
 

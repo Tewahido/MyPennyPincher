@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { Login } from "../../../services/apiService";
+import { Login } from "../../../services/authService.js";
 import { login } from "../../../store/slices/userSlice.js";
+import LoginInput from "./LoginInput.jsx";
+import ErrorMessage from "../../../components/ErrorMessage.jsx";
 
 export default function LoginForm() {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
+
+  const [loginFailed, setLoginFailed] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -29,32 +32,35 @@ export default function LoginForm() {
 
     console.log(loggedInUser);
 
-    if (loggedInUser) {
-      dispatch(login(loggedInUser));
-
-      navigate("/dashboard");
+    if (!loggedInUser) {
+      setLoginFailed(true);
+      return;
     }
+    dispatch(login(loggedInUser));
+
+    navigate("/dashboard");
   }
 
   return (
     <div className="flex flex-col justify-center items-center m-10 ">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        <input
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <LoginInput
           type="text"
-          className="outline-2 px-5 py-3 rounded-md text-green-600 outline-gray-500 transition-all duration-50 hover:outline-4"
           name="email"
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
+          loginFailed={loginFailed}
         />
-        <input
+        <LoginInput
           type="password"
-          className="outline-2 px-5 py-3 rounded-md text-green-600 outline-gray-500 transition-all duration-50 hover:outline-4"
           name="password"
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
+          loginFailed={loginFailed}
         />
+        <ErrorMessage text={loginFailed ? "Invalid credentials" : ""} />
         <div className="w-full flex flex-col gap-3">
           <div className="w-full flex justify-between">
             <p className="text-sm">Don't have an account?</p>

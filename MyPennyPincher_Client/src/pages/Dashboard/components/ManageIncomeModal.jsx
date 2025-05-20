@@ -1,10 +1,14 @@
 import { forwardRef, useRef, useImperativeHandle } from "react";
 import { createPortal } from "react-dom";
+import { useSelector } from "react-redux";
+import { AddIncome } from "../../../services/incomeService";
 
 const ManageIncomeModal = forwardRef(function ManageIncomeModal(
   { income },
   ref
 ) {
+  const user = useSelector((state) => state.user.user);
+  const month = useSelector((state) => state.month.month) + "-01";
   const dialog = useRef(ref);
 
   useImperativeHandle(ref, () => {
@@ -15,8 +19,28 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
     };
   });
 
-  function handleAddIncome(event) {
+  async function handleAddIncome(event) {
     event.preventDefault();
+    console.log(month);
+    const formData = new FormData(event.target);
+
+    const isMonthly = formData.has("monthly");
+
+    const status = await AddIncome(
+      {
+        source: formData.get("source"),
+        amount: formData.get("amount"),
+        date: month,
+        monthly: isMonthly,
+        userId: user.userId,
+      },
+      user.token
+    );
+
+    if (status == 200) {
+      console.log("Successfully added income");
+      dialog.current.close();
+    }
   }
 
   function handleClose(event) {
@@ -36,7 +60,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
           <p className="font-bold ">Source:</p>
           <input
             type="text"
-            name="Source"
+            name="source"
             className="h-full w-[75%] bg-green-100 text-green-900 rounded-lg mx-3 p-3 focus:outline-none"
             defaultValue={income && income.Source}
           />
@@ -45,7 +69,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
           <p className="font-bold">Amount:</p>
           <input
             type="number"
-            name="Amount"
+            name="amount"
             className="h-full w-[75%] bg-green-100 text-green-900  rounded-lg mx-3 p-3 focus:outline-none"
             defaultValue={income ? income.Amount : 0}
             min={0}
@@ -55,7 +79,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
           <p className="font-bold">Monthly :</p>
           <input
             type="checkbox"
-            name="Monthly"
+            name="monthly"
             className="mx-5"
             checked={income && income.Monthly}
           />
@@ -69,7 +93,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
             Cancel
           </button>
           <button
-            onClick={handleAddIncome}
+            type="submit"
             className="h-10 p-2 bg-green-800 text-green-100 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-green-950"
           >
             <p className="mx-2">{income ? "Confirm" : "Add"}</p>

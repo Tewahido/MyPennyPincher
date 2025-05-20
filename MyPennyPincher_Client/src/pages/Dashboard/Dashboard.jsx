@@ -1,6 +1,8 @@
 import { useState } from "react";
 import DashboardSection from "./components/DashboardSection";
 import TransactionsSection from "./components/TransactionsSection";
+import { useDispatch } from "react-redux";
+import { setMonth } from "../../store/slices/monthSlice";
 
 const incomeData = [
   {
@@ -179,9 +181,13 @@ const expenseData = [
 ];
 
 export default function Dashboard() {
+  const dispatch = useDispatch();
+
   const [selectedMonth, setSelectedMonth] = useState("2025-05");
 
+  dispatch(setMonth(selectedMonth));
   const [currentYear, currentMonth] = selectedMonth.split("-");
+
   const currentMonthIncomes = incomeData.filter((income) => {
     const incomeMonth = new Date(income.Date).getMonth() + 1;
     const incomeYear = new Date(income.Date).getFullYear();
