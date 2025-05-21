@@ -116,7 +116,7 @@ export default function Dashboard() {
 
     async function fetchIncomes() {
       try {
-        const userIncomes = await GetUserIncomes(user.userId, user.token);
+        const userIncomes = await GetUserIncomes(user.token);
 
         dispatch(setIncomes(userIncomes));
       } catch (error) {

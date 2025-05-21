@@ -20,8 +20,10 @@ public class IncomeController : ControllerBase
     }
 
     [HttpPost("getIncomes")]
-    public async Task<ActionResult<ICollection<Income>>> GetUserIncomes([FromBody]string userId)
+    public async Task<ActionResult<ICollection<Income>>> GetUserIncomes()
     {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
         var incomes = await _incomeService.GetUserIncomes(userId);
 
         if(incomes == null || incomes.Count() == 0)

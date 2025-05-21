@@ -30,8 +30,6 @@ export default function LoginForm() {
 
     const loggedInUser = await Login(formData.email, formData.password);
 
-    console.log(loggedInUser);
-
     if (!loggedInUser) {
       setLoginFailed(true);
       return;

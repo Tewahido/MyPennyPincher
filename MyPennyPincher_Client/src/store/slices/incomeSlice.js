@@ -16,9 +16,8 @@ const incomeSlice = createSlice({
       const index = state.incomes.findIndex(
         (income) => income.incomeId === action.payload.incomeId
       );
-      console.log(index);
+
       if (index !== -1) {
-        console.log(state.incomes[index]);
         state.incomes[index] = action.payload;
       }
     },
