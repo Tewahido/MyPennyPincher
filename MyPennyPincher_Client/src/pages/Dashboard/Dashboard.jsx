@@ -198,6 +198,7 @@ export default function Dashboard() {
   }, []);
 
   const [currentYear, currentMonth] = month.split("-");
+
   const currentMonthIncomes = incomeData
     ? incomeData.filter((income) => {
         const incomeMonth = new Date(income.date).getMonth() + 1;
@@ -207,12 +208,31 @@ export default function Dashboard() {
       })
     : null;
 
-  const currentMonthExpenses = expenseData.filter((expense) => {
-    const expenseMonth = new Date(expense.date).getMonth() + 1;
-    const expenseYear = new Date(expense.date).getFullYear();
+  const yearlyIncomeTotals = incomeData
+    ? incomeData.filter((income) => {
+        const incomeYear = new Date(income.date).getFullYear();
 
-    return expenseMonth == currentMonth && expenseYear == currentYear;
-  });
+        return incomeYear == currentYear;
+      })
+    : null;
+
+  const currentMonthExpenses = expenseData
+    ? expenseData.filter((expense) => {
+        const expenseMonth = new Date(expense.date).getMonth() + 1;
+        const expenseYear = new Date(expense.date).getFullYear();
+
+        return expenseMonth == currentMonth && expenseYear == currentYear;
+      })
+    : null;
+
+  const yearlyExpenseTotals = expenseData
+    ? expenseData.filter((expense) => {
+        const expenseYear = new Date(expense.date).getFullYear();
+
+        return expenseYear == currentYear;
+      })
+    : null;
+
   console.log(currentMonthExpenses);
 
   function handleChangeMonth(event) {
@@ -237,7 +257,10 @@ export default function Dashboard() {
         </div>
         <div className="w-full ">
           <DashboardSection
-            totals={{ incomes: incomeData, expenses: expenseData }}
+            yearlyTotals={{
+              incomes: yearlyIncomeTotals,
+              expenses: yearlyExpenseTotals,
+            }}
             currentMonthIncomes={currentMonthIncomes}
             currentMonthExpenses={currentMonthExpenses}
           />

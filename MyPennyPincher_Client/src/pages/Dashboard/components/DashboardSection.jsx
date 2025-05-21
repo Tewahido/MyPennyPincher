@@ -100,7 +100,6 @@ let barData;
 let lineData;
 
 function setBarGraphData(labels, incomes, expenses) {
-  console.log(labels);
   barData = {
     labels: labels,
     datasets: [
@@ -156,17 +155,19 @@ function setDonutChartData(income, expenses) {
 }
 
 function getTotal(transactions) {
+  console.log(transactions);
   return transactions
-    ? transactions.reduce((sum, transaction) => sum + transaction.amount, 0)
+    ? transactions.reduce((sum, transaction) => sum + +transaction.amount, 0)
     : 0;
 }
 
-function getAmounts(transactions) {
+function getMonthlyTotals(transactions) {
   if (transactions) {
     let monthTotals = [];
 
     monthNames.forEach((month, index) => {
       const monthTotal = { month: month, amount: 0 };
+
       transactions.forEach((transaction) => {
         const date = new Date(transaction.date);
         const monthName = monthNames[date.getMonth()];
@@ -178,13 +179,16 @@ function getAmounts(transactions) {
 
       monthTotals.push(monthTotal);
     });
+
+    // console.log(monthTotals);
+
     return monthTotals.map((monthTotal) => monthTotal.amount);
   }
   return 0;
 }
 
 export default function DashboardSection({
-  totals,
+  yearlyTotals,
   currentMonthIncomes,
   currentMonthExpenses,
 }) {
@@ -193,8 +197,8 @@ export default function DashboardSection({
   const totalExpenses = getTotal(currentMonthExpenses);
   let months = [];
 
-  if (totals.incomes) {
-    totals.incomes.map((income) => {
+  if (yearlyTotals.incomes) {
+    yearlyTotals.incomes.map((income) => {
       const date = new Date(income.date);
 
       if (!months.includes(monthNames[date.getMonth()])) {
@@ -202,9 +206,11 @@ export default function DashboardSection({
       }
     });
   }
-  const monthlyIncomeAmounts = getAmounts(totals.incomes);
-
-  const monthlyExpenseAmounts = getAmounts(totals.expenses);
+  // console.log(yearlyTotals);
+  const monthlyIncomeAmounts = getMonthlyTotals(yearlyTotals.incomes);
+  // console.log(monthlyIncomeAmounts);
+  const monthlyExpenseAmounts = getMonthlyTotals(yearlyTotals.expenses);
+  // console.log(monthlyExpenseAmounts);
 
   setBarGraphData(monthNames, monthlyIncomeAmounts, monthlyExpenseAmounts);
 
