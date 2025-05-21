@@ -54,7 +54,7 @@ public class ExpenseController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("editExpense")]
+    [HttpPut]
     public async Task<ActionResult> EditExpense([FromBody]Expense expense)
     {
         await _expenseService.EditExpense(expense);

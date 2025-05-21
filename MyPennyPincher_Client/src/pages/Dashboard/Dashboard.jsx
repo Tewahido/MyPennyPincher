@@ -135,8 +135,6 @@ export default function Dashboard() {
     fetchIncomes();
   }, [reloadIncomes]);
 
-  useEffect(() => {}, [incomeData]);
-
   const [currentYear, currentMonth] = month.split("-");
 
   const currentMonthIncomes = incomeData
