@@ -3,6 +3,9 @@ import Logo from "/GrabbingMoneyColor_Icon.png";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/slices/userSlice";
+import { clearIncomes } from "../store/slices/incomeSlice";
+import { clearExpenses } from "../store/slices/expenseSlice";
+import { resetMonth } from "../store/slices/monthSlice";
 
 export default function Navbar() {
   const dispatch = useDispatch();
@@ -25,6 +28,9 @@ export default function Navbar() {
   function handleLogout() {
     if (user.loggedIn) {
       dispatch(logout());
+      dispatch(clearIncomes());
+      dispatch(clearExpenses());
+      dispatch(resetMonth());
     }
   }
 
@@ -46,12 +52,14 @@ export default function Navbar() {
         </div>
         {window.location.pathname !== "/login" && (
           <div className=" flex items-end h-full gap-10 mr-1 md:mr-3 lg:mr-5">
-            <Link
-              to="/dashboard"
-              className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
-            >
-              Dashboard
-            </Link>
+            {user.loggedIn && window.location.pathname !== "/dashboard" && (
+              <Link
+                to="/dashboard"
+                className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
+              >
+                Dashboard
+              </Link>
+            )}
             <Link
               to="/login"
               className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"

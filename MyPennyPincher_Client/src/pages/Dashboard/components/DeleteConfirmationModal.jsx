@@ -8,7 +8,7 @@ const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
   { entry, type },
   ref
 ) {
-  const token = useSelector((state) => state.user.user.token);
+  const token = useSelector((state) => state.user.user?.token);
   const dispatch = useDispatch();
 
   const dialog = useRef(ref);

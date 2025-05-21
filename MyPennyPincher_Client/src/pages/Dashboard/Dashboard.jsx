@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import DashboardSection from "./components/DashboardSection";
 import TransactionsSection from "./components/TransactionsSection";
 import { useDispatch, useSelector } from "react-redux";
 import { setMonth } from "../../store/slices/monthSlice";
 import { GetUserIncomes } from "../../services/incomeService";
 import { setIncomes } from "../../store/slices/incomeSlice";
+import { useNavigate } from "react-router-dom";
 
 const expenseData = [
   {
@@ -100,16 +101,27 @@ const expenseData = [
 ];
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const incomeData = useSelector((state) => state.income.incomes);
+  const userLoggedIn = useSelector((state) => state.user.loggedIn);
   const user = useSelector((state) => state.user.user);
   const month = useSelector((state) => state.month.month);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!userLoggedIn) {
+      navigate("/login");
+    }
+
     async function fetchIncomes() {
-      const userIncomes = await GetUserIncomes(user.userId, user.token);
-      dispatch(setIncomes(userIncomes));
+      try {
+        const userIncomes = await GetUserIncomes(user.userId, user.token);
+
+        dispatch(setIncomes(userIncomes));
+      } catch (error) {
+        console.error("Error fetching incomes:", error);
+      }
     }
     fetchIncomes();
   }, []);

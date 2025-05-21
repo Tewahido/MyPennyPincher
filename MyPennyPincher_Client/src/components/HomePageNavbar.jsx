@@ -21,6 +21,15 @@ export default function Navbar() {
     };
   }, []);
 
+  function handleLogout() {
+    if (user.loggedIn) {
+      dispatch(logout());
+      dispatch(clearIncomes());
+      dispatch(clearExpenses());
+      dispatch(resetMonth());
+    }
+  }
+
   return (
     <div
       className="flex flex-col fixed top-0 left-0 w-full z-10 bg-cover bg-center bg-fixed "
@@ -43,15 +52,18 @@ export default function Navbar() {
           </Link>
         </div>
         <div className=" flex items-end h-full gap-10 mr-1 md:mr-3 lg:mr-5">
+          {user.loggedIn && (
+            <Link
+              to="/dashboard"
+              className="text-gray-300 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
+            >
+              Dashboard
+            </Link>
+          )}
           <Link
-            to="/dashboard"
-            className="text-gray-300 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
-          >
-            Dashboard
-          </Link>
-          <Link
-            to={user.loggedIn ? "/logout" : "/login"}
-            className="text-gray-300 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
+            to="/login"
+            className="text-gray-100 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
+            onClick={handleLogout}
           >
             {user.loggedIn ? "Logout" : "Login"}
           </Link>

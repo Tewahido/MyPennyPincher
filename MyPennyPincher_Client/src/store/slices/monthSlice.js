@@ -14,8 +14,11 @@ const monthSlice = createSlice({
     setMonth(state, action) {
       state.month = action.payload;
     },
+    resetMonth(state) {
+      state.month = getCurrentMonthString();
+    },
   },
 });
 
-export const { setMonth } = monthSlice.actions;
+export const { setMonth, resetMonth } = monthSlice.actions;
 export default monthSlice.reducer;

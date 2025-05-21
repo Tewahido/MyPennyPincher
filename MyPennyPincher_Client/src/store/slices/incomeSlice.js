@@ -27,9 +27,12 @@ const incomeSlice = createSlice({
         (income) => income.incomeId !== action.payload.incomeId
       );
     },
+    clearIncomes: (state) => {
+      state.incomes = [];
+    },
   },
 });
 
-export const { setIncomes, addIncome, editIncome, deleteIncome } =
+export const { setIncomes, addIncome, editIncome, deleteIncome, clearIncomes } =
   incomeSlice.actions;
 export default incomeSlice.reducer;

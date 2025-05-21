@@ -10,7 +10,7 @@ export const GetUserIncomes = async (data, token) => {
     body: JSON.stringify(data),
   });
 
-  const incomes = response?.json();
+  const incomes = await response.json();
 
   return incomes;
 };
