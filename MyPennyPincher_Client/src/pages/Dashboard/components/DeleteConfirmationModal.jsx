@@ -27,7 +27,7 @@ const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
   }
 
   async function handleDelete() {
-    const status = type === "income" ? DeleteIncome(entry, token) : null;
+    const status = type === "income" ? await DeleteIncome(entry, token) : null;
 
     if (status != 400 || status != 401) {
       type === "income" ? dispatch(deleteIncome(entry)) : null;

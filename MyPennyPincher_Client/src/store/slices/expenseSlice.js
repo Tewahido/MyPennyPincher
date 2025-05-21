@@ -13,14 +13,11 @@ const expenseSlice = createSlice({
       state.expenses = [...state.expenses, action.payload];
     },
     editExpense: (state, action) => {
-      const index = state.expenses.findIndex(
-        (expense) => expense.expenseId === action.payload.expenseId
+      state.expenses = state.expenses.map((expense) =>
+        expense.expenseId === action.payload.expenseId
+          ? action.payload
+          : expense
       );
-      console.log(index);
-      if (index !== -1) {
-        console.log(state.expenses[index]);
-        state.expenses[index] = action.payload;
-      }
     },
     deleteExpense: (state, action) => {
       state.expenses = state.expenses.filter(

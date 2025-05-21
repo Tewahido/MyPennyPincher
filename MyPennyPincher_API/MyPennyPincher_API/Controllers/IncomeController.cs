@@ -19,7 +19,7 @@ public class IncomeController : ControllerBase
         _incomeService = incomeService;
     }
 
-    [HttpPost("getIncomes")]
+    [HttpGet]
     public async Task<ActionResult<ICollection<Income>>> GetUserIncomes()
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

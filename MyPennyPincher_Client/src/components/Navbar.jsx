@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "/GrabbingMoneyColor_Icon.png";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,9 +6,11 @@ import { logout } from "../store/slices/userSlice";
 import { clearIncomes } from "../store/slices/incomeSlice";
 import { clearExpenses } from "../store/slices/expenseSlice";
 import { resetMonth } from "../store/slices/monthSlice";
+import { logoutUser } from "../util/util";
 
 export default function Navbar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
 
   const [scrolled, setScrolled] = useState(false);
@@ -27,10 +29,7 @@ export default function Navbar() {
 
   function handleLogout() {
     if (user.loggedIn) {
-      dispatch(logout());
-      dispatch(clearIncomes());
-      dispatch(clearExpenses());
-      dispatch(resetMonth());
+      logoutUser(dispatch, navigate);
     }
   }
 

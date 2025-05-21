@@ -3,13 +3,14 @@ import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AddIncome, EditIncome } from "../../../services/incomeService";
 import { addIncome, editIncome } from "../../../store/slices/incomeSlice.js";
+import { useNavigate } from "react-router-dom";
 
 const ManageIncomeModal = forwardRef(function ManageIncomeModal(
   { income },
   ref
 ) {
   const dispatch = useDispatch();
-  const incomes = useSelector((state) => state.income.incomes);
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
   const month = useSelector((state) => state.month.month) + "-01";
   const dialog = useRef(ref);
@@ -30,11 +31,12 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
 
     const currentIncome = {
       source: formData.get("source"),
-      amount: formData.get("amount"),
+      amount: +formData.get("amount"),
       date: month,
       monthly: isMonthly,
       userId: user.userId,
     };
+
     const status = income
       ? await EditIncome(
           { ...currentIncome, incomeId: income.incomeId },
@@ -47,6 +49,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
         ? dispatch(editIncome({ ...currentIncome, incomeId: income.incomeId }))
         : dispatch(addIncome(currentIncome));
       handleClose();
+      navigate("/dashboard");
     }
   }
 

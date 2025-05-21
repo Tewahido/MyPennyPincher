@@ -6,6 +6,7 @@ import { setMonth } from "../../store/slices/monthSlice";
 import { GetUserIncomes } from "../../services/incomeService";
 import { setIncomes } from "../../store/slices/incomeSlice";
 import { useNavigate } from "react-router-dom";
+import { logoutUser } from "../../util/util";
 
 const expenseData = [
   {
@@ -102,12 +103,15 @@ const expenseData = [
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const incomeData = useSelector((state) => state.income.incomes);
+  const reloadIncomes = useSelector((state) => state.income.reloadIncomes);
   const userLoggedIn = useSelector((state) => state.user.loggedIn);
   const user = useSelector((state) => state.user.user);
   const month = useSelector((state) => state.month.month);
 
-  const dispatch = useDispatch();
+  console.log(incomeData);
 
   useEffect(() => {
     if (!userLoggedIn) {
@@ -116,15 +120,22 @@ export default function Dashboard() {
 
     async function fetchIncomes() {
       try {
+        console.log("hello");
         const userIncomes = await GetUserIncomes(user.token);
-
-        dispatch(setIncomes(userIncomes));
+        const data = await userIncomes.json();
+        dispatch(setIncomes(data));
       } catch (error) {
-        console.error("Error fetching incomes:", error);
+        if (error.response) {
+          if (error.response?.status === 401) {
+            logoutUser(dispatch, navigate);
+          }
+        }
       }
     }
     fetchIncomes();
-  }, []);
+  }, [reloadIncomes]);
+
+  useEffect(() => {}, [incomeData]);
 
   const [currentYear, currentMonth] = month.split("-");
 

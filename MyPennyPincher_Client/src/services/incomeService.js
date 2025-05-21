@@ -1,17 +1,16 @@
 import { BASE_URL } from "../config/config";
 
 export const GetUserIncomes = async (token) => {
-  const response = await fetch(`${BASE_URL}/Income/getIncomes`, {
-    method: "POST",
+  console.log("getting incomes");
+  const response = await fetch(`${BASE_URL}/Income`, {
+    method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-type": "application/json",
     },
   });
 
-  const incomes = await response.json();
-
-  return incomes;
+  return response;
 };
 
 export const AddIncome = async (data, token) => {

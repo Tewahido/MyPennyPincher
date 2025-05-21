@@ -46,7 +46,6 @@ public class IncomeService
             existingIncome.Source = updatedIncome.Source;
             existingIncome.Date = updatedIncome.Date;
             existingIncome.Monthly = updatedIncome.Monthly;
-            //_context.Entry(existingIncome).CurrentValues.SetValues(updatedIncome);
 
             await _context.SaveChangesAsync();
         }
