@@ -45,8 +45,6 @@ public class AuthController : ControllerBase
         LoginResponse loginResponse= new LoginResponse
         {
             UserId = user.UserId,
-            FullName = user.FullName,
-            Email = user.Email,
             Token = token,
         };
 

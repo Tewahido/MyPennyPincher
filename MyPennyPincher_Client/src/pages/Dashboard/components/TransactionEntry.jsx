@@ -49,13 +49,13 @@ export default function TransactionEntry({ type, entry, index }) {
       <div
         className={`flex items-center justify-evenly ${entryColour} w-full rounded-xl p-5 `}
       >
-        <h1 className="w-[25%] text-lg font-bold">{index}</h1>
+        <h1 className="w-[10%] text-lg font-bold">{index}</h1>
 
-        <h1 className="w-[40%] text-lg font-bold">{entryTitle}</h1>
-        <h1 className={`w-[20%] ${amountColour} text-lg font-bold`}>
+        <h1 className="w-[30%] text-lg font-bold truncate">{entryTitle}</h1>
+        <h1 className={`w-[20%] ${amountColour} text-lg font-bold truncate`}>
           R{entry.amount}
         </h1>
-        <div className=" w-[10%] h-[75%] flex justify-between items-center ">
+        <div className=" w-[15%] h-[75%] flex justify-between items-center ">
           <div className="relative group">
             <img
               src={EditIcon}

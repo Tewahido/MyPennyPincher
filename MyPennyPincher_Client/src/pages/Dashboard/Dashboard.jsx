@@ -6,89 +6,6 @@ import { setMonth } from "../../store/slices/monthSlice";
 import { GetUserIncomes } from "../../services/incomeService";
 import { setIncomes } from "../../store/slices/incomeSlice";
 
-// const incomeData = [
-//   {
-//     IncomeId: 1,
-//     Source: "Salary",
-//     Amount: 5000,
-//     Date: "2025-01-25",
-//     Monthly: true,
-//     UserId: 1,
-//   },
-//   {
-//     IncomeId: 2,
-//     Source: "Freelance Project",
-//     Amount: 1500,
-//     Date: "2025-02-10",
-//     Monthly: false,
-//     UserId: 1,
-//   },
-//   {
-//     IncomeId: 3,
-//     Source: "Stock Dividends",
-//     Amount: 300,
-//     Date: "2025-03-18",
-//     Monthly: false,
-//     UserId: 1,
-//   },
-//   {
-//     IncomeId: 4,
-//     Source: "Bonus",
-//     Amount: 2000,
-//     Date: "2025-04-05",
-//     Monthly: false,
-//     UserId: 1,
-//   },
-//   {
-//     IncomeId: 5,
-//     Source: "Gift",
-//     Amount: 800,
-//     Date: "2025-05-12",
-//     Monthly: false,
-//     UserId: 1,
-//   },
-//   {
-//     IncomeId: 6,
-//     Source: "Side Hustle",
-//     Amount: 400,
-//     Date: "2025-01-15",
-//     Monthly: false,
-//     UserId: 1,
-//   },
-//   {
-//     IncomeId: 7,
-//     Source: "Selling Old Laptop",
-//     Amount: 600,
-//     Date: "2025-02-22",
-//     Monthly: false,
-//     UserId: 1,
-//   },
-//   {
-//     IncomeId: 8,
-//     Source: "Freelance Design",
-//     Amount: 700,
-//     Date: "2025-03-03",
-//     Monthly: false,
-//     UserId: 1,
-//   },
-//   {
-//     IncomeId: 9,
-//     Source: "Cashback",
-//     Amount: 100,
-//     Date: "2025-04-20",
-//     Monthly: false,
-//     UserId: 1,
-//   },
-//   {
-//     IncomeId: 10,
-//     Source: "Consulting",
-//     Amount: 1200,
-//     Date: "2025-05-05",
-//     Monthly: false,
-//     UserId: 1,
-//   },
-// ];
-
 const expenseData = [
   {
     expenseId: 1,
@@ -233,8 +150,6 @@ export default function Dashboard() {
       })
     : null;
 
-  console.log(currentMonthExpenses);
-
   function handleChangeMonth(event) {
     dispatch(setMonth(event.target.value));
   }
@@ -266,11 +181,11 @@ export default function Dashboard() {
           />
         </div>
         <hr className="bg-green-700 h-0.5 w-[70%] mx-auto my-5" />
-        <div className="p-3">
+        <div className="h-full p-3">
           <h1 className="text-6xl text-center font-extrabold text-green-700 mb-10">
             My Transactions
           </h1>
-          <div className="flex flex-col items-center bg-white h-200 rounded-4xl ">
+          <div className="flex flex-col items-center justify-evenly md:h-[825px] bg-white rounded-4xl ">
             <TransactionsSection
               incomes={currentMonthIncomes}
               expenses={currentMonthExpenses}

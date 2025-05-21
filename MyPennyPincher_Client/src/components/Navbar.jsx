@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import Logo from "/GrabbingMoneyColor_Icon.png";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../store/slices/userSlice";
 
 export default function Navbar() {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
   const [scrolled, setScrolled] = useState(false);
@@ -19,6 +21,12 @@ export default function Navbar() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  function handleLogout() {
+    if (user.loggedIn) {
+      dispatch(logout());
+    }
+  }
 
   return (
     <div className="flex flex-col fixed top-0 left-0 w-full z-10 bg-green-100">
@@ -36,20 +44,23 @@ export default function Navbar() {
             MyPennyPincher
           </Link>
         </div>
-        <div className=" flex items-end h-full gap-10 mr-1 md:mr-3 lg:mr-5">
-          <Link
-            to="/dashboard"
-            className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
-          >
-            Dashboard
-          </Link>
-          <Link
-            to={user.loggedIn ? "/logout" : "/login"}
-            className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
-          >
-            {user.loggedIn ? "Logout" : "Login"}
-          </Link>
-        </div>
+        {window.location.pathname !== "/login" && (
+          <div className=" flex items-end h-full gap-10 mr-1 md:mr-3 lg:mr-5">
+            <Link
+              to="/dashboard"
+              className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/login"
+              className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
+              onClick={handleLogout}
+            >
+              {user.loggedIn ? "Logout" : "Login"}
+            </Link>
+          </div>
+        )}
       </nav>
       {scrolled && <div className=" mx-auto h-0.5 w-[90vw] bg-green-700"></div>}
     </div>

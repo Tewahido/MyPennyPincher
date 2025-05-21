@@ -27,8 +27,6 @@ ChartJS.register(
   Title
 );
 
-let donutData;
-
 const barOptions = {
   responsive: true,
   layout: {
@@ -95,6 +93,8 @@ const lineOptions = {
   },
 };
 
+let donutData;
+
 let barData;
 
 let lineData;
@@ -154,8 +154,7 @@ function setDonutChartData(income, expenses) {
   };
 }
 
-function getTotal(transactions) {
-  console.log(transactions);
+function getTransactionsTotal(transactions) {
   return transactions
     ? transactions.reduce((sum, transaction) => sum + +transaction.amount, 0)
     : 0;
@@ -180,10 +179,9 @@ function getMonthlyTotals(transactions) {
       monthTotals.push(monthTotal);
     });
 
-    // console.log(monthTotals);
-
     return monthTotals.map((monthTotal) => monthTotal.amount);
   }
+
   return 0;
 }
 
@@ -192,9 +190,9 @@ export default function DashboardSection({
   currentMonthIncomes,
   currentMonthExpenses,
 }) {
-  const totalIncome = getTotal(currentMonthIncomes);
+  const totalIncome = getTransactionsTotal(currentMonthIncomes);
 
-  const totalExpenses = getTotal(currentMonthExpenses);
+  const totalExpenses = getTransactionsTotal(currentMonthExpenses);
   let months = [];
 
   if (yearlyTotals.incomes) {
@@ -206,11 +204,9 @@ export default function DashboardSection({
       }
     });
   }
-  // console.log(yearlyTotals);
   const monthlyIncomeAmounts = getMonthlyTotals(yearlyTotals.incomes);
-  // console.log(monthlyIncomeAmounts);
+
   const monthlyExpenseAmounts = getMonthlyTotals(yearlyTotals.expenses);
-  // console.log(monthlyExpenseAmounts);
 
   setBarGraphData(monthNames, monthlyIncomeAmounts, monthlyExpenseAmounts);
 
