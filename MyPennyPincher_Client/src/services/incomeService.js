@@ -1,7 +1,7 @@
 import { BASE_URL } from "../config/config";
+import { logoutUser } from "../util/util";
 
 export const GetUserIncomes = async (token) => {
-  console.log("getting incomes");
   const response = await fetch(`${BASE_URL}/Income`, {
     method: "GET",
     headers: {

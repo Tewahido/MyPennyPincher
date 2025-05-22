@@ -6,7 +6,11 @@ import { setMonth } from "../../store/slices/monthSlice";
 import { GetUserIncomes } from "../../services/incomeService";
 import { setIncomes } from "../../store/slices/incomeSlice";
 import { useNavigate } from "react-router-dom";
-import { logoutUser } from "../../util/util";
+import {
+  getMonthTransactions,
+  getYearlyTransactions,
+  logoutUser,
+} from "../../util/util";
 
 const expenseData = [
   {
@@ -119,57 +123,26 @@ export default function Dashboard() {
     }
 
     async function fetchIncomes() {
-      try {
-        console.log("hello");
-        const userIncomes = await GetUserIncomes(user.token);
-        const data = await userIncomes.json();
+      const userIncomes = await GetUserIncomes(user.token);
+      const data = await userIncomes.json();
+      if (userIncomes?.status === 401) {
+        logoutUser(dispatch, navigate);
+      } else {
         dispatch(setIncomes(data));
-      } catch (error) {
-        if (error.response) {
-          if (error.response?.status === 401) {
-            logoutUser(dispatch, navigate);
-          }
-        }
       }
     }
     fetchIncomes();
   }, [reloadIncomes]);
 
-  const [currentYear, currentMonth] = month.split("-");
+  const currentMonthIncomes = getMonthTransactions(incomeData, month);
 
-  const currentMonthIncomes = incomeData
-    ? incomeData.filter((income) => {
-        const incomeMonth = new Date(income.date).getMonth() + 1;
-        const incomeYear = new Date(income.date).getFullYear();
+  const currentYearIncomes = getYearlyTransactions(incomeData, month);
 
-        return incomeMonth == currentMonth && incomeYear == currentYear;
-      })
-    : null;
+  const currentMonthExpenses = getMonthTransactions(expenseData, month);
 
-  const yearlyIncomeTotals = incomeData
-    ? incomeData.filter((income) => {
-        const incomeYear = new Date(income.date).getFullYear();
+  const currentYearExpenses = getYearlyTransactions(expenseData, month);
 
-        return incomeYear == currentYear;
-      })
-    : null;
-
-  const currentMonthExpenses = expenseData
-    ? expenseData.filter((expense) => {
-        const expenseMonth = new Date(expense.date).getMonth() + 1;
-        const expenseYear = new Date(expense.date).getFullYear();
-
-        return expenseMonth == currentMonth && expenseYear == currentYear;
-      })
-    : null;
-
-  const yearlyExpenseTotals = expenseData
-    ? expenseData.filter((expense) => {
-        const expenseYear = new Date(expense.date).getFullYear();
-
-        return expenseYear == currentYear;
-      })
-    : null;
+  currentYearIncomes.forEach((yearlytotals) => {});
 
   function handleChangeMonth(event) {
     dispatch(setMonth(event.target.value));
@@ -194,8 +167,8 @@ export default function Dashboard() {
         <div className="w-full ">
           <DashboardSection
             yearlyTotals={{
-              incomes: yearlyIncomeTotals,
-              expenses: yearlyExpenseTotals,
+              incomes: currentYearIncomes,
+              expenses: currentYearExpenses,
             }}
             currentMonthIncomes={currentMonthIncomes}
             currentMonthExpenses={currentMonthExpenses}
