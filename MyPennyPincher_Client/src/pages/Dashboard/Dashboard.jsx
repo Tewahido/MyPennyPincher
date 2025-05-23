@@ -111,11 +111,28 @@ export default function Dashboard() {
 
   const incomeData = useSelector((state) => state.income.incomes);
   const reloadIncomes = useSelector((state) => state.income.reloadIncomes);
+
   const userLoggedIn = useSelector((state) => state.user.loggedIn);
   const user = useSelector((state) => state.user.user);
   const month = useSelector((state) => state.month.month);
 
-  console.log(incomeData);
+  const [currentYear, currentMonth] = month.split("-");
+
+  const currentMonthIncomes = getMonthTransactions(
+    incomeData,
+    currentYear,
+    currentMonth
+  );
+
+  const currentMonthExpenses = getMonthTransactions(
+    expenseData,
+    currentYear,
+    currentMonth
+  );
+
+  const currentYearIncomes = getYearlyTransactions(incomeData, currentYear);
+
+  const currentYearExpenses = getYearlyTransactions(expenseData, currentYear);
 
   useEffect(() => {
     if (!userLoggedIn) {
@@ -131,18 +148,10 @@ export default function Dashboard() {
         dispatch(setIncomes(data));
       }
     }
+    console.log("hello");
+
     fetchIncomes();
   }, [reloadIncomes]);
-
-  const currentMonthIncomes = getMonthTransactions(incomeData, month);
-
-  const currentYearIncomes = getYearlyTransactions(incomeData, month);
-
-  const currentMonthExpenses = getMonthTransactions(expenseData, month);
-
-  const currentYearExpenses = getYearlyTransactions(expenseData, month);
-
-  currentYearIncomes.forEach((yearlytotals) => {});
 
   function handleChangeMonth(event) {
     dispatch(setMonth(event.target.value));

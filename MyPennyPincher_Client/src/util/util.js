@@ -2,6 +2,7 @@ import { logout } from "../store/slices/userSlice";
 import { clearIncomes } from "../store/slices/incomeSlice";
 import { clearExpenses } from "../store/slices/expenseSlice";
 import { resetMonth } from "../store/slices/monthSlice";
+import { AddIncome } from "../services/incomeService";
 
 export function logoutUser(dispatch, navigate) {
   dispatch(logout());
@@ -10,9 +11,8 @@ export function logoutUser(dispatch, navigate) {
   dispatch(resetMonth());
   navigate("/login");
 }
-export function getMonthTransactions(transactions, month) {
-  const [currentYear, currentMonth] = month.split("-");
 
+export function getMonthTransactions(transactions, currentYear, currentMonth) {
   return transactions
     ? transactions.filter((transaction) => {
         const transactionMonth = new Date(transaction.date).getMonth() + 1;
@@ -25,9 +25,7 @@ export function getMonthTransactions(transactions, month) {
     : null;
 }
 
-export function getYearlyTransactions(transactions, month) {
-  const [currentYear, currentMonth] = month.split("-");
-
+export function getYearlyTransactions(transactions, currentYear) {
   return transactions
     ? transactions.filter((transaction) => {
         const transactionYear = new Date(transaction.date).getFullYear();
@@ -35,4 +33,24 @@ export function getYearlyTransactions(transactions, month) {
         return transactionYear == currentYear;
       })
     : null;
+}
+
+export function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+export function addMonthlyIncome(income, token) {
+  let incomeMonth = new Date(income.date).getMonth() + 1;
+
+  for (incomeMonth; incomeMonth < 12; incomeMonth++) {
+    const newDate = new Date(income.date);
+    newDate.setMonth(incomeMonth);
+    const newIncome = { ...income, date: formatDate(newDate) };
+    console.log(newIncome);
+    AddIncome(newIncome, token);
+  }
 }

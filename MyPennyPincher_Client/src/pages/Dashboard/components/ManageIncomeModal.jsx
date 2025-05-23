@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AddIncome, EditIncome } from "../../../services/incomeService";
 import { addIncome, editIncome } from "../../../store/slices/incomeSlice.js";
 import { useNavigate } from "react-router-dom";
+import { addMonthlyIncome } from "../../../util/util.js";
 
 const ManageIncomeModal = forwardRef(function ManageIncomeModal(
   { income },
@@ -45,6 +46,8 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
       : await AddIncome(currentIncome, user.token);
 
     if (status != 400 || status != 401) {
+      addMonthlyIncome(currentIncome, user.token);
+
       income
         ? dispatch(editIncome({ ...currentIncome, incomeId: income.incomeId }))
         : dispatch(addIncome(currentIncome));
