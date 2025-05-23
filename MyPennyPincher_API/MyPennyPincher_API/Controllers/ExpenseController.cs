@@ -41,6 +41,11 @@ public class ExpenseController : ControllerBase
     [HttpPost("addExpense")]
     public async Task<ActionResult> AddExpense([FromBody]Expense expense)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         await _expenseService.AddExpense(expense);
 
         return Ok();
@@ -49,6 +54,11 @@ public class ExpenseController : ControllerBase
     [HttpDelete]
     public async Task<ActionResult> DeleteExpense(Expense expense)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         await _expenseService.DeleteExpense(expense);
 
         return Ok();
@@ -57,6 +67,11 @@ public class ExpenseController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> EditExpense([FromBody]Expense expense)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         await _expenseService.EditExpense(expense);
 
         return Ok();

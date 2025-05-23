@@ -37,7 +37,11 @@ public class IncomeController : ControllerBase
     [HttpPost("addIncome")]
     public async Task<ActionResult> AddIncome([FromBody] Income income)
     {
-        Console.WriteLine(income.Source + income.Amount);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         await _incomeService.AddIncome(income);
 
         return Ok();
@@ -46,6 +50,11 @@ public class IncomeController : ControllerBase
     [HttpDelete]
     public async Task<ActionResult> DeleteIncome(Income income)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         await _incomeService.DeleteIncome(income);
 
         return Ok();
@@ -54,6 +63,11 @@ public class IncomeController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> EditIncome([FromBody] Income income)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         await _incomeService.EditIncome(income);
 
         return Ok();

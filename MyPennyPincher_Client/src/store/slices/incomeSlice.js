@@ -12,7 +12,6 @@ const incomeSlice = createSlice({
     },
     addIncome: (state, action) => {
       state.incomes = [...state.incomes, action.payload];
-
       state.reloadIncomes = !state.reloadIncomes;
     },
     editIncome: (state, action) => {
