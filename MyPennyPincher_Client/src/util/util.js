@@ -4,6 +4,12 @@ import { clearExpenses } from "../store/slices/expenseSlice";
 import { resetMonth } from "../store/slices/monthSlice";
 import { AddIncome } from "../services/incomeService";
 import { AddExpense } from "../services/expenseService";
+import { jwtDecode } from "jwt-decode";
+
+export function extractTokenExpiryTime(token) {
+  const decodedToken = jwtDecode(token);
+  return new Date(decodedToken.exp * 1000);
+}
 
 export function logoutUser(dispatch, navigate) {
   dispatch(logout());

@@ -10,11 +10,11 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
   { income },
   ref
 ) {
+  const dialog = useRef(ref);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
   const date = useSelector((state) => state.month.month) + "-01";
-  const dialog = useRef(ref);
 
   useImperativeHandle(ref, () => {
     return {

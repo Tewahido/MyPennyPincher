@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Login } from "../../../services/authService.js";
-import { login } from "../../../store/slices/userSlice.js";
+import { login, setExpiryTime } from "../../../store/slices/userSlice.js";
 import LoginInput from "./LoginInput.jsx";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
+import { extractTokenExpiryTime } from "../../../util/util.js";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -17,8 +18,8 @@ export default function LoginForm() {
     password: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (event) => {
+    const { name, value } = event.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -34,6 +35,9 @@ export default function LoginForm() {
       setLoginFailed(true);
       return;
     }
+    const tokenExpiryTime = extractTokenExpiryTime(loggedInUser.token);
+
+    dispatch(setExpiryTime(tokenExpiryTime.toISOString()));
     dispatch(login(loggedInUser));
 
     navigate("/dashboard");

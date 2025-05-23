@@ -1,20 +1,15 @@
-import { useEffect } from "react";
 import DashboardSection from "./components/DashboardSection";
 import TransactionsSection from "./components/TransactionsSection";
 import { useDispatch, useSelector } from "react-redux";
 import { setMonth } from "../../store/slices/monthSlice";
-import { GetUserIncomes } from "../../services/incomeService";
-import { setIncomes } from "../../store/slices/incomeSlice";
 import { useNavigate } from "react-router-dom";
 import {
   getMonthTransactions,
   getYearlyTransactions,
   logoutUser,
 } from "../../util/util";
-import { GetUserExpenses } from "../../services/expenseService";
-import { setExpenses } from "../../store/slices/expenseSlice";
+import { useFetchUserTransactions } from "../../hooks/useFetchUserTransactions";
 
-// const expenseData = [
 //   {
 //     expenseId: 1,
 //     description: "Rent",
@@ -113,12 +108,14 @@ export default function Dashboard() {
 
   const incomeData = useSelector((state) => state.income.incomes);
   const expenseData = useSelector((state) => state.expense.expenses);
-  const reloadExpenses = useSelector((state) => state.expense.reloadExpenses);
-  const reloadIncomes = useSelector((state) => state.income.reloadIncomes);
-
-  const userLoggedIn = useSelector((state) => state.user.loggedIn);
-  const user = useSelector((state) => state.user.user);
   const month = useSelector((state) => state.month.month);
+  const tokenExpiryTime = useSelector((state) => state.user.expiresAt);
+
+  const convertedTokenExpiryTime = new Date(tokenExpiryTime);
+
+  if (Date.now() >= convertedTokenExpiryTime.getTime()) {
+    logoutUser(dispatch, navigate);
+  }
 
   const [currentYear, currentMonth] = month.split("-");
 
@@ -138,36 +135,7 @@ export default function Dashboard() {
 
   const currentYearExpenses = getYearlyTransactions(expenseData, currentYear);
 
-  useEffect(() => {
-    if (!userLoggedIn) {
-      navigate("/login");
-    }
-
-    async function fetchIncomes() {
-      const userIncomes = await GetUserIncomes(user.token);
-      if (userIncomes?.status === 401) {
-        logoutUser(dispatch, navigate);
-      } else {
-        const data = await userIncomes.json();
-        dispatch(setIncomes(data));
-      }
-    }
-
-    fetchIncomes();
-
-    async function fetchExpenses() {
-      const userExpenses = await GetUserExpenses(user.token);
-      if (userExpenses?.status === 401) {
-        logoutUser(dispatch, navigate);
-      } else {
-        const data = await userExpenses.json();
-        dispatch(setExpenses(data));
-      }
-    }
-
-    fetchExpenses();
-    console.log();
-  }, [reloadIncomes, reloadExpenses]);
+  useFetchUserTransactions();
 
   function handleChangeMonth(event) {
     dispatch(setMonth(event.target.value));
