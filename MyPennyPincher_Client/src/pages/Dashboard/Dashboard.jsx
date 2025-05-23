@@ -153,7 +153,7 @@ export default function Dashboard() {
             onChange={(event) => handleChangeMonth(event)}
             value={month}
             className=" text-md border-2 rounded-xl md:text-xl xl:text-3xl cursor-pointer font-extrabold p-2"
-            max={new Date().toISOString().slice(0, 7)}
+            max={`${currentYear}-12`}
             min="2020-01"
           />
         </div>
