@@ -3,6 +3,8 @@ import { createPortal } from "react-dom";
 import { DeleteIncome } from "../../../services/incomeService";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteIncome } from "../../../store/slices/incomeSlice";
+import { DeleteExpense } from "../../../services/expenseService";
+import { deleteExpense } from "../../../store/slices/expenseSlice";
 
 const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
   { entry, type },
@@ -27,10 +29,15 @@ const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
   }
 
   async function handleDelete() {
-    const status = type === "income" ? await DeleteIncome(entry, token) : null;
+    const status =
+      type === "income"
+        ? await DeleteIncome(entry, token)
+        : DeleteExpense(entry, token);
 
     if (status != 400 || status != 401) {
-      type === "income" ? dispatch(deleteIncome(entry)) : null;
+      type === "income"
+        ? dispatch(deleteIncome(entry))
+        : dispatch(deleteExpense(entry));
       handleClose();
     }
   }

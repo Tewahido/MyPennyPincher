@@ -13,7 +13,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
-  const month = useSelector((state) => state.month.month) + "-01";
+  const date = useSelector((state) => state.month.month) + "-01";
   const dialog = useRef(ref);
 
   useImperativeHandle(ref, () => {
@@ -33,7 +33,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
     const currentIncome = {
       source: formData.get("source"),
       amount: +formData.get("amount"),
-      date: month,
+      date: date,
       monthly: isMonthly,
       userId: user.userId,
     };
@@ -46,8 +46,9 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
       : await AddIncome(currentIncome, user.token);
 
     if (status != 400 || status != 401) {
-      addMonthlyIncome(currentIncome, user.token);
-
+      if (isMonthly) {
+        addMonthlyIncome(currentIncome, user.token);
+      }
       income
         ? dispatch(editIncome({ ...currentIncome, incomeId: income.incomeId }))
         : dispatch(addIncome(currentIncome));

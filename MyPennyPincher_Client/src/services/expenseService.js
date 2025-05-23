@@ -1,7 +1,6 @@
 import { BASE_URL } from "../config/config";
 
 export const GetUserExpenses = async (token) => {
-  console.log("getting expenses");
   const response = await fetch(`${BASE_URL}/Expense`, {
     method: "GET",
     headers: {

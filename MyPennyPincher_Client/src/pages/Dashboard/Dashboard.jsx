@@ -113,6 +113,7 @@ export default function Dashboard() {
 
   const incomeData = useSelector((state) => state.income.incomes);
   const expenseData = useSelector((state) => state.expense.expenses);
+  const reloadExpenses = useSelector((state) => state.expense.reloadExpenses);
   const reloadIncomes = useSelector((state) => state.income.reloadIncomes);
 
   const userLoggedIn = useSelector((state) => state.user.loggedIn);
@@ -156,18 +157,17 @@ export default function Dashboard() {
 
     async function fetchExpenses() {
       const userExpenses = await GetUserExpenses(user.token);
-      const data = await userExpenses.json();
-      if (userIncomes?.status === 401) {
+      if (userExpenses?.status === 401) {
         logoutUser(dispatch, navigate);
       } else {
-        const data = await userIncomes.json();
+        const data = await userExpenses.json();
         dispatch(setExpenses(data));
       }
     }
 
     fetchExpenses();
     console.log();
-  }, [reloadIncomes]);
+  }, [reloadIncomes, reloadExpenses]);
 
   function handleChangeMonth(event) {
     dispatch(setMonth(event.target.value));
