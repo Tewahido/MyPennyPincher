@@ -2,120 +2,18 @@ import DashboardSection from "./components/DashboardSection";
 import TransactionsSection from "./components/TransactionsSection";
 import { useDispatch, useSelector } from "react-redux";
 import { setMonth } from "../../store/slices/monthSlice";
-import { useNavigate } from "react-router-dom";
-import {
-  getMonthTransactions,
-  getYearlyTransactions,
-  logoutUser,
-} from "../../util/util";
+import { getMonthTransactions, getYearlyTransactions } from "../../util/util";
 import { useFetchUserTransactions } from "../../hooks/useFetchUserTransactions";
-
-//   {
-//     expenseId: 1,
-//     description: "Rent",
-//     amount: 1200,
-//     date: "2025-01-01",
-//     recurring: true,
-//     categoryId: 1,
-//     userId: 1,
-//   },
-//   {
-//     expenseId: 2,
-//     description: "Electricity Bill",
-//     amount: 100,
-//     date: "2025-02-05",
-//     recurring: true,
-//     categoryId: 2,
-//     userId: 1,
-//   },
-//   {
-//     expenseId: 3,
-//     description: "Groceries",
-//     amount: 450,
-//     date: "2025-03-10",
-//     recurring: true,
-//     categoryId: 3,
-//     userId: 1,
-//   },
-//   {
-//     expenseId: 4,
-//     description: "New Phone",
-//     amount: 900,
-//     date: "2025-04-15",
-//     recurring: false,
-//     categoryId: 4,
-//     userId: 1,
-//   },
-//   {
-//     expenseId: 5,
-//     description: "Vacation Trip",
-//     amount: 1500,
-//     date: "2025-05-02",
-//     recurring: false,
-//     categoryId: 5,
-//     userId: 1,
-//   },
-//   {
-//     expenseId: 6,
-//     description: "Internet Subscription",
-//     amount: 60,
-//     date: "2025-01-10",
-//     recurring: true,
-//     categoryId: 2,
-//     userId: 1,
-//   },
-//   {
-//     expenseId: 7,
-//     description: "Gym Membership",
-//     amount: 50,
-//     date: "2025-02-12",
-//     recurring: true,
-//     categoryId: 6,
-//     userId: 1,
-//   },
-//   {
-//     expenseId: 8,
-//     description: "Movie Night",
-//     amount: 30,
-//     date: "2025-03-21",
-//     recurring: false,
-//     categoryId: 7,
-//     userId: 1,
-//   },
-//   {
-//     expenseId: 9,
-//     description: "Dining Out",
-//     amount: 75,
-//     date: "2025-04-10",
-//     recurring: false,
-//     categoryId: 7,
-//     userId: 1,
-//   },
-//   {
-//     expenseId: 10,
-//     description: "Clothing",
-//     amount: 200,
-//     date: "2025-05-08",
-//     recurring: false,
-//     categoryId: 8,
-//     userId: 1,
-//   },
-// ];
+import { useTokenChecker } from "../../hooks/useTokenChecker";
 
 export default function Dashboard() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const incomeData = useSelector((state) => state.income.incomes);
   const expenseData = useSelector((state) => state.expense.expenses);
   const month = useSelector((state) => state.month.month);
-  const tokenExpiryTime = useSelector((state) => state.user.expiresAt);
 
-  const convertedTokenExpiryTime = new Date(tokenExpiryTime);
-
-  if (Date.now() >= new Date(convertedTokenExpiryTime).getTime()) {
-    logoutUser(dispatch, navigate);
-  }
+  useTokenChecker();
 
   const [currentYear, currentMonth] = month.split("-");
 

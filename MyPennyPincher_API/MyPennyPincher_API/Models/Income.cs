@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MyPennyPincher_API.Models;
+﻿namespace MyPennyPincher_API.Models;
 
 public partial class Income
 {

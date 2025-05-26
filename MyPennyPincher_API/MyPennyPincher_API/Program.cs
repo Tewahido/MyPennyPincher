@@ -42,6 +42,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddOpenApi();
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddAuthorization();
@@ -61,6 +63,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    
 }
 
 app.UseCors("AllowFrontend");
@@ -70,6 +73,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapScalarApiReference();
+
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/openapi/v1.json", "api");
+});
 
 app.MapControllers();
 

@@ -8,6 +8,7 @@ import { useRef } from "react";
 import ContactUsForm from "./components/ContactUsForm.jsx";
 import NewsletterForm from "./components/NewsletterForm.jsx";
 import HeroBanner from "./components/HeroBanner.jsx";
+import { useTokenChecker } from "../../hooks/useTokenChecker.js";
 
 const services = [
   {
@@ -45,7 +46,6 @@ const fadeInSection = {
 
 export default function Home() {
   const servicesRef = useRef();
-
   return (
     <>
       <div className="w-full ">

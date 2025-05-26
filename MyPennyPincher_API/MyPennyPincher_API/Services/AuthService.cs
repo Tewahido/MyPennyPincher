@@ -28,8 +28,6 @@ public class AuthService
             FullName = user.FullName,
             Email = user.Email,
             Password = hashedPassword,
-            Expenses = user.Expenses,
-            Incomes = user.Incomes,
         };
 
         _context.Users.Add(newUser);

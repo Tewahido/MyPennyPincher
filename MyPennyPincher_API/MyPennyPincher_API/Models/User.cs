@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace MyPennyPincher_API.Models;
+﻿namespace MyPennyPincher_API.Models;
 
 public partial class User
 {

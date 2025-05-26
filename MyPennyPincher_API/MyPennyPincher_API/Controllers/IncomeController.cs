@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Services;
 
@@ -23,6 +22,11 @@ public class IncomeController : ControllerBase
     public async Task<ActionResult<ICollection<Income>>> GetUserIncomes()
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
 
         var incomes = await _incomeService.GetUserIncomes(userId);
 
