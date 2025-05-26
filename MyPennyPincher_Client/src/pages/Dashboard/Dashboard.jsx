@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMonth } from "../../store/slices/monthSlice";
 import { getMonthTransactions, getYearlyTransactions } from "../../util/util";
 import { useFetchUserTransactions } from "../../hooks/useFetchUserTransactions";
-import { useTokenChecker } from "../../hooks/useTokenChecker";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -12,8 +11,6 @@ export default function Dashboard() {
   const incomeData = useSelector((state) => state.income.incomes);
   const expenseData = useSelector((state) => state.expense.expenses);
   const month = useSelector((state) => state.month.month);
-
-  useTokenChecker();
 
   const [currentYear, currentMonth] = month.split("-");
 

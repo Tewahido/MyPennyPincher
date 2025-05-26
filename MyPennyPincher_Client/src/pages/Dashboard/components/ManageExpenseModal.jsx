@@ -11,7 +11,7 @@ import { GetExpenseCategories } from "../../../services/expenseCategoryService";
 import { logoutUser, addRecurringExpense } from "../../../util/util";
 import { EditExpense, AddExpense } from "../../../services/expenseService";
 import { editExpense, addExpense } from "../../../store/slices/expenseSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ManageExpenseModal = forwardRef(function ManageExpenseModal(
   { expense },
@@ -22,6 +22,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const dialog = useRef(ref);
 
   const [expenseCategories, setExpenseCategories] = useState([]);
@@ -30,7 +31,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
     async function getExpenseCategories() {
       const response = await GetExpenseCategories(user.token);
       if (response?.status === 401) {
-        logoutUser(dispatch, navigate);
+        logoutUser(dispatch, navigate, location);
       } else {
         const data = await response.json();
         setExpenseCategories(data);

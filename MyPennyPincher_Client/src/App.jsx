@@ -5,8 +5,15 @@ import "./App.css";
 import Login from "./pages/Login/Login.jsx";
 import SignUp from "./pages/SignUp/SignUp.jsx";
 import { AnimatePresence } from "motion/react";
+import { useTokenChecker } from "./hooks/useTokenChecker.js";
+import { useSelector } from "react-redux";
 
 function App() {
+  const userIsLoggedIn = useSelector((state) => state.user.loggedIn);
+
+  if (userIsLoggedIn) {
+    useTokenChecker();
+  }
   return (
     <AnimatePresence mode="wait">
       <Routes>

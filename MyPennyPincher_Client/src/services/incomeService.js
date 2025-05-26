@@ -1,5 +1,4 @@
 import { BASE_URL } from "../config/config";
-import { logoutUser } from "../util/util";
 
 export const GetUserIncomes = async (token) => {
   const response = await fetch(`${BASE_URL}/Income`, {

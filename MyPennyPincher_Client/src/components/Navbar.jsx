@@ -1,16 +1,13 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "/GrabbingMoneyColor_Icon.png";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../store/slices/userSlice";
-import { clearIncomes } from "../store/slices/incomeSlice";
-import { clearExpenses } from "../store/slices/expenseSlice";
-import { resetMonth } from "../store/slices/monthSlice";
 import { logoutUser } from "../util/util";
 
 export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const user = useSelector((state) => state.user);
 
   const [scrolled, setScrolled] = useState(false);
@@ -29,7 +26,7 @@ export default function Navbar() {
 
   function handleLogout() {
     if (user.loggedIn) {
-      logoutUser(dispatch, navigate);
+      logoutUser(dispatch, navigate, location);
     }
   }
 
@@ -49,9 +46,9 @@ export default function Navbar() {
             MyPennyPincher
           </Link>
         </div>
-        {window.location.pathname !== "/login" && (
+        {location.pathname !== "/login" && (
           <div className=" flex items-end h-full gap-10 mr-1 md:mr-3 lg:mr-5">
-            {user.loggedIn && window.location.pathname !== "/dashboard" && (
+            {user.loggedIn && location.pathname !== "/dashboard" && (
               <Link
                 to="/dashboard"
                 className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"

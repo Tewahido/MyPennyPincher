@@ -11,12 +11,15 @@ export function extractTokenExpiryTime(token) {
   return new Date(decodedToken.exp * 1000);
 }
 
-export function logoutUser(dispatch, navigate) {
+export function logoutUser(dispatch, navigate, location) {
   dispatch(logout());
   dispatch(clearIncomes());
   dispatch(clearExpenses());
   dispatch(resetMonth());
-  navigate("/login");
+
+  if (location.pathName != "/dashbaord") {
+    navigate("/login");
+  }
 }
 
 export function getMonthTransactions(transactions, currentYear, currentMonth) {
