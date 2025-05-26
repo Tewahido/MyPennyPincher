@@ -113,7 +113,7 @@ export default function Dashboard() {
 
   const convertedTokenExpiryTime = new Date(tokenExpiryTime);
 
-  if (Date.now() >= convertedTokenExpiryTime.getTime()) {
+  if (Date.now() >= new Date(convertedTokenExpiryTime).getTime()) {
     logoutUser(dispatch, navigate);
   }
 
