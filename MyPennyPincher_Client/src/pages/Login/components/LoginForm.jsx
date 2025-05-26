@@ -37,7 +37,7 @@ export default function LoginForm() {
     }
 
     const tokenExpiryTime = extractTokenExpiryTime(loggedInUser.token);
-
+    console.log(tokenExpiryTime);
     dispatch(setExpiryTime(tokenExpiryTime.toISOString()));
     dispatch(login(loggedInUser));
 
