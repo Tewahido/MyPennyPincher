@@ -3,20 +3,22 @@ import Navbar from "./Navbar.jsx";
 import HomePageNavbar from "./HomePageNavbar.jsx";
 import App from "../App.jsx";
 import Footer from "./Footer.jsx";
-import { Provider } from "react-redux";
-import { store } from "../store/store.js";
+import { useSelector } from "react-redux";
 
 export default function AppWrapper() {
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const loading = useSelector((state) => state.loading);
 
   return (
-    <div className="font-[Roboto]">
-      <Provider store={store}>
-        {isHome ? <HomePageNavbar /> : <Navbar />}
-        <App />
-        <Footer />
-      </Provider>
+    <div
+      className={`${
+        loading && "flex flex-col h-screen w-screen"
+      } font-[Roboto]`}
+    >
+      {isHome ? <HomePageNavbar /> : <Navbar />}
+      <App />
+      <Footer />
     </div>
   );
 }

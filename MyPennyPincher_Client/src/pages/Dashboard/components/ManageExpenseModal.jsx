@@ -17,6 +17,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
   { expense },
   ref
 ) {
+  console.log(expense);
   const user = useSelector((state) => state.user.user);
   const date = useSelector((state) => state.month.month) + "-01";
 
@@ -59,7 +60,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
       description: formData.get("description"),
       amount: +formData.get("amount"),
       date: date,
-      monthly: isRecurring,
+      recurring: isRecurring,
       expenseCategoryId: formData.get("expenseCategory"),
       userId: user.userId,
     };

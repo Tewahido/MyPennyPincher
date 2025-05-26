@@ -5,6 +5,7 @@ import { GetUserExpenses } from "../services/expenseService";
 import { setExpenses } from "../store/slices/expenseSlice";
 import { GetUserIncomes } from "../services/incomeService";
 import { setIncomes } from "../store/slices/incomeSlice";
+import { setLoading } from "../store/slices/loadingSlice";
 
 export function useFetchUserTransactions() {
   const dispatch = useDispatch();
@@ -18,6 +19,8 @@ export function useFetchUserTransactions() {
     if (!userLoggedIn) {
       navigate("/login");
     }
+
+    dispatch(setLoading(true));
 
     async function fetchIncomes() {
       const userIncomes = await GetUserIncomes(user.token);
@@ -42,6 +45,6 @@ export function useFetchUserTransactions() {
     }
 
     fetchExpenses();
-    console.log();
+    setTimeout(() => dispatch(setLoading(false)), 2000);
   }, [reloadIncomes, reloadExpenses]);
 }

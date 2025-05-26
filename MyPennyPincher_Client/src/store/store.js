@@ -5,6 +5,7 @@ import userReducer from "./slices/userSlice.js";
 import monthReducer from "./slices/monthSlice.js";
 import incomeReducer from "./slices/incomeSlice.js";
 import expenseReducer from "./slices/expenseSlice.js";
+import loadingReducer from "./slices/loadingSlice.js";
 import storage from "redux-persist/lib/storage";
 
 const persistConfig = {
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   month: monthReducer,
   income: incomeReducer,
   expense: expenseReducer,
+  loading: loadingReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
