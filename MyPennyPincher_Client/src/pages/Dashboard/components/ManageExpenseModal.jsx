@@ -8,7 +8,7 @@ import {
 import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { GetExpenseCategories } from "../../../services/expenseCategoryService";
-import { logoutUser, addRecurringExpense } from "../../../util/util";
+import { addRecurringExpense } from "../../../utils/recurringUtils";
 import { EditExpense, AddExpense } from "../../../services/expenseService";
 import { editExpense, addExpense } from "../../../store/slices/expenseSlice";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -17,7 +17,6 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
   { expense },
   ref
 ) {
-  console.log(expense);
   const user = useSelector((state) => state.user.user);
   const date = useSelector((state) => state.month.month) + "-01";
 
@@ -31,12 +30,9 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
   useEffect(() => {
     async function getExpenseCategories() {
       const response = await GetExpenseCategories(user.token);
-      if (response?.status === 401) {
-        logoutUser(dispatch, navigate, location);
-      } else {
-        const data = await response.json();
-        setExpenseCategories(data);
-      }
+
+      const data = await response.json();
+      setExpenseCategories(data);
     }
 
     getExpenseCategories();

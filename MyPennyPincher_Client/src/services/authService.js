@@ -1,4 +1,4 @@
-import { BASE_URL } from "../config/config.js";
+import { BASE_URL } from "../config/apiConfig.js";
 
 export const SignUp = async (fullName, email, password) => {
   const response = await fetch(`${BASE_URL}/Auth/register`, {

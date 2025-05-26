@@ -2,28 +2,18 @@ import DashboardSection from "./components/DashboardSection";
 import TransactionsSection from "./components/TransactionsSection";
 import { useDispatch, useSelector } from "react-redux";
 import { setMonth } from "../../store/slices/monthSlice";
-import { getMonthTransactions, getYearlyTransactions } from "../../util/util";
+import {
+  getMonthTransactions,
+  getYearlyTransactions,
+} from "../../utils/transactionUtils.js";
 import { useFetchUserTransactions } from "../../hooks/useFetchUserTransactions";
 import LoadingAnimation from "../../assets/Dashboard_Loading_Animation.json";
-import { useState } from "react";
 import Lottie from "lottie-react";
 import { motion } from "motion/react";
-
-const fadeInSection = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 1,
-      ease: "easeOut",
-    },
-  },
-};
+import { dashboardFade } from "../../config/animationConfig.js";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
-
-  // const [loading, setLoading] = useState(true);
 
   const incomeData = useSelector((state) => state.income.incomes);
   const expenseData = useSelector((state) => state.expense.expenses);
@@ -66,7 +56,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <motion.div
-            variants={fadeInSection}
+            variants={dashboardFade}
             initial="hidden"
             whileInView="visible"
           >

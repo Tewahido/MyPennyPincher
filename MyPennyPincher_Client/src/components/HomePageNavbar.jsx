@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 export default function Navbar() {
-  const user = useSelector((state) => state.user);
+  const userIsLoggedIn = useSelector((state) => state.user.loggedIn);
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -22,7 +22,7 @@ export default function Navbar() {
   }, []);
 
   function handleLogout() {
-    if (user.loggedIn) {
+    if (userIsLoggedIn) {
       dispatch(logout());
       dispatch(clearIncomes());
       dispatch(clearExpenses());
@@ -52,10 +52,10 @@ export default function Navbar() {
           </Link>
         </div>
         <div className=" flex items-end h-full gap-10 mr-1 md:mr-3 lg:mr-5">
-          {user.loggedIn && (
+          {userIsLoggedIn && (
             <Link
               to="/dashboard"
-              className="text-gray-300 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
+              className="text-gray-100 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
             >
               Dashboard
             </Link>
@@ -65,7 +65,7 @@ export default function Navbar() {
             className="text-gray-100 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
             onClick={handleLogout}
           >
-            {user.loggedIn ? "Logout" : "Login"}
+            {userIsLoggedIn ? "Logout" : "Login"}
           </Link>
         </div>
       </nav>

@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "/GrabbingMoneyColor_Icon.png";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser } from "../util/util";
+import { logoutUser } from "../utils/authUtils.js";
 
 export default function Navbar() {
   const dispatch = useDispatch();

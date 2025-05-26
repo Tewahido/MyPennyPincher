@@ -1,4 +1,4 @@
-import { BASE_URL } from "../config/config";
+import { BASE_URL } from "../config/apiConfig.js";
 
 export const GetUserIncomes = async (token) => {
   const response = await fetch(`${BASE_URL}/Income`, {

@@ -5,7 +5,7 @@ import { Login } from "../../../services/authService.js";
 import { login, setExpiryTime } from "../../../store/slices/userSlice.js";
 import LoginInput from "./LoginInput.jsx";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
-import { extractTokenExpiryTime } from "../../../util/util.js";
+import { extractTokenExpiryTime } from "../../../utils/authUtils.js";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -35,6 +35,7 @@ export default function LoginForm() {
       setLoginFailed(true);
       return;
     }
+
     const tokenExpiryTime = extractTokenExpiryTime(loggedInUser.token);
 
     dispatch(setExpiryTime(tokenExpiryTime.toISOString()));

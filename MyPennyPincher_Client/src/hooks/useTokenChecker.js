@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser } from "../util/util";
+import { logoutUser } from "../utils/authUtils.js";
 import { useEffect } from "react";
 
 export function useTokenChecker(interval = 60000) {

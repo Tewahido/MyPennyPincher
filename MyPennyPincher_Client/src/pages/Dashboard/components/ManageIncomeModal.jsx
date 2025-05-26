@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AddIncome, EditIncome } from "../../../services/incomeService";
 import { addIncome, editIncome } from "../../../store/slices/incomeSlice.js";
 import { useNavigate } from "react-router-dom";
-import { addMonthlyIncome } from "../../../util/util.js";
+import { addMonthlyIncome } from "../../../utils/recurringUtils.js";
 
 const ManageIncomeModal = forwardRef(function ManageIncomeModal(
   { income },

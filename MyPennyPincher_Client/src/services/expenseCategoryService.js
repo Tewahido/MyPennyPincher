@@ -1,4 +1,4 @@
-import { BASE_URL } from "../config/config.js";
+import { BASE_URL } from "../config/apiConfig.js";
 
 export const GetExpenseCategories = async (token) => {
   const response = await fetch(`${BASE_URL}/ExpenseCategory`, {

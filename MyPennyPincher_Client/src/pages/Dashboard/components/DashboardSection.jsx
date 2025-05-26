@@ -13,6 +13,16 @@ import {
 } from "chart.js";
 import { Doughnut, Bar, Line } from "react-chartjs-2";
 import TotalDisplay from "./TotalDisplay";
+import {
+  getMonthlyTotals,
+  getTransactionsTotal,
+} from "../../../utils/transactionUtils";
+import { monthNames } from "../../../constants/monthNames";
+import {
+  lineOptions,
+  barOptions,
+  donutOptions,
+} from "../../../config/chartConfig";
 
 ChartJS.register(
   ArcElement,
@@ -27,77 +37,11 @@ ChartJS.register(
   Title
 );
 
-const barOptions = {
-  responsive: true,
-  layout: {
-    padding: 5,
-  },
-  scales: {
-    y: {
-      beginAtZero: true,
-      ticks: {
-        stepSize: 500,
-      },
-    },
-  },
-  legend: {
-    position: "bottom",
-  },
-};
-
-const donutOptions = {
-  responsive: true,
-  cutout: "40%",
-  layout: {
-    padding: 5,
-  },
-  plugins: {
-    legend: {
-      position: "bottom",
-      labels: {
-        font: {
-          size: 16,
-        },
-      },
-    },
-  },
-};
-
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-const lineOptions = {
-  responsive: true,
-  layout: {
-    padding: 5,
-  },
-  plugins: {
-    legend: {
-      display: false,
-    },
-    title: {
-      display: false,
-    },
-  },
-};
-
-let donutData;
-
 let barData;
 
 let lineData;
+
+let donutData;
 
 function setBarGraphData(labels, incomes, expenses) {
   barData = {
@@ -154,37 +98,6 @@ function setDonutChartData(income, expenses) {
   };
 }
 
-function getTransactionsTotal(transactions) {
-  return transactions
-    ? transactions.reduce((sum, transaction) => sum + +transaction.amount, 0)
-    : 0;
-}
-
-function getMonthlyTotals(transactions) {
-  if (transactions) {
-    let monthTotals = [];
-
-    monthNames.forEach((month, index) => {
-      const monthTotal = { month: month, amount: 0 };
-
-      transactions.forEach((transaction) => {
-        const date = new Date(transaction.date);
-        const monthName = monthNames[date.getMonth()];
-
-        if (monthName === month) {
-          monthTotal.amount += transaction.amount;
-        }
-      });
-
-      monthTotals.push(monthTotal);
-    });
-
-    return monthTotals.map((monthTotal) => monthTotal.amount);
-  }
-
-  return 0;
-}
-
 export default function DashboardSection({
   yearlyTotals,
   currentMonthIncomes,
@@ -204,9 +117,16 @@ export default function DashboardSection({
       }
     });
   }
-  const monthlyIncomeAmounts = getMonthlyTotals(yearlyTotals.incomes);
 
-  const monthlyExpenseAmounts = getMonthlyTotals(yearlyTotals.expenses);
+  const monthlyIncomeAmounts = getMonthlyTotals(
+    yearlyTotals.incomes,
+    monthNames
+  );
+
+  const monthlyExpenseAmounts = getMonthlyTotals(
+    yearlyTotals.expenses,
+    monthNames
+  );
 
   setBarGraphData(monthNames, monthlyIncomeAmounts, monthlyExpenseAmounts);
 
