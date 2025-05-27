@@ -17,26 +17,15 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
   { expense },
   ref
 ) {
+  const expenseCategories = useSelector(
+    (state) => state.expense.expenseCategories
+  );
   const user = useSelector((state) => state.user.user);
   const date = useSelector((state) => state.month.month) + "-01";
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const dialog = useRef(ref);
-
-  const [expenseCategories, setExpenseCategories] = useState([]);
-
-  useEffect(() => {
-    async function getExpenseCategories() {
-      const response = await GetExpenseCategories(user.token);
-
-      const data = await response.json();
-      setExpenseCategories(data);
-    }
-
-    getExpenseCategories();
-  }, []);
 
   useImperativeHandle(ref, () => {
     return {
@@ -69,7 +58,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
       : await AddExpense(currentExpense, user.token);
 
     if (status != 400 || status != 401) {
-      if (isRecurring) {
+      if (!expense && isRecurring) {
         addRecurringExpense(currentExpense, user.token);
       }
       expense
@@ -121,13 +110,11 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
           <select
             name="expenseCategory"
             className=" h-full w-[70%] bg-red-100 text-red-900 rounded-lg mx-3 px-2 focus:outline-none"
+            defaultValue={expense && expense.expenseCategoryId}
           >
-            {expenseCategories.map((category) => (
-              <option
-                key={category.expenseCategoryId}
-                value={category.expenseCategoryId}
-              >
-                {category.name}
+            {expenseCategories.map((category, index) => (
+              <option key={index} value={index}>
+                {category}
               </option>
             ))}
           </select>

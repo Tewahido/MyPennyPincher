@@ -46,10 +46,10 @@ public class ExpenseService
             existingExpense.Description = updatedExpense.Description;
             existingExpense.Date = updatedExpense.Date;
             existingExpense.Recurring = updatedExpense.Recurring;
+            existingExpense.ExpenseCategoryId = updatedExpense.ExpenseCategoryId;
 
             await _context.SaveChangesAsync();
         }
 
-        
     }
 }

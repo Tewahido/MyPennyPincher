@@ -51,3 +51,22 @@ export function getTransactionsTotal(transactions) {
     ? transactions.reduce((sum, transaction) => sum + +transaction.amount, 0)
     : 0;
 }
+
+export function getCategoryTotals(expenses) {
+  console.log(expenses);
+  const rawTotals = expenses.reduce((categoryTotals, expense) => {
+    categoryTotals[expense.expenseCategoryId + 1] =
+      (categoryTotals[expense.expenseCategoryId + 1] || 0) + expense.amount;
+
+    return categoryTotals;
+  }, {});
+
+  let totals = [];
+
+  for (let i = 1; i < 16; i++) {
+    totals.push(rawTotals[i] || 0);
+  }
+  console.log(totals);
+
+  return totals;
+}

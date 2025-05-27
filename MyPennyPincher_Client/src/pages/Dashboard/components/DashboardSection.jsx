@@ -16,13 +16,16 @@ import TotalDisplay from "./TotalDisplay";
 import {
   getMonthlyTotals,
   getTransactionsTotal,
+  getCategoryTotals,
 } from "../../../utils/transactionUtils";
 import { monthNames } from "../../../constants/monthNames";
 import {
   lineOptions,
   barOptions,
   donutOptions,
+  categoryColours,
 } from "../../../config/chartConfig";
+import { useSelector } from "react-redux";
 
 ChartJS.register(
   ArcElement,
@@ -84,14 +87,31 @@ function setLineChartData(labels, incomes, expenses) {
   };
 }
 
-function setDonutChartData(income, expenses) {
+function setDonutChartData(expenses, categoryNames) {
+  const categoryTotals = getCategoryTotals(expenses);
+
+  let categories = [];
+
+  categoryTotals.forEach((total, index) => {
+    if (total > 0) {
+      const categoryName = categoryNames[index];
+      const colour = categoryColours[index];
+
+      categories.push({ name: categoryName, total: total, colour });
+    }
+  });
+
+  const populatedCategories = categories.map((category) => category.name);
+  const positiveTotals = categories.map((category) => category.total);
+  const colours = categories.map((category) => category.colour);
+
   donutData = {
-    labels: ["Income", "Expenses"],
+    labels: populatedCategories,
     datasets: [
       {
         label: "Monthly Transactions",
-        data: [income, expenses],
-        backgroundColor: ["rgba(0, 77, 64, 1)", "rgba(185, 28, 28, 1)"],
+        data: positiveTotals,
+        backgroundColor: colours,
         borderWidth: 3,
       },
     ],
@@ -103,6 +123,10 @@ export default function DashboardSection({
   currentMonthIncomes,
   currentMonthExpenses,
 }) {
+  const token = useSelector((state) => state.user.user.token);
+
+  const categoryNames = useSelector((state) => state.expense.expenseCategories);
+
   const totalIncome = getTransactionsTotal(currentMonthIncomes);
 
   const totalExpenses = getTransactionsTotal(currentMonthExpenses);
@@ -132,7 +156,7 @@ export default function DashboardSection({
 
   setLineChartData(monthNames, monthlyIncomeAmounts, monthlyExpenseAmounts);
 
-  setDonutChartData(totalIncome, totalExpenses);
+  setDonutChartData(currentMonthExpenses, categoryNames);
 
   const netIncome = totalIncome - totalExpenses;
 

@@ -11,6 +11,7 @@ import LoadingAnimation from "../../assets/Dashboard_Loading_Animation.json";
 import Lottie from "lottie-react";
 import { motion } from "motion/react";
 import { dashboardFade } from "../../config/animationConfig.js";
+import { useFetchExpenseCategories } from "../../hooks/useFetchExpenseCategoriese.js";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ export default function Dashboard() {
   const currentYearExpenses = getYearlyTransactions(expenseData, currentYear);
 
   useFetchUserTransactions();
+  useFetchExpenseCategories();
 
   function handleChangeMonth(event) {
     dispatch(setMonth(event.target.value));

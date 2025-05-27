@@ -9,6 +9,7 @@ export default function AppWrapper() {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const loading = useSelector((state) => state.loading);
+  const user = useSelector((state) => state.user.user);
 
   return (
     <div

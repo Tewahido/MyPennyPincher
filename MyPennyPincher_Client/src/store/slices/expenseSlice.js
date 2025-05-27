@@ -4,6 +4,7 @@ const expenseSlice = createSlice({
   name: "expense",
   initialState: {
     expenses: [],
+    expenseCategories: [],
     reloadExpenses: false,
   },
   reducers: {
@@ -32,6 +33,9 @@ const expenseSlice = createSlice({
       state.expenses = [];
       state.reloadExpenses = !state.reloadExpenses;
     },
+    setExpenseCategories: (state, action) => {
+      state.expenseCategories = action.payload;
+    },
   },
 });
 
@@ -41,5 +45,6 @@ export const {
   editExpense,
   deleteExpense,
   clearExpenses,
+  setExpenseCategories,
 } = expenseSlice.actions;
 export default expenseSlice.reducer;
