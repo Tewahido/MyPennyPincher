@@ -3,6 +3,7 @@ import { clearIncomes } from "../store/slices/incomeSlice";
 import { clearExpenses } from "../store/slices/expenseSlice";
 import { jwtDecode } from "jwt-decode";
 import { resetMonth } from "../store/slices/monthSlice";
+import { setLoading } from "../store/slices/loadingSlice";
 
 export function extractTokenExpiryTime(token) {
   const decodedToken = jwtDecode(token);
@@ -14,6 +15,7 @@ export function logoutUser(dispatch, navigate, location) {
   dispatch(clearIncomes());
   dispatch(clearExpenses());
   dispatch(resetMonth());
+  dispatch(setLoading(true));
 
   if (location.pathname === "/dashboard") {
     navigate("/login");

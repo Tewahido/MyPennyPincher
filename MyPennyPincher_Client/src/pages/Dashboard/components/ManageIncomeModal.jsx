@@ -46,7 +46,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
       : await AddIncome(currentIncome, user.token);
 
     if (status != 400 || status != 401) {
-      if (isMonthly) {
+      if (!income && isMonthly) {
         addMonthlyIncome(currentIncome, user.token);
       }
       income
