@@ -123,8 +123,6 @@ export default function DashboardSection({
   currentMonthIncomes,
   currentMonthExpenses,
 }) {
-  const token = useSelector((state) => state.user.user.token);
-
   const categoryNames = useSelector((state) => state.expense.expenseCategories);
 
   const totalIncome = getTransactionsTotal(currentMonthIncomes);

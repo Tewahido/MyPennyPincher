@@ -13,11 +13,7 @@ export default function AppWrapper() {
 
   useTokenChecker();
   return (
-    <div
-      className={`${
-        loading && "flex flex-col h-screen w-screen"
-      } font-[Roboto]`}
-    >
+    <div className={`${loading && "flex flex-col h-screen "} font-[Roboto]`}>
       {isHome ? <HomePageNavbar /> : <Navbar />}
       <App />
       <Footer />

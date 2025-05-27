@@ -8,7 +8,7 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const user = useSelector((state) => state.user);
+  const userLoggedIn = useSelector((state) => state.user.loggedIn);
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -25,13 +25,13 @@ export default function Navbar() {
   }, []);
 
   function handleLogout() {
-    if (user.loggedIn) {
+    if (userLoggedIn) {
       logoutUser(dispatch, navigate, location);
     }
   }
 
   return (
-    <div className="flex flex-col fixed top-0 left-0 w-full z-10 bg-green-100">
+    <div className="flex flex-col fixed top-0 left-0 w-full z-10 bg-green-100 ">
       <nav className="flex justify-between h-20  mx-5 md:mx-10 lg:mx-25 ">
         <div className="flex items-end h-full ">
           <img
@@ -48,7 +48,7 @@ export default function Navbar() {
         </div>
         {location.pathname !== "/login" && (
           <div className=" flex items-end h-full gap-10 mr-1 md:mr-3 lg:mr-5">
-            {user.loggedIn && location.pathname !== "/dashboard" && (
+            {userLoggedIn && location.pathname !== "/dashboard" && (
               <Link
                 to="/dashboard"
                 className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
@@ -61,7 +61,7 @@ export default function Navbar() {
               className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
               onClick={handleLogout}
             >
-              {user.loggedIn ? "Logout" : "Login"}
+              {userLoggedIn ? "Logout" : "Login"}
             </Link>
           </div>
         )}

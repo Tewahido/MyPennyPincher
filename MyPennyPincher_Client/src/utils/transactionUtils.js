@@ -53,10 +53,9 @@ export function getTransactionsTotal(transactions) {
 }
 
 export function getCategoryTotals(expenses) {
-  console.log(expenses);
   const rawTotals = expenses.reduce((categoryTotals, expense) => {
-    categoryTotals[expense.expenseCategoryId + 1] =
-      (categoryTotals[expense.expenseCategoryId + 1] || 0) + expense.amount;
+    categoryTotals[expense.expenseCategoryId] =
+      (categoryTotals[expense.expenseCategoryId] || 0) + expense.amount;
 
     return categoryTotals;
   }, {});
@@ -66,7 +65,6 @@ export function getCategoryTotals(expenses) {
   for (let i = 1; i < 16; i++) {
     totals.push(rawTotals[i] || 0);
   }
-  console.log(totals);
 
   return totals;
 }
