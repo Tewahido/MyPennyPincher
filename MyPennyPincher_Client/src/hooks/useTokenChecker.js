@@ -10,9 +10,13 @@ export function useTokenChecker(interval = 60000) {
 
   const tokenExpiryTime = useSelector((state) => state.user.expiresAt);
 
-  const convertedTokenExpiryTime = new Date(tokenExpiryTime);
-
   useEffect(() => {
+    if (!tokenExpiryTime) {
+      return;
+    }
+
+    const convertedTokenExpiryTime = new Date(tokenExpiryTime);
+
     function checkTokenValidity() {
       if (Date.now() >= convertedTokenExpiryTime.getTime()) {
         logoutUser(dispatch, navigate, location);
@@ -24,5 +28,5 @@ export function useTokenChecker(interval = 60000) {
     const tokenCheckInterval = setInterval(checkTokenValidity, interval);
 
     return () => clearInterval(tokenCheckInterval);
-  }, []);
+  }, [tokenExpiryTime, dispatch, navigate, location, interval]);
 }

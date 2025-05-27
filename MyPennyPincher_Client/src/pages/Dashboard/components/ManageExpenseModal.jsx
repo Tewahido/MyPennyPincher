@@ -113,7 +113,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
             defaultValue={expense && expense.expenseCategoryId}
           >
             {expenseCategories.map((category, index) => (
-              <option key={index} value={index}>
+              <option key={index} value={index + 1}>
                 {category}
               </option>
             ))}

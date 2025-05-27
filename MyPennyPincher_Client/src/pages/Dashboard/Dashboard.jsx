@@ -12,14 +12,22 @@ import Lottie from "lottie-react";
 import { motion } from "motion/react";
 import { dashboardFade } from "../../config/animationConfig.js";
 import { useFetchExpenseCategories } from "../../hooks/useFetchExpenseCategoriese.js";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const incomeData = useSelector((state) => state.income.incomes);
   const expenseData = useSelector((state) => state.expense.expenses);
   const month = useSelector((state) => state.month.month);
   const loading = useSelector((state) => state.loading);
+  const userLoggedIn = useSelector((state) => state.user.loggedIn);
+
+  if (userLoggedIn) {
+    useFetchUserTransactions();
+    useFetchExpenseCategories();
+  }
 
   const [currentYear, currentMonth] = month.split("-");
 
@@ -38,9 +46,6 @@ export default function Dashboard() {
   const currentYearIncomes = getYearlyTransactions(incomeData, currentYear);
 
   const currentYearExpenses = getYearlyTransactions(expenseData, currentYear);
-
-  useFetchUserTransactions();
-  useFetchExpenseCategories();
 
   function handleChangeMonth(event) {
     dispatch(setMonth(event.target.value));
