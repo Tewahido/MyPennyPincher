@@ -13,7 +13,7 @@ export const GetUserIncomes = async (token) => {
 };
 
 export const AddIncome = async (data, token) => {
-  const response = await fetch(`${BASE_URL}/Income/addIncome`, {
+  const response = await fetch(`${BASE_URL}/Income`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,

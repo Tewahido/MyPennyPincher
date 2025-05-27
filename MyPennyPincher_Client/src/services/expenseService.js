@@ -13,7 +13,7 @@ export const GetUserExpenses = async (token) => {
 };
 
 export const AddExpense = async (data, token) => {
-  const response = await fetch(`${BASE_URL}/Expense/addExpense`, {
+  const response = await fetch(`${BASE_URL}/Expense`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,

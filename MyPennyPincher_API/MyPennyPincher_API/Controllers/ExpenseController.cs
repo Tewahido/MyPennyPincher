@@ -38,7 +38,7 @@ public class ExpenseController : ControllerBase
         return Ok(expenses);
     }
 
-    [HttpPost("addExpense")]
+    [HttpPost]
     public async Task<ActionResult> AddExpense([FromBody]Expense expense)
     {
         if (!ModelState.IsValid)

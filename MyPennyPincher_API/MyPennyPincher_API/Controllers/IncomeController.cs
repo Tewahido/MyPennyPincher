@@ -38,7 +38,7 @@ public class IncomeController : ControllerBase
         return Ok(incomes);
     }
 
-    [HttpPost("addIncome")]
+    [HttpPost]
     public async Task<ActionResult> AddIncome([FromBody] Income income)
     {
         if (!ModelState.IsValid)
