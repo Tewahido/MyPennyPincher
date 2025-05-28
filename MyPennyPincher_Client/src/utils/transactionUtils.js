@@ -43,7 +43,7 @@ export function getMonthlyTotals(transactions, monthNames) {
     return monthTotals.map((monthTotal) => monthTotal.amount);
   }
 
-  return 0;
+  return null;
 }
 
 export function getTransactionsTotal(transactions) {
