@@ -31,7 +31,7 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<User?>> Login([FromBody] Login login)
     {
-        var user = await _authService.Login(login.Email, login.Password);
+        var user = await _authService.Login(login);
 
         if(user == null)
         {

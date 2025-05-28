@@ -21,10 +21,16 @@ public class AuthService
 
     public async Task<User> Register(User user)
     {
+        if (user == null)
+        {
+            throw new ArgumentNullException();
+        }
+
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
         var newUser = new User
         {
+            UserId = user.UserId,
             FullName = user.FullName,
             Email = user.Email,
             Password = hashedPassword,
@@ -37,16 +43,16 @@ public class AuthService
         return newUser;
     }
 
-    public async Task<User?> Login(string email, string password)
+    public async Task<User?> Login(Login login)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == login.Email);
 
         if (user == null) 
         {
             return null;
         }
 
-        bool isValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
+        bool isValid = BCrypt.Net.BCrypt.Verify(login.Password, user.Password);
 
         if (!isValid)
         {

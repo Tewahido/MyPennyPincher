@@ -5,7 +5,7 @@ VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyPennyPincher_API", "MyPennyPincher_API\MyPennyPincher_API.csproj", "{34E47359-FA3C-48E6-9709-3C7D8889A600}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyPennyPincher_APITests", "MyPennyPincher_APITests\MyPennyPincher_APITests.csproj", "{49914837-7280-47BF-84FF-20FABD627D79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyPennyPincher_API_Tests", "MyPennyPincher_API_Tests\MyPennyPincher_API_Tests.csproj", "{CAD89C33-979A-4B3E-8137-ACBD64D98E49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{34E47359-FA3C-48E6-9709-3C7D8889A600}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34E47359-FA3C-48E6-9709-3C7D8889A600}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34E47359-FA3C-48E6-9709-3C7D8889A600}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49914837-7280-47BF-84FF-20FABD627D79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49914837-7280-47BF-84FF-20FABD627D79}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49914837-7280-47BF-84FF-20FABD627D79}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49914837-7280-47BF-84FF-20FABD627D79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAD89C33-979A-4B3E-8137-ACBD64D98E49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAD89C33-979A-4B3E-8137-ACBD64D98E49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAD89C33-979A-4B3E-8137-ACBD64D98E49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAD89C33-979A-4B3E-8137-ACBD64D98E49}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
