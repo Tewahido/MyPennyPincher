@@ -1,13 +1,6 @@
 import { AddIncome } from "../services/incomeService";
 import { AddExpense } from "../services/expenseService";
-
-function formatDate(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-}
+import { formatDate } from "./dateUtils";
 
 export function addMonthlyIncome(income, token) {
   let incomeMonth = new Date(income.date).getMonth() + 1;

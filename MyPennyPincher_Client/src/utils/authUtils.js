@@ -12,9 +12,13 @@ export function extractTokenExpiryTime(token) {
 
 export function logoutUser(dispatch, navigate, location) {
   dispatch(logout());
+
   dispatch(clearIncomes());
+
   dispatch(clearExpenses());
+
   dispatch(resetMonth());
+
   dispatch(setLoading(true));
 
   if (location.pathname === "/dashboard") {
