@@ -14,10 +14,11 @@ public class IncomeService
 
     public async Task<ICollection<Income>?> GetUserIncomes(string userId)
     {
-        var incomes = _context.Incomes
-            .Where(user => user.UserId.ToString() == userId);
+        return _context.Incomes
+            .Where(user => user.UserId.ToString() == userId)
+            .ToList();
 
-        return incomes.ToList() ?? null;
+        
     }
 
     public async Task AddIncome(Income income)

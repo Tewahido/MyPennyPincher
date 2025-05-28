@@ -15,7 +15,6 @@ public class ExpenseCategoryService
 
     public async Task<ICollection<ExpenseCategory>> GetExpenseCategories()
     {
-        var expenseCategories = await _context.ExpenseCategories.ToListAsync();
-        return expenseCategories;
+        return await _context.ExpenseCategories.ToListAsync();
     }
 }

@@ -5,11 +5,10 @@ using Microsoft.Extensions.Configuration;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Services;
-using Newtonsoft.Json.Linq;
 
 namespace MyPennyPincher_API_Tests;
 
-public class AuthServiceTest
+public class AuthServiceTest : IDisposable
 {
     private readonly AuthService _authService;
     private readonly MyPennyPincherDbContext _context;
@@ -29,7 +28,7 @@ public class AuthServiceTest
             .Build();
 
         var options = new DbContextOptionsBuilder<MyPennyPincherDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDb")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         _context = new MyPennyPincherDbContext(options);
@@ -43,7 +42,7 @@ public class AuthServiceTest
         //Arrange
         User user = new User
         {
-            UserId = new Guid(),
+            UserId = Guid.NewGuid(),
             FullName = "Test User",
             Email = "test@email.com",
             Password = "password"
@@ -78,7 +77,7 @@ public class AuthServiceTest
         //Arrange
         User user = new User
         {
-            UserId = new Guid(),
+            UserId = Guid.NewGuid(),
             FullName = "Test User",
             Email = "test@email.com",
             Password = "password",
@@ -106,13 +105,13 @@ public class AuthServiceTest
         //Arrange
         User user = new User
         {
-            UserId = new Guid(),
+            UserId = Guid.NewGuid(),
             FullName = "Test User",
             Email = "test@email.com",
             Password = "password",
         };
 
-        _authService.Register(user);
+        await _authService.Register(user);
 
         Login login = new Login
         {
@@ -121,19 +120,19 @@ public class AuthServiceTest
         };
 
         //Act
-        User expectedUser = await _authService.Login(login);
+        User? expectedUser = await _authService.Login(login);
 
         //Assert
         Assert.Null(expectedUser);
     }
 
     [Fact]
-    public async Task GIVEN_LoggedInUser_WHEN_GeneratingToken_THEN_ReturnNewJWT()
+    public void GIVEN_LoggedInUser_WHEN_GeneratingToken_THEN_ReturnNewJWT()
     {
         //Arrange
         User user = new User
         {
-            UserId = new Guid(),
+            UserId = Guid.NewGuid(),
             FullName = "Test User",
             Email = "test@email.com",
             Password = "password",

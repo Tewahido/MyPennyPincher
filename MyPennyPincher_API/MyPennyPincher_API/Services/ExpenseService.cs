@@ -15,11 +15,9 @@ public class ExpenseService
 
     public async Task<ICollection<Expense>?> GetUserExpenses(string userId)
     {
-        var user = await _context.Users
-            .Include(user => user.Expenses)
-            .FirstOrDefaultAsync(user => user.UserId.ToString() == userId);
-
-        return user?.Expenses ?? null;
+        return _context.Expenses
+           .Where(user => user.UserId.ToString() == userId)
+           .ToList();
     }
 
     public async Task AddExpense(Expense expense)
