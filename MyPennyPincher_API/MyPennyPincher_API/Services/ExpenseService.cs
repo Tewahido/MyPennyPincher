@@ -13,7 +13,7 @@ public class ExpenseService : IExpenseService
         _expenseRepository = expenseRepository;
     }
 
-    public async Task<ICollection<Expense>> GetByUserId(string userId)
+    public async Task<ICollection<Expense>> GetByUserIdAsync(string userId)
     {
         return await _expenseRepository.GetByUserIdAsync(userId);
     }

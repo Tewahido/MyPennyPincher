@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Repositories;
+using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
 using MyPennyPincher_API_Tests.Test_Utilities;
 
@@ -13,6 +15,7 @@ public class AuthServiceTest : IDisposable
 {
     private readonly AuthService _authService;
     private readonly MyPennyPincherDbContext _context;
+    private readonly IAuthRepository _authRepository;    
     private readonly IConfiguration _config;
 
     public AuthServiceTest() 
@@ -30,7 +33,9 @@ public class AuthServiceTest : IDisposable
 
         _context = TestUtils.GenerateInMemoryDB();
 
-        _authService = new AuthService(_context, _config);
+        _authRepository = new AuthRepository(_context);
+
+        _authService = new AuthService(_authRepository, _config);
     }
 
     [Fact]
@@ -80,7 +85,7 @@ public class AuthServiceTest : IDisposable
             Password = "password",
         };
 
-        _authService.Register(user);
+        User registeredUser = await _authService.Register(user);
 
         Login login = new Login
         {

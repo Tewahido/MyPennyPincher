@@ -1,21 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Repositories;
+using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
+using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API_Tests.Test_Utilities;
 
 namespace MyPennyPincher_API_Tests.Unit_Tests;
 
 public class ExpenseServiceTest : IDisposable
 {
-    private readonly ExpenseService _expenseService;
+    private readonly IExpenseService _expenseService;
+    private readonly IExpenseRepository _expenseRepository;
     private readonly MyPennyPincherDbContext _context;
 
     public ExpenseServiceTest() 
     {
         _context = TestUtils.GenerateInMemoryDB();
-
-        _expenseService = new ExpenseService(_context);
+        _expenseRepository = new ExpenseRepository(_context);
+        _expenseService = new ExpenseService(_expenseRepository);
     }
 
     [Fact]
@@ -34,7 +38,7 @@ public class ExpenseServiceTest : IDisposable
         };
 
         //Act
-        await _expenseService.AddExpense(expense);
+        await _expenseService.AddAsync(expense);
 
         var expectedExpense = _context.Expenses.FirstOrDefaultAsync(exp => exp.ExpenseId == expense.ExpenseId);
 
@@ -57,10 +61,10 @@ public class ExpenseServiceTest : IDisposable
             UserId = Guid.NewGuid(),
         };
 
-        await _expenseService.AddExpense(expense);
+        await _expenseService.AddAsync(expense);
 
         //Act
-        await _expenseService.DeleteExpense(expense);
+        await _expenseService.DeleteAsync(expense);
 
         var expectedExpense = await _context.Expenses.FirstOrDefaultAsync(exp => exp.ExpenseId == expense.ExpenseId);
 
@@ -84,7 +88,7 @@ public class ExpenseServiceTest : IDisposable
             UserId = Guid.NewGuid(),
         };
 
-        await _expenseService.AddExpense(existingExpense);
+        await _expenseService.AddAsync(existingExpense);
         
         Expense editedExpense = new Expense
         {
@@ -98,7 +102,7 @@ public class ExpenseServiceTest : IDisposable
         };
 
         //Act
-        await _expenseService.EditExpense(editedExpense);
+        await _expenseService.EditAsync(editedExpense);
 
         var expectedExpense = await _context.Expenses.FirstOrDefaultAsync(exp => exp.ExpenseId == editedExpense.ExpenseId);
        
@@ -148,13 +152,13 @@ public class ExpenseServiceTest : IDisposable
             UserId = userId,
         };
 
-        _expenseService.AddExpense(firstExpense);
-        _expenseService.AddExpense(secondExpense);
-        _expenseService.AddExpense(thirdExpense);
+        _expenseService.AddAsync(firstExpense);
+        _expenseService.AddAsync(secondExpense);
+        _expenseService.AddAsync(thirdExpense);
 
 
         //Act
-        var expectedExpenses = await _expenseService.GetUserExpenses(userId.ToString());
+        var expectedExpenses = await _expenseService.GetByUserIdAsync(userId.ToString());
 
         //Assert
         Assert.Equal(expectedExpenses.Count, 3);

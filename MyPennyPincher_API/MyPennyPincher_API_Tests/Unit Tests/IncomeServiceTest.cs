@@ -2,21 +2,25 @@
 using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Repositories;
+using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
+using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API_Tests.Test_Utilities;
 
 namespace MyPennyPincher_API_Tests.Unit_Tests;
 
 public class IncomeServiceTest
 {
-    private readonly IncomeService _incomeService;
+    private readonly IIncomeService _incomeService;
+    private readonly IIncomeRepository _incomeRepository;
     private readonly MyPennyPincherDbContext _context;  
 
     public IncomeServiceTest()
     {
         _context = TestUtils.GenerateInMemoryDB();
-
-        _incomeService = new IncomeService(_context);
+        _incomeRepository = new IncomeRepository(_context);
+        _incomeService = new IncomeService(_incomeRepository);
     }
 
     [Fact]
@@ -34,7 +38,7 @@ public class IncomeServiceTest
         };
 
         //Act
-        await _incomeService.AddIncome(income);
+        await _incomeService.AddAsync(income);
 
         var expectedIncome = _context.Incomes.FirstOrDefaultAsync(exp => exp.IncomeId == income.IncomeId);
 
@@ -56,10 +60,10 @@ public class IncomeServiceTest
             UserId = Guid.NewGuid(),
         };
 
-        await _incomeService.AddIncome(income);
+        await _incomeService.AddAsync(income);
 
         //Act
-        await _incomeService.DeleteIncome(income);
+        await _incomeService.DeleteAsync(income);
 
         var expectedIncome = await _context.Incomes.FirstOrDefaultAsync(exp => exp.IncomeId == income.IncomeId);
 
@@ -82,7 +86,7 @@ public class IncomeServiceTest
             UserId = Guid.NewGuid(),
         };
 
-        await _incomeService.AddIncome(existingIncome);
+        await _incomeService.AddAsync(existingIncome);
 
         Income editedIncome = new Income
         {
@@ -96,7 +100,7 @@ public class IncomeServiceTest
 
 
         //Act
-        await _incomeService.EditIncome(editedIncome);
+        await _incomeService.EditAsync(editedIncome);
 
         var expectedIncome = await _context.Incomes.FirstOrDefaultAsync(exp => exp.IncomeId == editedIncome.IncomeId);
 
@@ -139,13 +143,13 @@ public class IncomeServiceTest
         };
 
 
-        await _incomeService.AddIncome(firstIncome);
-        await _incomeService.AddIncome(secondIncome);
-        await _incomeService.AddIncome(thirdIncome);
+        await _incomeService.AddAsync(firstIncome);
+        await _incomeService.AddAsync(secondIncome);
+        await _incomeService.AddAsync(thirdIncome);
 
         //Act
 
-        var expectedIncomes = await _incomeService.GetUserIncomes(userId.ToString());
+        var expectedIncomes = await _incomeService.GetByUserIdAsync(userId.ToString());
 
         //Assert
         Assert.Equal(expectedIncomes.Count, 3);

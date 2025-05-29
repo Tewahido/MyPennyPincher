@@ -28,7 +28,7 @@ public class ExpenseController : ControllerBase
             return Unauthorized();
         }
 
-        var expenses = await _expenseService.GetByUserId(userId);
+        var expenses = await _expenseService.GetByUserIdAsync(userId);
 
         if (expenses == null || expenses.Count() == 0)
         {

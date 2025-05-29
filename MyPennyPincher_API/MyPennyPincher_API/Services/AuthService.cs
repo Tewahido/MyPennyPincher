@@ -36,7 +36,7 @@ public class AuthService : IAuthService
             Password = hashedPassword,
         };
 
-        await _authRepository.AddAsync(user);
+        await _authRepository.AddAsync(newUser);
 
         await _authRepository.SaveChangesAsync();
 
