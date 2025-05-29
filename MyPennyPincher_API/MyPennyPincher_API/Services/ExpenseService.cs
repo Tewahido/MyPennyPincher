@@ -1,42 +1,41 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Repositories.Interfaces;
 
 namespace MyPennyPincher_API.Services;
 
 public class ExpenseService
 {
-    private readonly MyPennyPincherDbContext _context;
+    private readonly IExpenseRepository _expenseRepository;
 
-    public ExpenseService(MyPennyPincherDbContext context)
+    public ExpenseService(IExpenseRepository expenseRepository)
     {
-        _context = context;
+        _expenseRepository = expenseRepository;
     }
 
     public async Task<ICollection<Expense>> GetUserExpenses(string userId)
     {
-        return await _context.Expenses
-           .Where(user => user.UserId.ToString() == userId)
-           .ToListAsync();
+        return await _expenseRepository.GetByUserIdAsync(userId);
     }
 
     public async Task AddExpense(Expense expense)
     {
-        await _context.Expenses.AddAsync(expense);
+        await _expenseRepository.AddAsync(expense);
 
-        await _context.SaveChangesAsync();
+        await _expenseRepository.SaveChangesAsync();
     }
 
     public async Task DeleteExpense(Expense expense)
     {
-        _context.Expenses.Remove(expense);
+        await _expenseRepository.DeleteAsync(expense);
 
-        await _context.SaveChangesAsync();
+        await _expenseRepository.SaveChangesAsync();
     }
 
     public async Task EditExpense(Expense updatedExpense)
     {
-        var existingExpense = await _context.Expenses.FirstOrDefaultAsync(income => income.ExpenseId == updatedExpense.ExpenseId);
+        var existingExpense = await _expenseRepository.GetByIdAsync(updatedExpense.ExpenseId);
 
         if (existingExpense != null)
         {
@@ -46,7 +45,7 @@ public class ExpenseService
             existingExpense.Recurring = updatedExpense.Recurring;
             existingExpense.ExpenseCategoryId = updatedExpense.ExpenseCategoryId;
 
-            await _context.SaveChangesAsync();
+            await _expenseRepository.SaveChangesAsync();
         }
 
     }
