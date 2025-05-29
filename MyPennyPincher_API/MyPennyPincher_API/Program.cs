@@ -5,6 +5,8 @@ using Scalar.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using MyPennyPincher_API.Repositories.Interfaces;
+using MyPennyPincher_API.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,7 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<IncomeService>();
 builder.Services.AddScoped<ExpenseService>();
 builder.Services.AddScoped<ExpenseCategoryService>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 builder.Services.AddOpenApi();
 

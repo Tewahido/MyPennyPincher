@@ -4,6 +4,8 @@ namespace MyPennyPincher_API.Repositories.Interfaces;
 
 public interface IAuthRepository
 {
-    public void AddUser(User user);
-    public User FindUserByEmail(string email);
+    Task AddAsync(User user);
+    Task<User?> FindByEmailAsync(string email);
+    Task SaveChangesAsync();
+
 }

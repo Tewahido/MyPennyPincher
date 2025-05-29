@@ -4,5 +4,5 @@ namespace MyPennyPincher_API.Repositories.Interfaces;
 
 public interface IExpenseCategoryRepository
 {
-    public ICollection<ExpenseCategory> getExpenseCategories();
+    Task<ICollection<ExpenseCategory>> GetAsync();
 }

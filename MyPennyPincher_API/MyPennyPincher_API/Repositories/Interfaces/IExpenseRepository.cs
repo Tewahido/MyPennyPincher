@@ -4,6 +4,9 @@ namespace MyPennyPincher_API.Repositories.Interfaces;
 
 public interface IExpenseRepository
 {
-    public ICollection<Expense> GetUserExpenses(string userId);
-    public 
+    Task<ICollection<Expense>> GetByUserIdAsync(string userId);
+    Task<Expense?> GetByIdAsync(int expenseId);
+    Task AddAsync(Expense expense);
+    Task DeleteAsync(Expense expense);
+    Task SaveChangesAsync();
 }

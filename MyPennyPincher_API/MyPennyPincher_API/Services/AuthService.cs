@@ -5,17 +5,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Repositories.Interfaces;
 
 namespace MyPennyPincher_API.Services;
 
 public class AuthService
 {
-    private readonly MyPennyPincherDbContext _context;
+    private readonly IAuthRepository _authRepository;
     private readonly IConfiguration _config;
 
-    public AuthService(MyPennyPincherDbContext context, IConfiguration config) 
+    public AuthService(IAuthRepository authRepository, IConfiguration config) 
     {  
-        _context = context;
+        _authRepository = authRepository;
         _config = config;
     }
 
@@ -36,16 +37,16 @@ public class AuthService
             Password = hashedPassword,
         };
 
-        _context.Users.Add(newUser);
+        await _authRepository.AddAsync(user);
 
-        await _context.SaveChangesAsync();
+        await _authRepository.SaveChangesAsync();
 
         return newUser;
     }
 
     public async Task<User?> Login(Login login)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == login.Email);
+        var user = await _authRepository.FindByEmailAsync(login.Email);
 
         if (user == null) 
         {
