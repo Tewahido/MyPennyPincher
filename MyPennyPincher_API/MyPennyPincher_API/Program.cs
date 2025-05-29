@@ -20,6 +20,7 @@ builder.Services.AddScoped<IncomeService>();
 builder.Services.AddScoped<ExpenseService>();
 builder.Services.AddScoped<ExpenseCategoryService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IIncomeRepository, IncomeRepository>();
 
 builder.Services.AddOpenApi();
 

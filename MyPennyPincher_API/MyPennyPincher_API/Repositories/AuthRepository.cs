@@ -23,4 +23,9 @@ public class AuthRepository : IAuthRepository
     {
        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
 }

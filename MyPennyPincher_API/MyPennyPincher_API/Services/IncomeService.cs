@@ -1,42 +1,41 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Repositories.Interfaces;
 
 namespace MyPennyPincher_API.Services;
 
 public class IncomeService
 {
-    private readonly MyPennyPincherDbContext _context;
+    private readonly IIncomeRepository _incomeRepository;
 
-    public IncomeService(MyPennyPincherDbContext context)
+    public IncomeService( IIncomeRepository incomeRepository)
     {
-        _context = context;
+        _incomeRepository = incomeRepository;
     }
 
     public async Task<ICollection<Income>> GetUserIncomes(string userId)
     {
-        return await _context.Incomes
-            .Where(user => user.UserId.ToString() == userId)
-            .ToListAsync();        
+        return await _incomeRepository.GetByUserIdAsync(userId);      
     }
 
     public async Task AddIncome(Income income)
     {
-        await _context.Incomes.AddAsync(income);
+        await _incomeRepository.AddAsync(income);
 
-        await _context.SaveChangesAsync();
+        await _incomeRepository.SaveChangesAsync();
     }
 
     public async Task DeleteIncome(Income income)
     {
-        _context.Incomes.Remove(income);
+        await _incomeRepository.DeleteAsync(income);
 
-        await _context.SaveChangesAsync();
+        await _incomeRepository.SaveChangesAsync();
     }
 
     public async Task EditIncome(Income updatedIncome)
     {
-        var existingIncome = await _context.Incomes.FirstOrDefaultAsync(income => income.IncomeId == updatedIncome.IncomeId);
+        var existingIncome = await _incomeRepository.GetByIdAsync(updatedIncome.IncomeId);
 
         if(existingIncome != null)
         {
@@ -45,7 +44,7 @@ public class IncomeService
             existingIncome.Date = updatedIncome.Date;
             existingIncome.Monthly = updatedIncome.Monthly;
 
-            await _context.SaveChangesAsync();
+            await _incomeRepository.SaveChangesAsync();
         }
     }
 }
