@@ -13,16 +13,16 @@ public class ExpenseService
         _context = context;
     }
 
-    public async Task<ICollection<Expense>?> GetUserExpenses(string userId)
+    public async Task<ICollection<Expense>> GetUserExpenses(string userId)
     {
-        return _context.Expenses
+        return await _context.Expenses
            .Where(user => user.UserId.ToString() == userId)
-           .ToList();
+           .ToListAsync();
     }
 
     public async Task AddExpense(Expense expense)
     {
-        _context.Expenses.Add(expense);
+        await _context.Expenses.AddAsync(expense);
 
         await _context.SaveChangesAsync();
     }

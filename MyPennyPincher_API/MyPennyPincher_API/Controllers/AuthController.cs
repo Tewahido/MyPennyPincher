@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Services;
 
 namespace MyPennyPincher_API.Controllers;

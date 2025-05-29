@@ -2,6 +2,7 @@
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Services;
+using MyPennyPincher_API_Tests.Test_Utilities;
 
 namespace MyPennyPincher_API_Tests.Unit_Tests;
 
@@ -12,11 +13,7 @@ public class ExpenseServiceTest : IDisposable
 
     public ExpenseServiceTest() 
     {
-        var options = new DbContextOptionsBuilder<MyPennyPincherDbContext>()
-           .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-           .Options;
-
-        _context = new MyPennyPincherDbContext(options);
+        _context = TestUtils.GenerateInMemoryDB();
 
         _expenseService = new ExpenseService(_context);
     }

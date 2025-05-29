@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Services;
+using MyPennyPincher_API_Tests.Test_Utilities;
 
 namespace MyPennyPincher_API_Tests.Unit_Tests;
 
@@ -13,11 +14,7 @@ public class IncomeServiceTest
 
     public IncomeServiceTest()
     {
-        var options = new DbContextOptionsBuilder<MyPennyPincherDbContext>()
-           .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-           .Options;
-
-        _context = new MyPennyPincherDbContext(options);
+        _context = TestUtils.GenerateInMemoryDB();
 
         _incomeService = new IncomeService(_context);
     }

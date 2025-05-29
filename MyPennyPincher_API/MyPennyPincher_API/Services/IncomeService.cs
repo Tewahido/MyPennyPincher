@@ -1,4 +1,5 @@
-﻿using MyPennyPincher_API.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
 
 namespace MyPennyPincher_API.Services;
@@ -12,19 +13,16 @@ public class IncomeService
         _context = context;
     }
 
-    public async Task<ICollection<Income>?> GetUserIncomes(string userId)
+    public async Task<ICollection<Income>> GetUserIncomes(string userId)
     {
-        return _context.Incomes
+        return await _context.Incomes
             .Where(user => user.UserId.ToString() == userId)
-            .ToList();
-
-        
+            .ToListAsync();        
     }
 
     public async Task AddIncome(Income income)
     {
-        Console.WriteLine(income);
-        _context.Incomes.Add(income);
+        await _context.Incomes.AddAsync(income);
 
         await _context.SaveChangesAsync();
     }
@@ -38,7 +36,7 @@ public class IncomeService
 
     public async Task EditIncome(Income updatedIncome)
     {
-        var existingIncome = _context.Incomes.Where(income => income.IncomeId == updatedIncome.IncomeId).FirstOrDefault();
+        var existingIncome = await _context.Incomes.FirstOrDefaultAsync(income => income.IncomeId == updatedIncome.IncomeId);
 
         if(existingIncome != null)
         {
