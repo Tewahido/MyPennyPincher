@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
 
 namespace MyPennyPincher_API_Tests.Test_Utilities;
