@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyPennyPincher_API.Models;
-using MyPennyPincher_API.Services;
+using MyPennyPincher_API.Services.Interfaces;
 
 namespace MyPennyPincher_API.Controllers;
 
@@ -11,9 +11,9 @@ namespace MyPennyPincher_API.Controllers;
 [Authorize]
 public class ExpenseController : ControllerBase
 {
-    private readonly ExpenseService _expenseService;
+    private readonly IExpenseService _expenseService;
 
-    public ExpenseController(ExpenseService expenseService)
+    public ExpenseController(IExpenseService expenseService)
     {
         _expenseService = expenseService;
     }
@@ -28,7 +28,7 @@ public class ExpenseController : ControllerBase
             return Unauthorized();
         }
 
-        var expenses = await _expenseService.GetUserExpenses(userId);
+        var expenses = await _expenseService.GetByUserId(userId);
 
         if (expenses == null || expenses.Count() == 0)
         {
@@ -46,7 +46,7 @@ public class ExpenseController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        await _expenseService.AddExpense(expense);
+        await _expenseService.AddAsync(expense);
 
         return Ok();
     }
@@ -59,7 +59,7 @@ public class ExpenseController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        await _expenseService.DeleteExpense(expense);
+        await _expenseService.DeleteAsync(expense);
 
         return Ok();
     }
@@ -72,7 +72,7 @@ public class ExpenseController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        await _expenseService.EditExpense(expense);
+        await _expenseService.EditAsync(expense);
 
         return Ok();
     }

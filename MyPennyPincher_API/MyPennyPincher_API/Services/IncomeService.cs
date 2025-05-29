@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MyPennyPincher_API.Context;
-using MyPennyPincher_API.Models;
+﻿using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Repositories.Interfaces;
+using MyPennyPincher_API.Services.Interfaces;
 
 namespace MyPennyPincher_API.Services;
 
-public class IncomeService
+public class IncomeService : IIncomeService
 {
     private readonly IIncomeRepository _incomeRepository;
 
@@ -14,26 +13,26 @@ public class IncomeService
         _incomeRepository = incomeRepository;
     }
 
-    public async Task<ICollection<Income>> GetUserIncomes(string userId)
+    public async Task<ICollection<Income>> GetByUserIdAsync(string userId)
     {
         return await _incomeRepository.GetByUserIdAsync(userId);      
     }
 
-    public async Task AddIncome(Income income)
+    public async Task AddAsync(Income income)
     {
         await _incomeRepository.AddAsync(income);
 
         await _incomeRepository.SaveChangesAsync();
     }
 
-    public async Task DeleteIncome(Income income)
+    public async Task DeleteAsync(Income income)
     {
         await _incomeRepository.DeleteAsync(income);
 
         await _incomeRepository.SaveChangesAsync();
     }
 
-    public async Task EditIncome(Income updatedIncome)
+    public async Task EditAsync(Income updatedIncome)
     {
         var existingIncome = await _incomeRepository.GetByIdAsync(updatedIncome.IncomeId);
 

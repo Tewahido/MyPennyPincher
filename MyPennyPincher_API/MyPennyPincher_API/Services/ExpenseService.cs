@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MyPennyPincher_API.Context;
-using MyPennyPincher_API.Models;
+﻿using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Repositories.Interfaces;
+using MyPennyPincher_API.Services.Interfaces;
 
 namespace MyPennyPincher_API.Services;
 
-public class ExpenseService
+public class ExpenseService : IExpenseService
 {
     private readonly IExpenseRepository _expenseRepository;
 
@@ -14,26 +13,26 @@ public class ExpenseService
         _expenseRepository = expenseRepository;
     }
 
-    public async Task<ICollection<Expense>> GetUserExpenses(string userId)
+    public async Task<ICollection<Expense>> GetByUserId(string userId)
     {
         return await _expenseRepository.GetByUserIdAsync(userId);
     }
 
-    public async Task AddExpense(Expense expense)
+    public async Task AddAsync(Expense expense)
     {
         await _expenseRepository.AddAsync(expense);
 
         await _expenseRepository.SaveChangesAsync();
     }
 
-    public async Task DeleteExpense(Expense expense)
+    public async Task DeleteAsync(Expense expense)
     {
         await _expenseRepository.DeleteAsync(expense);
 
         await _expenseRepository.SaveChangesAsync();
     }
 
-    public async Task EditExpense(Expense updatedExpense)
+    public async Task EditAsync(Expense updatedExpense)
     {
         var existingExpense = await _expenseRepository.GetByIdAsync(updatedExpense.ExpenseId);
 

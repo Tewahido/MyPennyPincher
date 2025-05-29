@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyPennyPincher_API.Models;
-using MyPennyPincher_API.Services;
+using MyPennyPincher_API.Services.Interfaces;
 
 namespace MyPennyPincher_API.Controllers;
 
@@ -10,9 +10,9 @@ namespace MyPennyPincher_API.Controllers;
 [Authorize]
 public class ExpenseCategoryController : ControllerBase
 {
-    private readonly ExpenseCategoryService _service;
+    private readonly IExpenseCategoryService _service;
 
-    public ExpenseCategoryController(ExpenseCategoryService service) 
+    public ExpenseCategoryController(IExpenseCategoryService service) 
     {
         _service = service;
     }

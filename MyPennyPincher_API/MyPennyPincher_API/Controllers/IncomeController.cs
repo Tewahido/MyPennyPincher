@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyPennyPincher_API.Models;
-using MyPennyPincher_API.Services;
+using MyPennyPincher_API.Services.Interfaces;
 
 namespace MyPennyPincher_API.Controllers;
 
@@ -11,9 +11,9 @@ namespace MyPennyPincher_API.Controllers;
 [Authorize]
 public class IncomeController : ControllerBase
 {
-    private readonly IncomeService _incomeService;
+    private readonly IIncomeService _incomeService;
 
-    public IncomeController(IncomeService incomeService)
+    public IncomeController(IIncomeService incomeService)
     {
         _incomeService = incomeService;
     }
@@ -28,7 +28,7 @@ public class IncomeController : ControllerBase
             return Unauthorized();
         }
 
-        var incomes = await _incomeService.GetUserIncomes(userId);
+        var incomes = await _incomeService.GetByUserIdAsync(userId);
 
         if(incomes == null || incomes.Count() == 0)
         {
@@ -46,7 +46,7 @@ public class IncomeController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        await _incomeService.AddIncome(income);
+        await _incomeService.AddAsync(income);
 
         return Ok();
     }
@@ -59,7 +59,7 @@ public class IncomeController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        await _incomeService.DeleteIncome(income);
+        await _incomeService.DeleteAsync(income);
 
         return Ok();
     }
@@ -72,7 +72,7 @@ public class IncomeController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        await _incomeService.EditIncome(income);
+        await _incomeService.EditAsync(income);
 
         return Ok();
     }

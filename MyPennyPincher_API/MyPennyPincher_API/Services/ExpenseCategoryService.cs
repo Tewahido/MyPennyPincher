@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Services.Interfaces;
 
 namespace MyPennyPincher_API.Services;
 
-public class ExpenseCategoryService
+public class ExpenseCategoryService : IExpenseCategoryService
 {
     private readonly MyPennyPincherDbContext _context;
 

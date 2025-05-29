@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Models.DTO;
-using MyPennyPincher_API.Services;
+using MyPennyPincher_API.Services.Interfaces;
 
 namespace MyPennyPincher_API.Controllers;
 
@@ -9,9 +9,9 @@ namespace MyPennyPincher_API.Controllers;
 [Route("[controller]")]
 public class AuthController : ControllerBase
 {
-    private AuthService _authService;
+    private IAuthService _authService;
 
-    public AuthController( AuthService authService)
+    public AuthController( IAuthService authService)
     {
         _authService = authService;
     }

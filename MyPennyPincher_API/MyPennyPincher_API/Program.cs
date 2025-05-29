@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Repositories;
+using MyPennyPincher_API.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,12 +16,13 @@ builder.Services.AddDbContext<MyPennyPincherDbContext>(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<IncomeService>();
-builder.Services.AddScoped<ExpenseService>();
-builder.Services.AddScoped<ExpenseCategoryService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IIncomeService, IncomeService>();
+builder.Services.AddScoped<IExpenseService, ExpenseService>();
+builder.Services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IIncomeRepository, IncomeRepository>();
+builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 
 builder.Services.AddOpenApi();
 
