@@ -128,6 +128,7 @@ export default function DashboardSection({
   const totalIncome = getTransactionsTotal(currentMonthIncomes);
 
   const totalExpenses = getTransactionsTotal(currentMonthExpenses);
+
   let months = [];
 
   if (yearlyTotals.incomes) {

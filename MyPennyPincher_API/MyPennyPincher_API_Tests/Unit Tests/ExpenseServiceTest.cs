@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Services;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MyPennyPincher_API_Tests.Unit_Tests;
 
@@ -24,15 +22,17 @@ public class ExpenseServiceTest : IDisposable
     }
 
     [Fact]
-    public async Task GIVEN_Expense_WHEN_AddignExpense_THEN_AddExpenseToDb() 
+    public async Task GIVEN_NewExpense_WHEN_AddignExpense_THEN_AddExpenseToDb() 
     {
         //Arrange
         Expense expense = new Expense
         {
+            ExpenseId=1,
             Description = "Test",
             Amount = 100,
             Date = DateOnly.FromDateTime(DateTime.Now),
             Recurring = false,
+            ExpenseCategoryId = 3,
             UserId = Guid.NewGuid(),
         };
 
@@ -46,7 +46,7 @@ public class ExpenseServiceTest : IDisposable
     }
 
     [Fact]
-    public async Task GIVEN_ExistingExpense_WHEN_DeletingExpense_THEN_RemoveExpenseFromDb()
+    public async Task GIVEN_ExistingExpense_WHEN_DeletingExpense_THEN_DeleteExpenseFromDb()
     {
         //Arrange
         Expense expense = new Expense
@@ -56,6 +56,7 @@ public class ExpenseServiceTest : IDisposable
             Amount = 100,
             Date = DateOnly.FromDateTime(DateTime.Now),
             Recurring = false,
+            ExpenseCategoryId = 3,
             UserId = Guid.NewGuid(),
         };
 
@@ -72,7 +73,7 @@ public class ExpenseServiceTest : IDisposable
     }
 
     [Fact]
-    public async Task GIVEN_ExistingExpense_WHEN_EditingExpense_THEN_EditOverwriteExistingExpense()
+    public async Task GIVEN_ExistingExpense_WHEN_EditingExpense_THEN_OverwriteExistingExpense()
     {
         //Arrange
         Expense existingExpense = new Expense
@@ -82,6 +83,7 @@ public class ExpenseServiceTest : IDisposable
             Amount = 100,
             Date = DateOnly.FromDateTime(DateTime.Now),
             Recurring = false,
+            ExpenseCategoryId = 3,
             UserId = Guid.NewGuid(),
         };
 
@@ -94,6 +96,7 @@ public class ExpenseServiceTest : IDisposable
             Amount = 500,
             Date = existingExpense.Date,
             Recurring = existingExpense.Recurring,
+            ExpenseCategoryId = existingExpense.ExpenseCategoryId,
             UserId = existingExpense.UserId,
         };
 
@@ -120,6 +123,7 @@ public class ExpenseServiceTest : IDisposable
             Amount = 100,
             Date = DateOnly.FromDateTime(DateTime.Now),
             Recurring = false,
+            ExpenseCategoryId = 3,
             UserId = userId,
         };
 
@@ -131,6 +135,7 @@ public class ExpenseServiceTest : IDisposable
             Amount = 1400,
             Date = DateOnly.FromDateTime(DateTime.Now),
             Recurring = false,
+            ExpenseCategoryId = 4,
             UserId = userId,
         };
 
@@ -142,6 +147,7 @@ public class ExpenseServiceTest : IDisposable
             Amount = 10540,
             Date = DateOnly.FromDateTime(DateTime.Now),
             Recurring = false,
+            ExpenseCategoryId = 5,
             UserId = userId,
         };
 
