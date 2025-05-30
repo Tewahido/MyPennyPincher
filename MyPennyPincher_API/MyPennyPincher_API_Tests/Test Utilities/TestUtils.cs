@@ -13,4 +13,11 @@ public class TestUtils
 
         return new MyPennyPincherDbContext(options);
     }
+
+    public static string GenerateRandomEmail()
+    {
+        var randomPrefix = Guid.NewGuid().ToString().Substring(0, 8); // or Random
+        return $"{randomPrefix}@example.com";
+    }
+
 }

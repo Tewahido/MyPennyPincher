@@ -27,16 +27,17 @@ public class AuthController : ControllerBase
         try
         {
             User? registredUser = await _authService.Register(user);
-        if (registredUser == null)
-        {
-            return BadRequest("Could not register user");
+            
+            if (registredUser == null)
+            {
+                return BadRequest("Could not register user");
+            }
         }
-        }
+
         catch(InvalidOperationException ex)
         {
             return Conflict(ex.Message);
         }
-
 
         return Ok();
     }
@@ -44,6 +45,11 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<User?>> Login([FromBody] Login login)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         var user = await _authService.Login(login);
 
         if(user == null)

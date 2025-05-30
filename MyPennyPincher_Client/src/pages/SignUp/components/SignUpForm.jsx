@@ -1,24 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import { SignUp } from "../../../services/authService.js";
-import { useState } from "react";
+import { isValidElement, useState } from "react";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
 import SignUpInput from "./SignUpInput.jsx";
+import { isValidPassword } from "../../../utils/authUtils.js";
 
 const emailDomain = [".com", ".co.za", ".org"];
 
-function isValidPassword(password) {
-  const hasUpperCase = /[A-Z]/.test(password);
-  const hasLowerCase = /[a-z]/.test(password);
-  const hasDigit = /\d/.test(password);
-  const hasSpecialChar = /[\W_]/.test(password);
-  const isLongEnough = password.length >= 8;
-
-  return (
-    hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar && isLongEnough
-  );
-}
-
 export default function SignUpForm() {
+  const [userExists, setUserExists] = useState(false);
+
   const [isDataValid, setIsDataValid] = useState({
     email: true,
     fullName: true,
@@ -57,6 +48,10 @@ export default function SignUpForm() {
     );
 
     console.log(formData);
+
+    if (signUpStatus === 409) {
+      setUserExists(true);
+    }
 
     if (signUpStatus === 200) {
       navigate("/login");
@@ -156,6 +151,9 @@ export default function SignUpForm() {
                   -A special character`
             }
           />
+          {userExists && (
+            <ErrorMessage text="A user with this email already exists" />
+          )}
         </div>
       </form>
     </div>

@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Net;
 using System.Text;
-using Microsoft.AspNetCore.Builder;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API_Tests.Test_Utilities;
 using Newtonsoft.Json;
@@ -28,7 +27,7 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
         {
             UserId = Guid.NewGuid(),
             FullName = "Test User",
-            Email = "test@email.com",
+            Email = TestUtils.GenerateRandomEmail(),
             Password = "password"
         };
 
@@ -40,6 +39,30 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
 
         //Assert
         response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task GIVEN_ExistingUser_WHEN_AttemptingToRegister_THEN_ReturnConflictStatus()
+    {
+        //Arrange
+        User user = new User
+        {
+            UserId = Guid.NewGuid(),
+            FullName = "Test User",
+            Email = TestUtils.GenerateRandomEmail(),
+            Password = "password"
+        };
+
+        var json = JsonConvert.SerializeObject(user);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var firstResponse = await _client.PostAsync(BaseRoute + "/register", content);
+
+        //Act
+        var response = await _client.PostAsync(BaseRoute + "/register", content);
+
+        //Assert
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
 
     [Fact]
