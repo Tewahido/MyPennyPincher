@@ -1,5 +1,6 @@
 import { describe, test } from "vitest";
-import { extractTokenExpiryTime } from "../utils/authUtils";
+import { extractTokenExpiryTime, isValidPassword } from "../utils/authUtils";
+import { isValidElement } from "react";
 
 function generateMockJWT(expiryTime) {
   const jwt = require("jsonwebtoken");
@@ -15,7 +16,7 @@ function generateMockJWT(expiryTime) {
   return jwt.sign(payload, secret);
 }
 
-describe("authUtils tests", () => {
+describe("token expiry time tests", () => {
   const expiryTime = Math.floor(Date.now() / 1000) + 60 * 60;
 
   const token = generateMockJWT(expiryTime);
@@ -24,6 +25,27 @@ describe("authUtils tests", () => {
     const expected = new Date(expiryTime * 1000);
 
     const result = extractTokenExpiryTime(token);
+
+    expect(result).toEqual(expected);
+  });
+});
+
+describe("password validity check tests", () => {
+  const validPassword = "Abc!23you&me";
+  const invalidPassword = "notValid";
+
+  test("return true with valid password", () => {
+    const expected = true;
+
+    const result = isValidPassword(validPassword);
+
+    expect(result).toEqual(expected);
+  });
+
+  test("return false with valid password", () => {
+    const expected = false;
+
+    const result = isValidPassword(invalidPassword);
 
     expect(result).toEqual(expected);
   });

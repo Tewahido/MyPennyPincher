@@ -25,3 +25,15 @@ export function logoutUser(dispatch, navigate, location) {
     navigate("/login");
   }
 }
+
+export function isValidPassword(password) {
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasDigit = /\d/.test(password);
+  const hasSpecialChar = /[\W_]/.test(password);
+  const isLongEnough = password.length >= 8;
+
+  return (
+    hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar && isLongEnough
+  );
+}

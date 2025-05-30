@@ -36,6 +36,7 @@ export default function SignUpForm() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    setUserExists(false);
 
     if (!isFormValid(formData)) {
       return;
@@ -51,6 +52,12 @@ export default function SignUpForm() {
 
     if (signUpStatus === 409) {
       setUserExists(true);
+      setFormData({
+        fullName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
     }
 
     if (signUpStatus === 200) {
@@ -122,6 +129,9 @@ export default function SignUpForm() {
           isDataValid={isDataValid.confirmPassword}
           errorMessage="Passwords do not match."
         />
+        {userExists && (
+          <ErrorMessage text="A user with this email already exists" />
+        )}
         <div className="w-full flex flex-col gap-3">
           <div className="w-full flex justify-between">
             <p className="text-sm">Already have an account?</p>
@@ -151,9 +161,6 @@ export default function SignUpForm() {
                   -A special character`
             }
           />
-          {userExists && (
-            <ErrorMessage text="A user with this email already exists" />
-          )}
         </div>
       </form>
     </div>
