@@ -17,16 +17,6 @@ namespace MyPennyPincher_API_Tests.WebApplicationFactory
 
             builder.ConfigureServices(services =>
             {
-                services.RemoveAll<DbContextOptions>();
-                services.RemoveAll<MyPennyPincherDbContext>();
-
-                var options = services.Where(s => s.ServiceType.BaseType == typeof(DbContextOptions<MyPennyPincherDbContext>)).ToList();
-                
-                foreach (var option in options)
-                {
-                    services.Remove(option);
-                }
-
                 services.AddDbContext<MyPennyPincherDbContext>(options =>
                 {
                     options.UseInMemoryDatabase(InMemoryDbName);
