@@ -11,13 +11,10 @@ namespace MyPennyPincher_API_Tests.Integration_Tests;
 public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Program>> 
 {
     private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program>
-        _factory;
     private const string BaseRoute= "/Auth";
     
     public AuthControllerTest(CustomWebApplicationFactory<Program> factory)
     {
-        _factory = factory;
         _client = factory.CreateClient();
     }
 
@@ -59,17 +56,12 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
             Email = randomEmail,
             Password = "password"
         };
-
-        var json = JsonConvert.SerializeObject(user);
-
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        var firstResponse = await TestUtils.RegisterTestUserAsync(_client, user);
+        var firstResponse = await TestUtils.PostAsync(_client, BaseRoute + "/register",  user);
 
         firstResponse.EnsureSuccessStatusCode();
 
         //Act
-        var response = await TestUtils.RegisterTestUserAsync(_client, user);
+        var response = await TestUtils.PostAsync(_client, BaseRoute + "/register", user);
 
         //Assert
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
@@ -89,7 +81,7 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
             Password = "password"
         };
 
-        var registeredUserResult = await TestUtils.RegisterTestUserAsync(_client, user);
+        var registeredUserResult = await TestUtils.PostAsync(_client, BaseRoute + "/register", user);
 
         registeredUserResult.EnsureSuccessStatusCode();
 
@@ -99,20 +91,18 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
             Password = user.Password
         };
 
-        var json = JsonConvert.SerializeObject(login);
-
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
         //Act
-        var response = await _client.PostAsync(BaseRoute + "/login", content);
+        var response = await TestUtils.PostAsync(_client, BaseRoute + "/login", login);
 
         //Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        response.EnsureSuccessStatusCode();
 
         var responseString = await response.Content.ReadAsStringAsync();
+
         var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseString);
 
         Assert.NotNull(loginResponse);
+        
         Assert.Equal(user.UserId, loginResponse.UserId);
     }
 }

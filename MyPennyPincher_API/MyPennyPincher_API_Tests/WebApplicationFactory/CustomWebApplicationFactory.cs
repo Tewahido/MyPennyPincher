@@ -22,13 +22,13 @@ namespace MyPennyPincher_API_Tests.WebApplicationFactory
                     options.UseInMemoryDatabase(InMemoryDbName);
                 });
 
-                services.AddAuthentication("FakeScheme")
-                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("FakeScheme", options => { });
+                services.AddAuthentication("TestScheme")
+                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", options => { });
 
                 services.Configure<AuthenticationOptions>(options =>
                 {
-                    options.DefaultAuthenticateScheme = "FakeScheme";
-                    options.DefaultChallengeScheme = "FakeScheme";
+                    options.DefaultAuthenticateScheme = "TestScheme";
+                    options.DefaultChallengeScheme = "TestScheme";
                 });
 
                 services.AddAuthorization();
