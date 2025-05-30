@@ -6,16 +6,17 @@ using Newtonsoft.Json;
 
 namespace MyPennyPincher_API_Tests.Integration_Tests;
 
-public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
-    private const string BaseRoute = "/Income";
+    private const string BaseRoute = "/Expense";
     private const string AuthRoute = "/Auth";
 
-    public IncomeControllerTest(CustomWebApplicationFactory<Program> factory)
+    public ExpenseControllerTest(CustomWebApplicationFactory<Program> factory)
     {
         _client = factory.CreateClient();
     }
+
 
     [Fact]
     public async Task GIVEN_NewIncome_WHEN_AddingIncome_THEN_ReturnOkStatus()
@@ -30,20 +31,20 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
         };
 
         var userResponse = await TestUtils.PostAsync(_client, AuthRoute + "/register", user);
-
         userResponse.EnsureSuccessStatusCode();
 
-        Income income = new Income
+        Expense expense = new Expense
         {
-            Source = "Test",
+            Description = "Test",
             Amount = 100,
             Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
+            Recurring = false,
+            ExpenseCategoryId = 3,
             UserId = user.UserId,
         };
 
         //Act
-        var response = await TestUtils.PostAsync(_client, BaseRoute, income);
+        var response = await TestUtils.PostAsync(_client, BaseRoute, expense);
 
         //Assert
         response.EnsureSuccessStatusCode();
@@ -62,25 +63,24 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
         };
 
         var userResponse = await TestUtils.PostAsync(_client, AuthRoute + "/register", user);
-
         userResponse.EnsureSuccessStatusCode();
 
-        Income income = new Income
+        Expense expense = new Expense
         {
-            IncomeId = 2,
-            Source = "Test",
+            ExpenseId = 2,
+            Description = "Test",
             Amount = 100,
             Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
+            Recurring = false,
+            ExpenseCategoryId = 3,
             UserId = user.UserId,
         };
 
-        var addIncomeResponse = await TestUtils.PostAsync(_client, BaseRoute, income);
-
+        var addIncomeResponse = await TestUtils.PostAsync(_client, BaseRoute, expense);
         addIncomeResponse.EnsureSuccessStatusCode();
 
         //Act
-        var response = await TestUtils.DeleteAsync(_client, BaseRoute, income);
+        var response = await TestUtils.DeleteAsync(_client, BaseRoute, expense);
 
         //Assert
         response.EnsureSuccessStatusCode();
@@ -100,40 +100,39 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
         };
 
         var userResponse = await TestUtils.PostAsync(_client, AuthRoute + "/register", user);
-
         userResponse.EnsureSuccessStatusCode();
 
-        Income income = new Income
+        Expense expense = new Expense
         {
-            IncomeId = 3,
-            Source = "Test",
+            ExpenseId = 3,
+            Description = "Test",
             Amount = 100,
             Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
+            Recurring = false,
+            ExpenseCategoryId = 3,
             UserId = user.UserId,
         };
 
-        var addIncomeResponse = await TestUtils.PostAsync(_client, BaseRoute, income);
-
+        var addIncomeResponse = await TestUtils.PostAsync(_client, BaseRoute, expense);
         addIncomeResponse.EnsureSuccessStatusCode();
 
-        Income editedIncome = new Income
+        Expense editedExpense = new Expense
         {
-            IncomeId = 3,
-            Source = "Test",
+            ExpenseId = 3,
+            Description = "Test",
             Amount = 500,
             Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
+            Recurring = false,
+            ExpenseCategoryId = 3,
             UserId = user.UserId,
         };
 
         //Act
-        var response = await TestUtils.PutAsync(_client, BaseRoute, editedIncome);
+        var response = await TestUtils.PutAsync(_client, BaseRoute, editedExpense);
 
         //Assert
         response.EnsureSuccessStatusCode();
     }
-
 
     [Fact]
     public async Task GIVEN_UserId_WHEN_GettingUserExpenses_THEN_ReturnOkAndUserExpenses()
@@ -167,40 +166,46 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
 
         var token = loginResponse?.Token;
 
-        Income firstIncome = new Income
+        Expense firstExpense = new Expense
         {
-            Source = "Test",
+            ExpenseId = 4,
+            Description = "Test",
             Amount = 100,
             Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
+            Recurring = false,
+            ExpenseCategoryId = 3,
             UserId = user.UserId,
         };
 
-        Income secondIncome = new Income
+        Expense secondExpense = new Expense
         {
-            Source = "Test",
+            ExpenseId = 5,
+            Description = "Test",
             Amount = 100,
             Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
+            Recurring = false,
+            ExpenseCategoryId = 3,
             UserId = user.UserId,
         };
 
-        Income thirdIncome = new Income
+        Expense thirdExpense = new Expense
         {
-            Source = "Test",
+            ExpenseId = 6,
+            Description = "Test",
             Amount = 100,
             Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
+            Recurring = false,
+            ExpenseCategoryId = 3,
             UserId = user.UserId,
         };
 
-        var firstResponse = await TestUtils.PostAsync(_client, BaseRoute, firstIncome);
+        var firstResponse = await TestUtils.PostAsync(_client, BaseRoute, firstExpense);
         firstResponse.EnsureSuccessStatusCode();
 
-        var secondResponse = await TestUtils.PostAsync(_client, BaseRoute, secondIncome);
+        var secondResponse = await TestUtils.PostAsync(_client, BaseRoute, secondExpense);
         secondResponse.EnsureSuccessStatusCode();
 
-        var thirdResponse = await TestUtils.PostAsync(_client, BaseRoute, thirdIncome);
+        var thirdResponse = await TestUtils.PostAsync(_client, BaseRoute, thirdExpense);
         thirdResponse.EnsureSuccessStatusCode();
 
         //Act
@@ -208,12 +213,13 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
         response.EnsureSuccessStatusCode();
 
         var json = await response.Content.ReadAsStringAsync();
-        var incomes = JsonConvert.DeserializeObject<List<Income>>(json);
+        var expenses = JsonConvert.DeserializeObject<List<Income>>(json);
 
         //Assert
 
-        Assert.NotNull(incomes);
-        Assert.All(incomes, income => Assert.IsType<Income>(income));
-        Assert.Equal(incomes.Count, 3);
+        Assert.NotNull(expenses);
+        Assert.All(expenses, income => Assert.IsType<Income>(income));
+        Assert.Equal(expenses.Count, 3);
     }
+
 }
