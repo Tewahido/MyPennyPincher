@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Integration Tests\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MyPennyPincher_API\MyPennyPincher_API.csproj" />
   </ItemGroup>
 

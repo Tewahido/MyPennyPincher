@@ -19,12 +19,24 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult<User>> Register(User user)
     {
-        User? registredUser = await _authService.Register(user);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
+        try
+        {
+            User? registredUser = await _authService.Register(user);
         if (registredUser == null)
         {
             return BadRequest("Could not register user");
         }
+        }
+        catch(InvalidOperationException ex)
+        {
+            return Conflict(ex.Message);
+        }
+
 
         return Ok();
     }

@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Repositories;

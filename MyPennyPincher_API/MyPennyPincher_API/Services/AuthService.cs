@@ -26,6 +26,13 @@ public class AuthService : IAuthService
             throw new ArgumentNullException();
         }
 
+        var existingUser = await _authRepository.FindByEmailAsync(user.Email);
+
+        if (existingUser != null)
+        {
+            throw new InvalidOperationException("A user with this email already exists.");
+        }
+
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
         var newUser = new User
