@@ -3,7 +3,7 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-namespace MyPennyPincher_API_Tests.Test_Utilities;
+namespace MyPennyPincher_API_Tests.WebApplicationFactory;
 
 public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {

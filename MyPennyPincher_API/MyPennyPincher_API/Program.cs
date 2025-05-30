@@ -11,8 +11,11 @@ using MyPennyPincher_API.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<MyPennyPincherDbContext>(options =>
+if (!builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddDbContext<MyPennyPincherDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbCon")));
+}
 
 builder.Services.AddControllers();
 
