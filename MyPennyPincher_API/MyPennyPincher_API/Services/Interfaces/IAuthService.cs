@@ -1,4 +1,5 @@
 ﻿using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Models.DTO;
 
 namespace MyPennyPincher_API.Services.Interfaces;
 

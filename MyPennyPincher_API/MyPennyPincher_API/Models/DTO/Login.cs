@@ -1,4 +1,4 @@
-﻿namespace MyPennyPincher_API.Models;
+﻿namespace MyPennyPincher_API.Models.DTO;
 
 public class Login
 {
