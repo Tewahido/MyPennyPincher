@@ -22,6 +22,9 @@ public partial class MyPennyPincherDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Expense>(entity =>
@@ -65,10 +68,24 @@ public partial class MyPennyPincherDbContext : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.HasIndex(u => u.Email)
+                .IsUnique();
             entity.Property(e => e.FullName)
                 .HasMaxLength(150)
                 .IsUnicode(false);
             entity.Property(e => e.Password).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasKey(e => e.RefreshTokenId).HasName("PK__RefreshT__F5845E394FB8BAE0");
+
+            entity.HasIndex(e => e.Token, "UQ__RefreshT__1EB4F817DEE02968").IsUnique();
+
+            entity.Property(e => e.ExpiryDate).HasColumnType("datetime");
+            entity.Property(e => e.Token)
+                .HasMaxLength(150)
+                .IsUnicode(false);
         });
 
         OnModelCreatingPartial(modelBuilder);
