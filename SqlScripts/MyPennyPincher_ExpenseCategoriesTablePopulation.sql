@@ -1,0 +1,16 @@
+INSERT INTO ExpenseCategories (Name) VALUES
+('Housing'),
+('Utilities'),
+('Food'),
+('Transportation'),
+('Health'),
+('Personal Care'),
+('Education'),
+('Communication'),
+('Entertainment'),
+('Travel'),
+('Financial'),
+('Gifts & Donations'),
+('Pets'),
+('Savings & Investments'),
+('Miscellaneous');

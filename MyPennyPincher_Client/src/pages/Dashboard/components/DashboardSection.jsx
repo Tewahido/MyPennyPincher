@@ -163,7 +163,7 @@ export default function DashboardSection({
 
   return (
     <div className="flex flex-col bg-green-100 items-center 2xl:flex-row justify-evenly w-full h-full 2xl:h-150 overflow-hidden ">
-      <div className=" hidden 2xl:flex flex-col items-center h-full bg-white m-1 rounded-xl w-[60%] px-15 pb-15">
+      <div className=" hidden 2xl:flex flex-col items-center h-full bg-white m-1 rounded-xl w-[60%] px-15 pb-15 ">
         <h1 className=" font-bold text-3xl xl:text-4xl black my-10  mx-auto text-center">
           Current month spending
         </h1>

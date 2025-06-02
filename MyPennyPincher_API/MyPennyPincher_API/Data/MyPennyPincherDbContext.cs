@@ -80,6 +80,8 @@ public partial class MyPennyPincherDbContext : DbContext
         {
             entity.HasKey(e => e.RefreshTokenId).HasName("PK__RefreshT__F5845E394FB8BAE0");
 
+            entity.Property(e => e.RefreshTokenId).ValueGeneratedOnAdd();
+
             entity.HasIndex(e => e.Token, "UQ__RefreshT__1EB4F817DEE02968").IsUnique();
 
             entity.Property(e => e.ExpiryDate).HasColumnType("datetime");

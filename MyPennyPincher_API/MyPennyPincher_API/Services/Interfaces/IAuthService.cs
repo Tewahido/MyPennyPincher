@@ -7,5 +7,5 @@ public interface IAuthService
 {
     Task<User> Register(User user);
     Task<User?> Login(Login login);
-    string GenerateToken(User user);
+    Task<string?> RefreshToken(Guid userId, string refreshToken);
 }

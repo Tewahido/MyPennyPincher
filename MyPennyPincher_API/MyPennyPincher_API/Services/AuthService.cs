@@ -1,8 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using MyPennyPincher_API.Models;
+﻿using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services.Interfaces;
@@ -12,12 +8,12 @@ namespace MyPennyPincher_API.Services;
 public class AuthService : IAuthService
 {
     private readonly IAuthRepository _authRepository;
-    private readonly IConfiguration _config;
+    private readonly ITokenService _tokenService;
 
-    public AuthService(IAuthRepository authRepository, IConfiguration config) 
+    public AuthService(IAuthRepository authRepository, ITokenService tokenService) 
     {  
         _authRepository = authRepository;
-        _config = config;
+        _tokenService = tokenService;
     }
 
     public async Task<User> Register(User user)
@@ -67,32 +63,30 @@ public class AuthService : IAuthService
             return null;
         }
 
+        var existingToken = await _tokenService.GetUserToken(user);
+
+        if (existingToken != null)
+        {
+            await _tokenService.DeleteRefreshToken(existingToken);
+        }
+
+        var refreshToken = _tokenService.GenerateRefreshToken(user);
+
+        await _tokenService.AddRefreshToken(refreshToken);
+
         return user;
     }
 
-    public string GenerateToken(User user)
+ 
+    public async Task<string?> RefreshToken(Guid userId, string refreshToken)
     {
+        bool tokenIsValid = await _tokenService.ValidateToken(userId, refreshToken);
 
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-        var userId = user.UserId.ToString();
-
-        var claims = new[]
+        if (tokenIsValid) 
         {
-            new Claim(ClaimTypes.NameIdentifier, userId),
-            new Claim(ClaimTypes.Name, user.FullName)
-        };
+            return _tokenService.GenerateAccessToken(userId);
+        }
 
-        var tokenValidityTime = DateTime.Now.AddHours(_config.GetValue<double>("Jwt:TokenValidityHrs"));
-
-        var token = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],
-            audience: _config["Jwt:Issuer"],
-            claims: claims,
-            expires: tokenValidityTime,
-            signingCredentials: credentials);
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return null;
     }
 }

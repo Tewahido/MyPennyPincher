@@ -9,11 +9,13 @@ namespace MyPennyPincher_API.Controllers;
 [Route("[controller]")]
 public class AuthController : ControllerBase
 {
-    private IAuthService _authService;
+    private readonly IAuthService _authService;
+    private readonly ITokenService _tokenService;
 
-    public AuthController( IAuthService authService)
+    public AuthController( IAuthService authService, ITokenService tokenService)
     {
         _authService = authService;
+        _tokenService = tokenService;
     }
 
     [HttpPost("register")]
@@ -57,13 +59,15 @@ public class AuthController : ControllerBase
             return Unauthorized("Invalid Credentials");
         }
 
-        string token = _authService.GenerateToken(user);
+        string token = _tokenService.GenerateAccessToken(user.UserId);
 
         LoginResponse loginResponse= new LoginResponse
         {
             UserId = user.UserId,
             Token = token,
         };
+
+
 
         return Ok(loginResponse);
     }
