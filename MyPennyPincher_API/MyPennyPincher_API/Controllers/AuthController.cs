@@ -71,13 +71,15 @@ public class AuthController : ControllerBase
 
         await _tokenService.AddRefreshToken(refreshToken);
 
+        int tokenValiditySeconds = (int)(refreshToken.ExpiryDate - DateTime.UtcNow).TotalSeconds;
+
         Response.Cookies.Append("refreshToken", refreshToken.Token, new CookieOptions
         {
             HttpOnly = true,
             Secure = true,
-            SameSite = SameSiteMode.Strict,
+            SameSite = SameSiteMode.None,
             Path = "/auth/refresh",
-            Expires = refreshToken.ExpiryDate
+            MaxAge = TimeSpan.FromSeconds(tokenValiditySeconds)
         });
 
         return Ok(loginResponse);

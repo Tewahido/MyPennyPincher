@@ -9,5 +9,4 @@ public interface ITokenService
     Task AddRefreshToken(RefreshToken refreshToken);
     Task DeleteRefreshToken(string userId);
     Task<bool> ValidateToken(Guid userId, string token);
-    Task<RefreshToken?> GetUserToken(User user);
 }

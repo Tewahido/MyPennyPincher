@@ -78,7 +78,6 @@ public class TokenService : ITokenService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-
     public async Task<bool> ValidateToken(Guid userId, string token)
     {
         RefreshToken refreshToken = await _tokenRepository.GetTokenAsync(userId);
@@ -90,7 +89,7 @@ public class TokenService : ITokenService
         return tokenIsValid;
     }
 
-    public async Task<RefreshToken?> GetUserToken(string userId)
+    private async Task<RefreshToken?> GetUserToken(string userId)
     {
         return await _tokenRepository.GetTokenAsync(new Guid(userId));
     }

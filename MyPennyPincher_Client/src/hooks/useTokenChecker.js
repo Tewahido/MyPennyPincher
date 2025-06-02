@@ -7,7 +7,7 @@ export function useTokenChecker(interval = 60000) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-
+  const userId = useSelector((state) => state.user.user.userId);
   const tokenExpiryTime = useSelector((state) => state.user.expiresAt);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export function useTokenChecker(interval = 60000) {
 
     function checkTokenValidity() {
       if (Date.now() >= convertedTokenExpiryTime.getTime()) {
-        logoutUser(dispatch, navigate, location);
+        logoutUser(dispatch, navigate, location, userId);
       }
     }
 

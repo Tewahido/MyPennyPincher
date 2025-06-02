@@ -4,13 +4,20 @@ import { clearExpenses } from "../store/slices/expenseSlice";
 import { jwtDecode } from "jwt-decode";
 import { resetMonth } from "../store/slices/monthSlice";
 import { setLoading } from "../store/slices/loadingSlice";
+import { Logout } from "../services/authService";
 
 export function extractTokenExpiryTime(token) {
   const decodedToken = jwtDecode(token);
   return new Date(decodedToken.exp * 1000);
 }
 
-export function logoutUser(dispatch, navigate, location) {
+export function logoutUser(dispatch, navigate, location, userId) {
+  const response = Logout(userId);
+
+  if (response != 200) {
+    return;
+  }
+
   dispatch(logout());
 
   dispatch(clearIncomes());

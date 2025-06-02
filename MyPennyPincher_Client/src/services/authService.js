@@ -35,6 +35,26 @@ export const Login = async (email, password) => {
     return null;
   }
 
+  document.cookie("refreshToken");
+
   const data = await response.json();
   return data;
+};
+
+export const Logout = async (userId) => {
+  const response = await fetch(`${BASE_URL}/Auth/logout`, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(userId),
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    console.error("Error:", error);
+    return null;
+  }
+
+  return response;
 };
