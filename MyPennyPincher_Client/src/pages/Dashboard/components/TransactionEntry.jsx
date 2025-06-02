@@ -47,7 +47,7 @@ export default function TransactionEntry({ type, entry, index }) {
       <ManageIncomeModal ref={manageIncomeDialog} income={entry} />
       <ManageExpenseModal ref={manageExpenseDialog} expense={entry} />
       <div
-        className={`flex items-center justify-evenly ${entryColour} w-full rounded-xl p-5 `}
+        className={`flex items-center justify-evenly ${entryColour} w-full rounded-xl p-5`}
       >
         <h1 className="w-[10%] text-lg font-bold">{index}</h1>
 
