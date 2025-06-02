@@ -63,20 +63,8 @@ public class AuthService : IAuthService
             return null;
         }
 
-        var existingToken = await _tokenService.GetUserToken(user);
-
-        if (existingToken != null)
-        {
-            await _tokenService.DeleteRefreshToken(existingToken);
-        }
-
-        var refreshToken = _tokenService.GenerateRefreshToken(user);
-
-        await _tokenService.AddRefreshToken(refreshToken);
-
         return user;
     }
-
  
     public async Task<string?> RefreshToken(Guid userId, string refreshToken)
     {

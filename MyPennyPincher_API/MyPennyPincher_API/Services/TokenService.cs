@@ -26,9 +26,10 @@ public class TokenService : ITokenService
         await _tokenRepository.SaveChangesAsync();
     }
 
-    public async Task DeleteRefreshToken(User user)
+    public async Task DeleteRefreshToken(string userId)
     {
-        var existingToken = await GetUserToken(user);
+
+        var existingToken = await GetUserToken(userId);
 
         if (existingToken != null)
         {
@@ -89,8 +90,8 @@ public class TokenService : ITokenService
         return tokenIsValid;
     }
 
-    public async Task<RefreshToken?> GetUserToken(User user)
+    public async Task<RefreshToken?> GetUserToken(string userId)
     {
-        return await _tokenRepository.GetTokenAsync(user.UserId);
+        return await _tokenRepository.GetTokenAsync(new Guid(userId));
     }
 }

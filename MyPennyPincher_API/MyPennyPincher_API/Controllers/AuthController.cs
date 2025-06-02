@@ -67,8 +67,27 @@ public class AuthController : ControllerBase
             Token = token,
         };
 
+        var refreshToken = _tokenService.GenerateRefreshToken(user);
 
+        await _tokenService.AddRefreshToken(refreshToken);
+
+        Response.Cookies.Append("refreshToken", refreshToken.Token, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Path = "/auth/refresh",
+            Expires = refreshToken.ExpiryDate
+        });
 
         return Ok(loginResponse);
+    }
+
+    [HttpPost("logout")]
+    public async Task<ActionResult> Logout([FromBody] string userId)
+    {
+        await _tokenService.DeleteRefreshToken(userId);
+
+        return Ok();
     }
 }
