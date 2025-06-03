@@ -1,4 +1,4 @@
-import { logout } from "../store/slices/userSlice";
+import { login, logout, setExpiryTime } from "../store/slices/userSlice";
 import { clearIncomes } from "../store/slices/incomeSlice";
 import { clearExpenses } from "../store/slices/expenseSlice";
 import { jwtDecode } from "jwt-decode";
@@ -11,9 +11,17 @@ export function extractTokenExpiryTime(token) {
   return new Date(decodedToken.exp * 1000);
 }
 
+export function loginUser(dispatch, userData) {
+  const tokenExpiryTime = extractTokenExpiryTime(userData.token);
+
+  dispatch(setExpiryTime(tokenExpiryTime.toISOString()));
+
+  dispatch(login(userData));
+}
+
 export async function logoutUser(dispatch, navigate, location, userId) {
   const response = await Logout(userId);
-  console.log(response);
+
   if (response != 200) {
     return;
   }

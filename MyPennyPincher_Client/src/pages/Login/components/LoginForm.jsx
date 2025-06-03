@@ -2,10 +2,9 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Login } from "../../../services/authService.js";
-import { login, setExpiryTime } from "../../../store/slices/userSlice.js";
 import LoginInput from "./LoginInput.jsx";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
-import { extractTokenExpiryTime } from "../../../utils/authUtils.js";
+import { loginUser } from "../../../utils/authUtils.js";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -20,6 +19,7 @@ export default function LoginForm() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -29,17 +29,15 @@ export default function LoginForm() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const loggedInUser = await Login(formData.email, formData.password);
+    const response = await Login(formData.email, formData.password);
 
-    if (!loggedInUser) {
+    if (response.status != 200) {
       setLoginFailed(true);
       return;
     }
+    const loggedInUser = await response.json();
 
-    const tokenExpiryTime = extractTokenExpiryTime(loggedInUser.token);
-    console.log(tokenExpiryTime);
-    dispatch(setExpiryTime(tokenExpiryTime.toISOString()));
-    dispatch(login(loggedInUser));
+    loginUser(dispatch, loggedInUser);
 
     navigate("/dashboard");
   }

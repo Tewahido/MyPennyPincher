@@ -1,7 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser } from "../utils/authUtils.js";
+import { loginUser, logoutUser } from "../utils/authUtils.js";
 import { useEffect } from "react";
+import { Refresh } from "../services/authService.js";
 
 export function useTokenChecker(interval = 60000) {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ export function useTokenChecker(interval = 60000) {
   const tokenExpiryTime = useSelector((state) => state.user.expiresAt);
 
   useEffect(() => {
-    if (!tokenExpiryTime) {
+    if (!tokenExpiryTime || !user) {
       return;
     }
 
@@ -19,7 +20,22 @@ export function useTokenChecker(interval = 60000) {
 
     async function checkTokenValidity() {
       if (Date.now() >= convertedTokenExpiryTime.getTime()) {
-        await logoutUser(dispatch, navigate, location, user.userId);
+        try {
+          const response = await Refresh(user.userId);
+
+          if (response.status !== 200) {
+            await logoutUser(dispatch, navigate, location, user.userId);
+            return;
+          }
+
+          const userData = await response.json();
+
+          loginUser(dispatch, userData);
+        } catch (error) {
+          console.error("Token refresh failed:", error);
+
+          await logoutUser(dispatch, navigate, location, user.userId);
+        }
       }
     }
 
