@@ -44,14 +44,14 @@ public class TokenService : ITokenService
         await _tokenRepository.SaveChangesAsync();
     }
 
-    public RefreshToken GenerateRefreshToken(User user)
+    public RefreshToken GenerateRefreshToken(Guid userId)
     {
         string generatedToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
 
         RefreshToken refreshToken = new RefreshToken
         {
             Token = generatedToken,
-            UserId = user.UserId,
+            UserId = userId,
             ExpiryDate = DateTime.UtcNow.AddDays(1),
         };
 
@@ -83,7 +83,19 @@ public class TokenService : ITokenService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public async Task<bool> ValidateToken(Guid userId, string token)
+    public async Task<string?> RefreshToken(Guid userId, string refreshToken)
+    {
+        bool tokenIsValid = await ValidateToken(userId, refreshToken);
+
+        if (tokenIsValid)
+        {
+            return GenerateAccessToken(userId);
+        }
+
+        return null;
+    }
+
+    private async Task<bool> ValidateToken(Guid userId, string token)
     {
         RefreshToken refreshToken = await _tokenRepository.GetTokenAsync(userId);
 

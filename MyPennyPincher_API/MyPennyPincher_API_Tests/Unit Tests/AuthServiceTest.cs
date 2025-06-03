@@ -8,6 +8,7 @@ using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
+using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API_Tests.Test_Utilities;
 
 namespace MyPennyPincher_API_Tests;
@@ -16,27 +17,15 @@ public class AuthServiceTest : IDisposable
 {
     private readonly AuthService _authService;
     private readonly MyPennyPincherDbContext _context;
-    private readonly IAuthRepository _authRepository;    
-    private readonly IConfiguration _config;
+    private readonly IAuthRepository _authRepository; 
 
     public AuthServiceTest() 
     {
-        var configData = new Dictionary<string, string>
-        {
-            { "Jwt:Key", "X2s#9f!zLq@84hT%vG^7Rb*eWkP$JmN+ZcA!uYdE6rOi$0MbTpLgVsWx1QdHzFnCy" },
-            { "Jwt:Issuer", "https://localhost:7053" },
-            { "Jwt:TokenValidityHrs", "1" }
-        };
-
-        _config = new ConfigurationBuilder()
-            .AddInMemoryCollection(configData)
-            .Build();
-
-        _context = TestUtils.GenerateInMemoryDB();
+        _context = DbContextUtils.GenerateInMemoryDB();
 
         _authRepository = new AuthRepository(_context);
 
-        _authService = new AuthService(_authRepository, _config);
+        _authService = new AuthService(_authRepository);
     }
 
     [Fact]
@@ -129,30 +118,7 @@ public class AuthServiceTest : IDisposable
         Assert.Null(expectedUser);
     }
 
-    [Fact]
-    public void GIVEN_LoggedInUser_WHEN_GeneratingToken_THEN_ReturnNewJWT()
-    {
-        //Arrange
-        User user = new User
-        {
-            UserId = Guid.NewGuid(),
-            FullName = "Test User",
-            Email = "test@email.com",
-            Password = "password",
-        };
-
-        //Act
-        var token = _authService.GenerateToken(user);
-
-        var handler = new JwtSecurityTokenHandler();
-        var readToken = handler.ReadJwtToken(token);
-
-        //Assert
-        Assert.Contains(readToken.Claims, claim => claim.Type == ClaimTypes.NameIdentifier && claim.Value == user.UserId.ToString());
-        Assert.Contains(readToken.Claims, claim => claim.Type == ClaimTypes.Name && claim.Value == user.FullName);
-
-        Assert.Equal(_config["Jwt:Issuer"], readToken.Issuer);
-    }
+   
 
     public void Dispose()
     {

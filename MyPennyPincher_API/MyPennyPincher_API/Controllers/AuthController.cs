@@ -45,7 +45,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<User?>> Login([FromBody] Login login)
+    public async Task<ActionResult<UserAccessToken?>> Login([FromBody] Login login)
     {
         if (!ModelState.IsValid)
         {
@@ -61,28 +61,30 @@ public class AuthController : ControllerBase
 
         string token = _tokenService.GenerateAccessToken(user.UserId);
 
-        LoginResponse loginResponse= new LoginResponse
+        UserAccessToken userAccessToken= new UserAccessToken
         {
             UserId = user.UserId,
             Token = token,
         };
 
-        var refreshToken = _tokenService.GenerateRefreshToken(user);
+        var refreshToken = _tokenService.GenerateRefreshToken(user.UserId);
 
         await _tokenService.AddRefreshToken(refreshToken);
 
         int tokenValiditySeconds = (int)(refreshToken.ExpiryDate - DateTime.UtcNow).TotalSeconds;
 
-        Response.Cookies.Append("refreshToken", refreshToken.Token, new CookieOptions
+        CookieOptions refreshTokenCookieOptions = new CookieOptions
         {
-            HttpOnly = true,
+            HttpOnly = false,
             Secure = true,
             SameSite = SameSiteMode.None,
             Path = "/auth/refresh",
-            MaxAge = TimeSpan.FromSeconds(tokenValiditySeconds)
-        });
+            MaxAge = TimeSpan.FromSeconds(tokenValiditySeconds),
+        };
 
-        return Ok(loginResponse);
+        Response.Cookies.Append("refreshToken", refreshToken.Token, refreshTokenCookieOptions);
+
+        return Ok(userAccessToken);
     }
 
     [HttpPost("logout")]
@@ -91,5 +93,32 @@ public class AuthController : ControllerBase
         await _tokenService.DeleteRefreshToken(userId);
 
         return Ok();
+    }
+
+    [HttpPost("refresh")]
+    public async Task<ActionResult<UserAccessToken>> Refresh([FromBody]string userId)
+    {
+        var refreshToken = Request.Cookies["refreshToken"];
+
+        if(refreshToken == null)
+        {
+            return Unauthorized();
+        }
+
+        var convertedUserId = new Guid(userId);
+
+        var accessToken = await _tokenService.RefreshToken(convertedUserId, refreshToken);
+
+        if (accessToken == null)
+        {
+            return Unauthorized();
+        }
+        UserAccessToken userAccessToken = new UserAccessToken
+        {
+            UserId = convertedUserId,
+            Token = accessToken
+        };
+
+        return Ok(userAccessToken);
     }
 }

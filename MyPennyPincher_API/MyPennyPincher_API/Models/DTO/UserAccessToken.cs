@@ -1,8 +1,8 @@
 ﻿namespace MyPennyPincher_API.Models.DTO;
 
-public class LoginResponse
+public class UserAccessToken
 {
     public Guid UserId { get; set; }
 
-    public string Token { get; set; } = null;
+    public string Token { get; set; } = "";
 }

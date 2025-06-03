@@ -17,7 +17,7 @@ public class IncomeServiceTest
 
     public IncomeServiceTest()
     {
-        _context = TestUtils.GenerateInMemoryDB();
+        _context = DbContextUtils.GenerateInMemoryDB();
         _incomeRepository = new IncomeRepository(_context);
         _incomeService = new IncomeService(_incomeRepository);
     }

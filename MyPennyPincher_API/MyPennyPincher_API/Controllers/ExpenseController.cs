@@ -19,7 +19,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ICollection<Income>>> GetUserIncomes()
+    public async Task<ActionResult<ICollection<Income>>> GetUserExpenses()
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 

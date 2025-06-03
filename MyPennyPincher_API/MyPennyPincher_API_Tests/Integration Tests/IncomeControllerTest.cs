@@ -21,29 +21,16 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
     public async Task GIVEN_NewIncome_WHEN_AddingIncome_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = new User
-        {
-            UserId = Guid.NewGuid(),
-            FullName = "Test User",
-            Email = TestUtils.GenerateRandomEmail(),
-            Password = "password"
-        };
+        User user = TestDataFactory.CreateTestUser();
 
-        var userResponse = await TestUtils.PostAsync(_client, AuthRoute + "/register", user);
+        var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
 
         userResponse.EnsureSuccessStatusCode();
 
-        Income income = new Income
-        {
-            Source = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
-            UserId = user.UserId,
-        };
+        Income income = TestDataFactory.CreateIncome(1, user);
 
         //Act
-        var response = await TestUtils.PostAsync(_client, BaseRoute, income);
+        var response = await HttpRequestSender.PostAsync(_client, BaseRoute, income);
 
         //Assert
         response.EnsureSuccessStatusCode();
@@ -53,34 +40,20 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
     public async Task GIVEN_ExistingIncome_WHEN_DeletingIncome_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = new User
-        {
-            UserId = Guid.NewGuid(),
-            FullName = "Test User",
-            Email = TestUtils.GenerateRandomEmail(),
-            Password = "password"
-        };
+        User user = TestDataFactory.CreateTestUser();
 
-        var userResponse = await TestUtils.PostAsync(_client, AuthRoute + "/register", user);
+        var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
 
         userResponse.EnsureSuccessStatusCode();
 
-        Income income = new Income
-        {
-            IncomeId = 2,
-            Source = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
-            UserId = user.UserId,
-        };
+        Income income = TestDataFactory.CreateIncome(2, user);
 
-        var addIncomeResponse = await TestUtils.PostAsync(_client, BaseRoute, income);
+        var addIncomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, income);
 
         addIncomeResponse.EnsureSuccessStatusCode();
 
         //Act
-        var response = await TestUtils.DeleteAsync(_client, BaseRoute, income);
+        var response = await HttpRequestSender.DeleteAsync(_client, BaseRoute, income);
 
         //Assert
         response.EnsureSuccessStatusCode();
@@ -91,29 +64,15 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
     public async Task GIVEN_ExistingIncome_WHEN_EditingIncome_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = new User
-        {
-            UserId = Guid.NewGuid(),
-            FullName = "Test User",
-            Email = TestUtils.GenerateRandomEmail(),
-            Password = "password"
-        };
+        User user = TestDataFactory.CreateTestUser();
 
-        var userResponse = await TestUtils.PostAsync(_client, AuthRoute + "/register", user);
+        var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
 
         userResponse.EnsureSuccessStatusCode();
 
-        Income income = new Income
-        {
-            IncomeId = 3,
-            Source = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
-            UserId = user.UserId,
-        };
+        Income income = TestDataFactory.CreateIncome(3, user);
 
-        var addIncomeResponse = await TestUtils.PostAsync(_client, BaseRoute, income);
+        var addIncomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, income);
 
         addIncomeResponse.EnsureSuccessStatusCode();
 
@@ -128,7 +87,7 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
         };
 
         //Act
-        var response = await TestUtils.PutAsync(_client, BaseRoute, editedIncome);
+        var response = await HttpRequestSender.PutAsync(_client, BaseRoute, editedIncome);
 
         //Assert
         response.EnsureSuccessStatusCode();
@@ -139,72 +98,40 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
     public async Task GIVEN_UserId_WHEN_GettingUserExpenses_THEN_ReturnOkAndUserExpenses()
     {
         //Arrange
-        var randomEmail = TestUtils.GenerateRandomEmail();
-        var userId = new Guid();
+        User user = TestDataFactory.CreateAuthenticatedTestUser();
 
-        User user = new User
-        {
-            UserId = userId,
-            FullName = "Test User",
-            Email = randomEmail,
-            Password = "password"
-        };
-
-        var registerUserResponse = await TestUtils.PostAsync(_client, AuthRoute + "/register", user);
+        var registerUserResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
         registerUserResponse.EnsureSuccessStatusCode();
 
-        Login login = new Login
-        {
-            Email = randomEmail,
-            Password = user.Password
-        };
+        Login login = TestDataFactory.CreateUserLogin(user);
 
-        var loginUserResponse = await TestUtils.PostAsync(_client, AuthRoute + "/login", login);
+        var loginUserResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/login", login);
         loginUserResponse.EnsureSuccessStatusCode();
 
         var responseString = await loginUserResponse.Content.ReadAsStringAsync();
-        var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseString);
+        var loginResponse = JsonConvert.DeserializeObject<UserAccessToken>(responseString);
 
         var token = loginResponse?.Token;
 
-        Income firstIncome = new Income
+        List<Income> userIncomes = new List<Income>();
+
+        Income firstIncome = TestDataFactory.CreateIncome(4, user);
+        userIncomes.Add(firstIncome);
+
+        Income secondIncome = TestDataFactory.CreateIncome(5, user);
+        userIncomes.Add(secondIncome);
+
+        Income thirdIncome = TestDataFactory.CreateIncome(6, user);
+        userIncomes.Add(thirdIncome);
+
+        foreach (var income in userIncomes)
         {
-            Source = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
-            UserId = user.UserId,
-        };
-
-        Income secondIncome = new Income
-        {
-            Source = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
-            UserId = user.UserId,
-        };
-
-        Income thirdIncome = new Income
-        {
-            Source = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
-            UserId = user.UserId,
-        };
-
-        var firstResponse = await TestUtils.PostAsync(_client, BaseRoute, firstIncome);
-        firstResponse.EnsureSuccessStatusCode();
-
-        var secondResponse = await TestUtils.PostAsync(_client, BaseRoute, secondIncome);
-        secondResponse.EnsureSuccessStatusCode();
-
-        var thirdResponse = await TestUtils.PostAsync(_client, BaseRoute, thirdIncome);
-        thirdResponse.EnsureSuccessStatusCode();
+            var incomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, income);
+            incomeResponse.EnsureSuccessStatusCode();
+        }
 
         //Act
-        var response = await TestUtils.GetAsync(_client, BaseRoute, token);
+        var response = await HttpRequestSender.GetAsync(_client, BaseRoute, token);
         response.EnsureSuccessStatusCode();
 
         var json = await response.Content.ReadAsStringAsync();
@@ -214,6 +141,6 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
 
         Assert.NotNull(incomes);
         Assert.All(incomes, income => Assert.IsType<Income>(income));
-        Assert.Equal(incomes.Count, 3);
+        Assert.Equal(3, incomes.Count);
     }
 }

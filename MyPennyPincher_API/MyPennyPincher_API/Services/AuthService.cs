@@ -8,12 +8,10 @@ namespace MyPennyPincher_API.Services;
 public class AuthService : IAuthService
 {
     private readonly IAuthRepository _authRepository;
-    private readonly ITokenService _tokenService;
 
-    public AuthService(IAuthRepository authRepository, ITokenService tokenService) 
+    public AuthService(IAuthRepository authRepository) 
     {  
         _authRepository = authRepository;
-        _tokenService = tokenService;
     }
 
     public async Task<User> Register(User user)
@@ -66,15 +64,5 @@ public class AuthService : IAuthService
         return user;
     }
  
-    public async Task<string?> RefreshToken(Guid userId, string refreshToken)
-    {
-        bool tokenIsValid = await _tokenService.ValidateToken(userId, refreshToken);
 
-        if (tokenIsValid) 
-        {
-            return _tokenService.GenerateAccessToken(userId);
-        }
-
-        return null;
-    }
 }

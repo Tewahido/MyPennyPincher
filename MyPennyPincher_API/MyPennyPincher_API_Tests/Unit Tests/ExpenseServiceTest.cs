@@ -17,7 +17,7 @@ public class ExpenseServiceTest : IDisposable
 
     public ExpenseServiceTest() 
     {
-        _context = TestUtils.GenerateInMemoryDB();
+        _context = DbContextUtils.GenerateInMemoryDB();
         _expenseRepository = new ExpenseRepository(_context);
         _expenseService = new ExpenseService(_expenseRepository);
     }
