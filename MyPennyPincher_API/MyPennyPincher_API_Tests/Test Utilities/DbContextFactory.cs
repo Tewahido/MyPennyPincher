@@ -3,7 +3,7 @@ using MyPennyPincher_API.Context;
 
 namespace MyPennyPincher_API_Tests.Test_Utilities;
 
-public class DbContextUtils
+public class DbContextFactory
 {
     public static MyPennyPincherDbContext GenerateInMemoryDB()
     {

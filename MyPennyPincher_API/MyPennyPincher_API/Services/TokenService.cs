@@ -71,7 +71,7 @@ public class TokenService : ITokenService
             new Claim(ClaimTypes.NameIdentifier, convertedUserId),
         };
 
-        var tokenValidityTime = DateTime.Now.AddHours(_config.GetValue<double>("Jwt:TokenValidityHrs"));
+        var tokenValidityTime = DateTime.Now.AddMinutes(_config.GetValue<double>("Jwt:TokenValidityMins"));
 
         var token = new JwtSecurityToken(
             issuer: _config["Jwt:Issuer"],

@@ -28,14 +28,14 @@ public class TokenServiceTest : IDisposable
         {
             { "Jwt:Key", "X2s#9f!zLq@84hT%vG^7Rb*eWkP$JmN+ZcA!uYdE6rOi$0MbTpLgVsWx1QdHzFnCy" },
             { "Jwt:Issuer", "https://localhost:7053" },
-            { "Jwt:TokenValidityHrs", "1" }
+            { "Jwt:TokenValidityMins", "15" }
         };
 
         _config = new ConfigurationBuilder()
             .AddInMemoryCollection(configData)
             .Build();
 
-        _context = DbContextUtils.GenerateInMemoryDB();
+        _context = DbContextFactory.GenerateInMemoryDB();
 
         _tokenRepository = new TokenRepository(_context);
 

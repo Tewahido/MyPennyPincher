@@ -21,7 +21,7 @@ public class AuthServiceTest : IDisposable
 
     public AuthServiceTest() 
     {
-        _context = DbContextUtils.GenerateInMemoryDB();
+        _context = DbContextFactory.GenerateInMemoryDB();
 
         _authRepository = new AuthRepository(_context);
 

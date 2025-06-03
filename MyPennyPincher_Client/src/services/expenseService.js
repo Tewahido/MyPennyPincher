@@ -35,7 +35,6 @@ export const AddExpense = async (data, token) => {
 };
 
 export const EditExpense = async (data, token) => {
-  console.log(data);
   const response = await fetch(`${BASE_URL}/Expense`, {
     method: "PUT",
     headers: {

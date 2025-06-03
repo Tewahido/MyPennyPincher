@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Text;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API_Tests.Test_Utilities;
