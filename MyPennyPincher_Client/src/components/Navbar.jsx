@@ -8,7 +8,7 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const userId = useSelector((state) => state.user.user.userId);
+  const user = useSelector((state) => state.user.user);
   const userLoggedIn = useSelector((state) => state.user.loggedIn);
 
   const [scrolled, setScrolled] = useState(false);
@@ -27,7 +27,7 @@ export default function Navbar() {
 
   function handleLogout() {
     if (userLoggedIn) {
-      logoutUser(dispatch, navigate, location, userId);
+      logoutUser(dispatch, navigate, location, userId.userId);
     }
   }
 

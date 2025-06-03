@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace MyPennyPincher_API_Tests.WebApplicationFactory
 {

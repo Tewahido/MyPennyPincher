@@ -11,9 +11,9 @@ export function extractTokenExpiryTime(token) {
   return new Date(decodedToken.exp * 1000);
 }
 
-export function logoutUser(dispatch, navigate, location, userId) {
-  const response = Logout(userId);
-
+export async function logoutUser(dispatch, navigate, location, userId) {
+  const response = await Logout(userId);
+  console.log(response);
   if (response != 200) {
     return;
   }

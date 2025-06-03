@@ -31,13 +31,14 @@ export const Login = async (email, password) => {
 
   if (!response.ok) {
     const error = await response.text();
+
     console.error("Error:", error);
+
     return null;
   }
 
-  document.cookie("refreshToken");
-
   const data = await response.json();
+
   return data;
 };
 
@@ -56,5 +57,7 @@ export const Logout = async (userId) => {
     return null;
   }
 
-  return response;
+  const statusCode = await response.status;
+
+  return statusCode;
 };

@@ -22,7 +22,12 @@ public class TokenService : ITokenService
 
     public async Task AddRefreshToken(RefreshToken refreshToken)
     {
+        var userId = refreshToken.UserId.ToString();
+
+        await DeleteRefreshToken(userId);
+
         await _tokenRepository.AddAsync(refreshToken);
+
         await _tokenRepository.SaveChangesAsync();
     }
 
