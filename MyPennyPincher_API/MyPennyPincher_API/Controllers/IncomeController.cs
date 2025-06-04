@@ -30,11 +30,6 @@ public class IncomeController : ControllerBase
 
         var incomes = await _incomeService.GetByUserIdAsync(userId);
 
-        if(incomes == null || incomes.Count() == 0)
-        {
-            return NotFound("No user incomes found");
-        }
-
         return Ok(incomes);
     }
 

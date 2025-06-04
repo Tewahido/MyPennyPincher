@@ -6,6 +6,8 @@ using System.Text;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services.Interfaces;
+using MyPennyPincher_API.Models.DTO;
+using MyPennyPincher_API.Exceptions;
 
 namespace MyPennyPincher_API.Services;
 
@@ -36,10 +38,12 @@ public class TokenService : ITokenService
 
         var existingToken = await GetUserToken(userId);
 
-        if (existingToken != null)
+        if (existingToken == null)
         {
-            await _tokenRepository.DeleteAsync(existingToken);
+            throw new RefreshTokenNotFoundException("User refresh token not found");
         }
+        
+        await _tokenRepository.DeleteAsync(existingToken);
         
         await _tokenRepository.SaveChangesAsync();
     }
@@ -58,7 +62,7 @@ public class TokenService : ITokenService
         return refreshToken;
     }
 
-    public string GenerateAccessToken(Guid userId)
+    public UserAccessToken GenerateAccessToken(Guid userId)
     {
 
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
@@ -80,19 +84,25 @@ public class TokenService : ITokenService
             expires: tokenValidityTime,
             signingCredentials: credentials);
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        var userToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return new UserAccessToken
+        {
+            UserId = userId,
+            Token = userToken,
+        };
     }
 
-    public async Task<string?> RefreshToken(Guid userId, string refreshToken)
+    public async Task<UserAccessToken?> RefreshToken(Guid userId, string refreshToken)
     {
         bool tokenIsValid = await ValidateToken(userId, refreshToken);
 
-        if (tokenIsValid)
+        if (!tokenIsValid)
         {
-            return GenerateAccessToken(userId);
+            throw new InvalidRefreshTokenException("Refresh token is invalid");
         }
-
-        return null;
+        
+        return GenerateAccessToken(userId);
     }
 
     private async Task<bool> ValidateToken(Guid userId, string token)
@@ -109,5 +119,19 @@ public class TokenService : ITokenService
     private async Task<RefreshToken?> GetUserToken(string userId)
     {
         return await _tokenRepository.GetTokenAsync(new Guid(userId));
+    }
+
+    public CookieOptions CreateRefreshTokenCookieOptions(RefreshToken refreshToken)
+    {
+        int tokenValiditySeconds = (int)(refreshToken.ExpiryDate - DateTime.UtcNow).TotalSeconds;
+
+        return new CookieOptions
+        {
+            HttpOnly = false,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Path = "/auth/refresh",
+            MaxAge = TimeSpan.FromSeconds(tokenValiditySeconds),
+        };
     }
 }

@@ -1,4 +1,5 @@
-﻿using MyPennyPincher_API.Models;
+﻿using MyPennyPincher_API.Exceptions;
+using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services.Interfaces;
@@ -25,7 +26,7 @@ public class AuthService : IAuthService
 
         if (existingUser != null)
         {
-            throw new InvalidOperationException("A user with this email already exists.");
+            throw new UserAlreadyExistsException("A user with this email already exists.");
         }
 
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
@@ -51,14 +52,14 @@ public class AuthService : IAuthService
 
         if (user == null) 
         {
-            return null;
+            throw new InvalidCredentialsException("Invalid user credentials");
         }
 
         bool isValid = BCrypt.Net.BCrypt.Verify(login.Password, user.Password);
 
         if (!isValid)
         {
-            return null;
+            throw new InvalidCredentialsException("Invalid user credentials");
         }
 
         return user;

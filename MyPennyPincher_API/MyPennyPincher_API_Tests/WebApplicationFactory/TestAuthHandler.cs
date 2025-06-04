@@ -17,7 +17,7 @@ public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, new Guid().ToString()),
+            new Claim(ClaimTypes.NameIdentifier, new Guid("b7a5d653-3f5a-4a69-a732-4a3e0f40e8a3").ToString()),
             new Claim(ClaimTypes.Name, "Test User Full Name")
         };
 

@@ -1,7 +1,5 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
-using MyPennyPincher_API.Context;
 using Newtonsoft.Json;
 
 namespace MyPennyPincher_API_Tests.Test_Utilities;

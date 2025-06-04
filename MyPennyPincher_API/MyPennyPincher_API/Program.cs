@@ -8,6 +8,8 @@ using System.Text;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Services.Interfaces;
+using System.Text.Json;
+using MyPennyPincher_API.CustomExceptionMiddleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +55,25 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtIssuer,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
     };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnChallenge = context =>
+        {
+            context.HandleResponse();
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            context.Response.ContentType = "application/json";
+
+            var response = new
+            {
+                error = "User not authenticated.",
+                statusCode = 401
+            };
+
+            var json = JsonSerializer.Serialize(response);
+            return context.Response.WriteAsync(json);
+        }
+    };
 });
 
 builder.Services.AddOpenApi();
@@ -94,6 +115,8 @@ app.UseSwaggerUI(options =>
 });
 
 app.UseCookiePolicy();
+
+app.UseMiddleware<CustomExceptionMiddleware>();
 
 app.MapControllers();
 

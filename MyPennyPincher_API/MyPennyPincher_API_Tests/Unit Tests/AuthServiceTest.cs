@@ -1,14 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using MyPennyPincher_API.Context;
+﻿using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
-using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API_Tests.Test_Utilities;
 
 namespace MyPennyPincher_API_Tests;

@@ -1,4 +1,5 @@
-﻿using MyPennyPincher_API.Models;
+﻿using MyPennyPincher_API.Exceptions;
+using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services.Interfaces;
 
@@ -15,7 +16,14 @@ public class IncomeService : IIncomeService
 
     public async Task<ICollection<Income>> GetByUserIdAsync(string userId)
     {
-        return await _incomeRepository.GetByUserIdAsync(userId);      
+        var incomes = await _incomeRepository.GetByUserIdAsync(userId);
+
+        if (incomes == null || incomes.Count() == 0)
+        {
+            throw new IncomesNotFoundException("User incomes not found");
+        }
+
+        return incomes;
     }
 
     public async Task AddAsync(Income income)
@@ -34,16 +42,19 @@ public class IncomeService : IIncomeService
 
     public async Task EditAsync(Income updatedIncome)
     {
-        var existingIncome = await _incomeRepository.GetByIdAsync(updatedIncome.IncomeId);
+        int incomeId = updatedIncome.IncomeId;
+
+        var existingIncome = await _incomeRepository.GetByIdAsync(incomeId);
 
         if(existingIncome != null)
         {
+            throw new IncomeNotFoundException(incomeId);
+        }
             existingIncome.Amount = updatedIncome.Amount;
             existingIncome.Source = updatedIncome.Source;
             existingIncome.Date = updatedIncome.Date;
             existingIncome.Monthly = updatedIncome.Monthly;
 
             await _incomeRepository.SaveChangesAsync();
-        }
     }
 }

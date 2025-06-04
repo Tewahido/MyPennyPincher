@@ -70,7 +70,7 @@ export default function Dashboard() {
                 value={month}
                 className=" text-md border-2 rounded-xl md:text-xl xl:text-3xl cursor-pointer font-extrabold p-2"
                 max={`${currentYear}-12`}
-                min="2020-01"
+                min="2025-01"
               />
             </div>
             <div className="w-full ">

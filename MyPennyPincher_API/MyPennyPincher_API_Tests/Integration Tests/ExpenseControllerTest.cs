@@ -1,4 +1,5 @@
-﻿using MyPennyPincher_API.Models;
+﻿using System.Net;
+using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API_Tests.Test_Utilities;
 using MyPennyPincher_API_Tests.WebApplicationFactory;
@@ -6,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace MyPennyPincher_API_Tests.Integration_Tests;
 
-public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<Program>>, IDisposable
 {
     private readonly HttpClient _client;
     private const string BaseRoute = "/Expense";
@@ -57,7 +58,6 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
         response.EnsureSuccessStatusCode();
     }
 
-
     [Fact]
     public async Task GIVEN_ExistingIncome_WHEN_EditingIncome_THEN_ReturnOkStatus()
     {
@@ -92,7 +92,7 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
     }
 
     [Fact]
-    public async Task GIVEN_UserId_WHEN_GettingUserExpenses_THEN_ReturnOkAndUserExpenses()
+    public async Task GIVEN_UserId_WHEN_GettingUserExpenses_THEN_ReturnUserExpenses()
     {
         //Arrange
         User user = TestDataFactory.CreateAuthenticatedTestUser();
@@ -136,10 +136,13 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
         var expenses = JsonConvert.DeserializeObject<List<Income>>(json);
 
         //Assert
-
         Assert.NotNull(expenses);
         Assert.All(expenses, income => Assert.IsType<Income>(income));
         Assert.Equal(3, expenses.Count);
     }
 
+    public void Dispose()
+    {
+        _client.Dispose();
+    }
 }

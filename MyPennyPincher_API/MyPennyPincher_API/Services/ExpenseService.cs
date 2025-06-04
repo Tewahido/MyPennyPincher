@@ -1,4 +1,5 @@
-﻿using MyPennyPincher_API.Models;
+﻿using MyPennyPincher_API.Exceptions;
+using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services.Interfaces;
 
@@ -15,7 +16,14 @@ public class ExpenseService : IExpenseService
 
     public async Task<ICollection<Expense>> GetByUserIdAsync(string userId)
     {
-        return await _expenseRepository.GetByUserIdAsync(userId);
+        var expenses = await _expenseRepository.GetByUserIdAsync(userId);
+
+        if (expenses == null || expenses.Count() == 0)
+        {
+            throw new ExpensesNotFoundException("No expenses found");
+        }
+
+        return expenses;
     }
 
     public async Task AddAsync(Expense expense)
@@ -34,18 +42,22 @@ public class ExpenseService : IExpenseService
 
     public async Task EditAsync(Expense updatedExpense)
     {
-        var existingExpense = await _expenseRepository.GetByIdAsync(updatedExpense.ExpenseId);
+        int expenseId = updatedExpense.ExpenseId;
 
-        if (existingExpense != null)
+        var existingExpense = await _expenseRepository.GetByIdAsync(expenseId);
+
+        if (existingExpense == null)
         {
-            existingExpense.Amount = updatedExpense.Amount;
-            existingExpense.Description = updatedExpense.Description;
-            existingExpense.Date = updatedExpense.Date;
-            existingExpense.Recurring = updatedExpense.Recurring;
-            existingExpense.ExpenseCategoryId = updatedExpense.ExpenseCategoryId;
-
-            await _expenseRepository.SaveChangesAsync();
+            throw new ExpenseNotFoundException(expenseId);
         }
+
+        existingExpense.Amount = updatedExpense.Amount;
+        existingExpense.Description = updatedExpense.Description;
+        existingExpense.Date = updatedExpense.Date;
+        existingExpense.Recurring = updatedExpense.Recurring;
+        existingExpense.ExpenseCategoryId = updatedExpense.ExpenseCategoryId;
+
+        await _expenseRepository.SaveChangesAsync();
 
     }
 }

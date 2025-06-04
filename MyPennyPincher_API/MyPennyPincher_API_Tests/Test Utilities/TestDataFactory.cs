@@ -27,7 +27,7 @@ public class TestDataFactory
 
     public static User CreateAuthenticatedTestUser()
     {
-        var userId = new Guid();
+        var userId = new Guid("b7a5d653-3f5a-4a69-a732-4a3e0f40e8a3");
         var randomEmail = GenerateRandomEmail();
 
         return new User

@@ -26,20 +26,7 @@ public class AuthController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        try
-        {
-            User? registredUser = await _authService.Register(user);
-            
-            if (registredUser == null)
-            {
-                return BadRequest("Could not register user");
-            }
-        }
-
-        catch(InvalidOperationException ex)
-        {
-            return Conflict(ex.Message);
-        }
+        User? registredUser = await _authService.Register(user);
 
         return Ok();
     }
@@ -54,33 +41,13 @@ public class AuthController : ControllerBase
 
         var user = await _authService.Login(login);
 
-        if(user == null)
-        {
-            return Unauthorized("Invalid Credentials");
-        }
-
-        string token = _tokenService.GenerateAccessToken(user.UserId);
-
-        UserAccessToken userAccessToken= new UserAccessToken
-        {
-            UserId = user.UserId,
-            Token = token,
-        };
+        var userAccessToken = _tokenService.GenerateAccessToken(user.UserId);
 
         var refreshToken = _tokenService.GenerateRefreshToken(user.UserId);
 
         await _tokenService.AddRefreshToken(refreshToken);
 
-        int tokenValiditySeconds = (int)(refreshToken.ExpiryDate - DateTime.UtcNow).TotalSeconds;
-
-        CookieOptions refreshTokenCookieOptions = new CookieOptions
-        {
-            HttpOnly = false,
-            Secure = true,
-            SameSite = SameSiteMode.None,
-            Path = "/auth/refresh",
-            MaxAge = TimeSpan.FromSeconds(tokenValiditySeconds),
-        };
+        CookieOptions refreshTokenCookieOptions = _tokenService.CreateRefreshTokenCookieOptions(refreshToken);
 
         Response.Cookies.Append("refreshToken", refreshToken.Token, refreshTokenCookieOptions);
 
@@ -113,12 +80,7 @@ public class AuthController : ControllerBase
         {
             return Unauthorized();
         }
-        UserAccessToken userAccessToken = new UserAccessToken
-        {
-            UserId = convertedUserId,
-            Token = accessToken
-        };
 
-        return Ok(userAccessToken);
+        return Ok(accessToken);
     }
 }

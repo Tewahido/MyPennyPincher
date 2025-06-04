@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Azure;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API_Tests.Test_Utilities;
@@ -7,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace MyPennyPincher_API_Tests.Integration_Tests;
 
-public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Program>> 
+public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Program>> , IDisposable
 {
     private readonly HttpClient _client;
     private const string BaseRoute= "/Auth";
@@ -124,5 +125,54 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
 
         Assert.NotNull(newAccessToken);
         Assert.Equal(user.UserId, newAccessToken.UserId);
+    }
+
+    [Fact]
+    public async Task GIVEN_UserIdAndInvalidRefreshTokenCookie_WHEN_RefreshingToken_THEN_ReturnUnauthorized()
+    {
+        //Arrange
+        User user = TestDataFactory.CreateTestUser();
+
+        var registeredUserResult = await HttpRequestSender.PostAsync(_client, BaseRoute + "/register", user);
+        registeredUserResult.EnsureSuccessStatusCode();
+
+        //Act
+        var refreshTokenResponse = await HttpRequestSender.PostWithCookiesAsync(_client, BaseRoute + "/refresh", user.UserId.ToString(), "Invalid-refresh-token");
+
+        //Assert
+        Assert.Equal(HttpStatusCode.Unauthorized, refreshTokenResponse.StatusCode);
+
+    }
+
+    [Fact]
+    public async Task GIVEN_LoggedInUser_WHEN_LoggingOut_THEN_ReturnOkStatus()
+    {
+        //Arrange
+        User user = TestDataFactory.CreateTestUser();
+
+        var registeredUserResult = await HttpRequestSender.PostAsync(_client, BaseRoute + "/register", user);
+        registeredUserResult.EnsureSuccessStatusCode();
+
+        Login login = TestDataFactory.CreateUserLogin(user);
+
+        var response = await HttpRequestSender.PostAsync(_client, BaseRoute + "/login", login);
+
+        response.EnsureSuccessStatusCode();
+
+        var responseString = await response.Content.ReadAsStringAsync();
+        var loginResponse = JsonConvert.DeserializeObject<UserAccessToken>(responseString);
+
+        var userId = loginResponse.UserId.ToString();
+
+        //Act
+        var logoutResponse = await HttpRequestSender.PostAsync(_client, BaseRoute + "/logout", userId);
+
+        //Assert
+        logoutResponse.EnsureSuccessStatusCode();
+    }
+
+    public void Dispose()
+    {
+        _client.Dispose();
     }
 }

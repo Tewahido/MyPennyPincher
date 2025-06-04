@@ -9,6 +9,11 @@ export const GetUserIncomes = async (token) => {
     },
   });
 
+  if (!response.ok) {
+    const error = await response.json();
+    console.error("Error:", error.message);
+  }
+
   return response;
 };
 
@@ -23,10 +28,8 @@ export const AddIncome = async (data, token) => {
   });
 
   if (!response.ok) {
-    console.error();
-
-    const error = await response.text();
-    console.error("Error:", error);
+    const error = await response.json();
+    console.error("Error:", error.message);
   }
 
   const status = response.status;
@@ -44,6 +47,11 @@ export const EditIncome = async (data, token) => {
     },
     body: JSON.stringify(data),
   });
+
+  if (!response.ok) {
+    const error = await response.json();
+    console.error("Error:", error.message);
+  }
 
   const status = response.status;
 

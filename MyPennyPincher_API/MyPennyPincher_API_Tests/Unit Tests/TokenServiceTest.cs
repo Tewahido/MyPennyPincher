@@ -1,9 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Repositories;
@@ -11,7 +9,6 @@ using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
 using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API_Tests.Test_Utilities;
-using Newtonsoft.Json.Linq;
 
 namespace MyPennyPincher_API_Tests.Unit_Tests;
 

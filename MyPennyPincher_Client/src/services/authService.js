@@ -10,9 +10,8 @@ export const SignUp = async (fullName, email, password) => {
   });
 
   if (!response.ok) {
-    const error = await response.text();
-    console.error("Error:", error);
-    console.log(JSON.stringify(email, fullName, password));
+    const responseData = await response.json();
+    console.error("Error:", responseData.message);
   }
 
   const statusCode = await response.status;
@@ -31,9 +30,8 @@ export const Login = async (email, password) => {
   });
 
   if (!response.ok) {
-    const error = await response.text();
-
-    console.error("Error:", error);
+    const error = await response.json();
+    console.error("Error:", error.message);
   }
 
   return response;
@@ -49,8 +47,8 @@ export const Logout = async (userId) => {
   });
 
   if (!response.ok) {
-    const error = await response.text();
-    console.error("Error:", error);
+    const error = await response.json();
+    console.error("Error:", error.message);
   }
 
   const statusCode = await response.status;

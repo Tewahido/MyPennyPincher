@@ -30,11 +30,6 @@ public class ExpenseController : ControllerBase
 
         var expenses = await _expenseService.GetByUserIdAsync(userId);
 
-        if (expenses == null || expenses.Count() == 0)
-        {
-            return NotFound("No user expenses found");
-        }
-
         return Ok(expenses);
     }
 
