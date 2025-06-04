@@ -25,7 +25,7 @@ export function getMonthlyTotals(transactions, monthNames) {
   if (transactions) {
     let monthTotals = [];
 
-    monthNames.forEach((month, index) => {
+    monthNames.forEach((month, _) => {
       const monthTotal = { month: month, amount: 0 };
 
       transactions.forEach((transaction) => {

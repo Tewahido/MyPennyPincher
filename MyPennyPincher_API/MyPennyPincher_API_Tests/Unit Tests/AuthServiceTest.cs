@@ -1,4 +1,5 @@
 ﻿using MyPennyPincher_API.Context;
+using MyPennyPincher_API.Exceptions;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Repositories;
@@ -17,9 +18,7 @@ public class AuthServiceTest : IDisposable
     public AuthServiceTest() 
     {
         _context = DbContextFactory.GenerateInMemoryDB();
-
         _authRepository = new AuthRepository(_context);
-
         _authService = new AuthService(_authRepository);
     }
 
@@ -27,20 +26,14 @@ public class AuthServiceTest : IDisposable
     public async Task GIVEN_User_WHEN_Registering_THEN_ReturnNewUser()
     {
         //Arrange
-        User user = new User
-        {
-            UserId = Guid.NewGuid(),
-            FullName = "Test User",
-            Email = "test@email.com",
-            Password = "password"
-        };
+        User user = TestDataFactory.CreateTestUser();
 
         //Act
         User registeredUser = await _authService.Register(user);
 
         bool passwordIsHashed = BCrypt.Net.BCrypt.Verify(user.Password, registeredUser.Password);
 
-        User expectedUser = _context.Users.FirstOrDefault(u => u.UserId == user.UserId);
+        var expectedUser = _context.Users.FirstOrDefault(u => u.UserId == user.UserId);
 
         //Assert
         Assert.NotNull(registeredUser);
@@ -52,7 +45,7 @@ public class AuthServiceTest : IDisposable
     public async Task GIVEN_NullUser_WHEN_Registering_THEN_ThrowNullArgumentException()
     {
         //Arrange
-        User nullUser = null;
+        User? nullUser = null;
 
         //Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() => _authService.Register(nullUser));
@@ -62,24 +55,14 @@ public class AuthServiceTest : IDisposable
     public async Task GIVEN_ValidLoginDetails_WHEN_LoggingIn_THEN_ReturnAuthenticatedUser()
     {
         //Arrange
-        User user = new User
-        {
-            UserId = Guid.NewGuid(),
-            FullName = "Test User",
-            Email = "test@email.com",
-            Password = "password",
-        };
+        User user = TestDataFactory.CreateTestUser();
 
         User registeredUser = await _authService.Register(user);
 
-        Login login = new Login
-        {
-            Email = user.Email,
-            Password = user.Password
-        };
+        Login login = TestDataFactory.CreateUserLogin(user);
 
         //Act
-        User expectedUser = await _authService.Login(login);
+        var expectedUser = await _authService.Login(login);
 
         //Assert
         Assert.NotNull(expectedUser);
@@ -90,13 +73,7 @@ public class AuthServiceTest : IDisposable
     public async Task GIVEN_InvalidLoginDetails_WHEN_LoggingIn_THEN_ReturnNull()
     {
         //Arrange
-        User user = new User
-        {
-            UserId = Guid.NewGuid(),
-            FullName = "Test User",
-            Email = "test@email.com",
-            Password = "password",
-        };
+        User user = TestDataFactory.CreateTestUser();
 
         await _authService.Register(user);
 
@@ -106,14 +83,9 @@ public class AuthServiceTest : IDisposable
             Password = "invalidPassword"
         };
 
-        //Act
-        User? expectedUser = await _authService.Login(login);
-
-        //Assert
-        Assert.Null(expectedUser);
+        //Act & Assert
+        await Assert.ThrowsAsync<InvalidCredentialsException>(async () => await _authService.Login(login));
     }
-
-   
 
     public void Dispose()
     {

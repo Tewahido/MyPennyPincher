@@ -14,28 +14,21 @@ public class ExpenseServiceTest : IDisposable
     private readonly IExpenseService _expenseService;
     private readonly IExpenseRepository _expenseRepository;
     private readonly MyPennyPincherDbContext _context;
+    private readonly User _testUser;
 
     public ExpenseServiceTest() 
     {
         _context = DbContextFactory.GenerateInMemoryDB();
         _expenseRepository = new ExpenseRepository(_context);
         _expenseService = new ExpenseService(_expenseRepository);
+        _testUser = TestDataFactory.CreateTestUser();
     }
 
     [Fact]
     public async Task GIVEN_NewExpense_WHEN_AddignExpense_THEN_AddExpenseToDb() 
     {
         //Arrange
-        Expense expense = new Expense
-        {
-            ExpenseId=1,
-            Description = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Recurring = false,
-            ExpenseCategoryId = 3,
-            UserId = Guid.NewGuid(),
-        };
+        Expense expense = TestDataFactory.CreateExpense(1, _testUser);
 
         //Act
         await _expenseService.AddAsync(expense);
@@ -50,16 +43,7 @@ public class ExpenseServiceTest : IDisposable
     public async Task GIVEN_ExistingExpense_WHEN_DeletingExpense_THEN_DeleteExpenseFromDb()
     {
         //Arrange
-        Expense expense = new Expense
-        {
-            ExpenseId = 1,
-            Description = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Recurring = false,
-            ExpenseCategoryId = 3,
-            UserId = Guid.NewGuid(),
-        };
+        Expense expense = TestDataFactory.CreateExpense(1, _testUser);
 
         await _expenseService.AddAsync(expense);
 
@@ -70,23 +54,13 @@ public class ExpenseServiceTest : IDisposable
 
         //Assert
         Assert.Null(expectedExpense);
-
     }
 
     [Fact]
     public async Task GIVEN_ExistingExpense_WHEN_EditingExpense_THEN_OverwriteExistingExpense()
     {
         //Arrange
-        Expense existingExpense = new Expense
-        {
-            ExpenseId = 2,
-            Description = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Recurring = false,
-            ExpenseCategoryId = 3,
-            UserId = Guid.NewGuid(),
-        };
+        Expense existingExpense = TestDataFactory.CreateExpense(1, _testUser);
 
         await _expenseService.AddAsync(existingExpense);
         
@@ -116,52 +90,21 @@ public class ExpenseServiceTest : IDisposable
         //Arrange
         Guid userId = Guid.NewGuid();
 
-        Expense firstExpense = new Expense
-        {
+        Expense firstExpense = TestDataFactory.CreateExpense(2, _testUser);
+        await _expenseService.AddAsync(firstExpense);
 
-            ExpenseId = 1,
-            Description = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Recurring = false,
-            ExpenseCategoryId = 3,
-            UserId = userId,
-        };
+        Expense secondExpense = TestDataFactory.CreateExpense(3, _testUser);
+        await _expenseService.AddAsync(secondExpense);
 
-        Expense secondExpense = new Expense
-        {
-
-            ExpenseId = 2,
-            Description = "Test2",
-            Amount = 1400,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Recurring = false,
-            ExpenseCategoryId = 4,
-            UserId = userId,
-        };
-
-        Expense thirdExpense = new Expense
-        {
-
-            ExpenseId = 3,
-            Description = "Test3",
-            Amount = 10540,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Recurring = false,
-            ExpenseCategoryId = 5,
-            UserId = userId,
-        };
-
-        _expenseService.AddAsync(firstExpense);
-        _expenseService.AddAsync(secondExpense);
-        _expenseService.AddAsync(thirdExpense);
-
+        Expense thirdExpense = TestDataFactory.CreateExpense(4, _testUser);
+        await _expenseService.AddAsync(thirdExpense);
 
         //Act
         var expectedExpenses = await _expenseService.GetByUserIdAsync(userId.ToString());
 
         //Assert
-        Assert.Equal(expectedExpenses.Count, 3);
+        Assert.Equal(3, expectedExpenses.Count);
+
         Assert.Contains(firstExpense, expectedExpenses);
         Assert.Contains(secondExpense, expectedExpenses);
         Assert.Contains(thirdExpense, expectedExpenses);

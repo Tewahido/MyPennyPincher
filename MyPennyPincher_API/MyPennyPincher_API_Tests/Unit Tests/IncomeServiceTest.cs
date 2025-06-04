@@ -13,28 +13,23 @@ public class IncomeServiceTest
 {
     private readonly IIncomeService _incomeService;
     private readonly IIncomeRepository _incomeRepository;
-    private readonly MyPennyPincherDbContext _context;  
+    private readonly MyPennyPincherDbContext _context;
+    private readonly User _testUser;
 
     public IncomeServiceTest()
     {
         _context = DbContextFactory.GenerateInMemoryDB();
         _incomeRepository = new IncomeRepository(_context);
         _incomeService = new IncomeService(_incomeRepository);
+        _testUser = TestDataFactory.CreateTestUser();
     }
 
     [Fact]
     public async Task GIVEN_NewIncome_WHEN_AddingIncome_THEN_AddIncomeToDb()
     {
         //Arrange
-        Income income = new Income
-        {
-            IncomeId = 1,
-            Source = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
-            UserId = Guid.NewGuid(),
-        };
+        Income income = TestDataFactory.CreateIncome(1, _testUser);
+
 
         //Act
         await _incomeService.AddAsync(income);
@@ -49,15 +44,7 @@ public class IncomeServiceTest
     public async Task GIVEN_ExistingIncome_WHEN_DeletingIncome_THEN_DeleteIncomeFromDb()
     {
         //Arrange
-        Income income = new Income
-        {
-            IncomeId = 1,
-            Source = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
-            UserId = Guid.NewGuid(),
-        };
+        Income income = TestDataFactory.CreateIncome(1, _testUser);
 
         await _incomeService.AddAsync(income);
 
@@ -75,15 +62,7 @@ public class IncomeServiceTest
     public async Task GIVEN_ExistingIncome_WHEN_EditingIncome_THEN_OverwriteExistingIncome()
     {
         //Arrange
-        Income existingIncome = new Income
-        {
-            IncomeId = 1,
-            Source = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
-            UserId = Guid.NewGuid(),
-        };
+        Income existingIncome = TestDataFactory.CreateIncome(1, _testUser);
 
         await _incomeService.AddAsync(existingIncome);
 
@@ -96,7 +75,6 @@ public class IncomeServiceTest
             Monthly = existingIncome.Monthly,
             UserId = existingIncome.UserId,
         };
-
 
         //Act
         await _incomeService.EditAsync(editedIncome);
@@ -111,47 +89,21 @@ public class IncomeServiceTest
     public async Task GIVEN_UserId_WHEN_GettingUserIncomes_THEN_ReturnUserIncomes()
     {
         //Arrange
-        Guid userId = Guid.NewGuid();
-
-        Income firstIncome = new Income
-        {
-            IncomeId = 1,
-            Source = "Test",
-            Amount = 100,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
-            UserId = userId,
-        };
-        Income secondIncome = new Income
-        {
-            IncomeId = 2,
-            Source = "Test2",
-            Amount = 1200,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
-            UserId = userId,
-        };
-        Income thirdIncome = new Income
-        {
-            IncomeId = 3,
-            Source = "Test3",
-            Amount = 1300,
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            Monthly = false,
-            UserId = userId,
-        };
-
-
+        Income firstIncome = TestDataFactory.CreateIncome(2, _testUser);
         await _incomeService.AddAsync(firstIncome);
+
+        Income secondIncome = TestDataFactory.CreateIncome(3, _testUser);
         await _incomeService.AddAsync(secondIncome);
+
+        Income thirdIncome = TestDataFactory.CreateIncome(4, _testUser);
         await _incomeService.AddAsync(thirdIncome);
 
         //Act
-
-        var expectedIncomes = await _incomeService.GetByUserIdAsync(userId.ToString());
+        var expectedIncomes = await _incomeService.GetByUserIdAsync(_testUser.UserId.ToString());
 
         //Assert
-        Assert.Equal(expectedIncomes.Count, 3);
+        Assert.Equal(3, expectedIncomes.Count);
+
         Assert.Contains(firstIncome, expectedIncomes);
         Assert.Contains(secondIncome, expectedIncomes);
         Assert.Contains(thirdIncome, expectedIncomes);

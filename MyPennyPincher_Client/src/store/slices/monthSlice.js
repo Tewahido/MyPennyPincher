@@ -1,21 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-function getCurrentMonthString() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = (now.getMonth() + 1).toString().padStart(2, "0");
-  return `${year}-${month}`;
-}
+import { getCurrentMonthAsString } from "../../utils/dateUtils";
 
 const monthSlice = createSlice({
   name: "month",
-  initialState: { month: getCurrentMonthString() },
+  initialState: { month: getCurrentMonthAsString() },
   reducers: {
     setMonth(state, action) {
       state.month = action.payload;
     },
     resetMonth(state) {
-      state.month = getCurrentMonthString();
+      state.month = getCurrentMonthAsString();
     },
   },
 });

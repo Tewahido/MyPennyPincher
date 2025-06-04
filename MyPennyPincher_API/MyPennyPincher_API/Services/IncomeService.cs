@@ -46,15 +46,16 @@ public class IncomeService : IIncomeService
 
         var existingIncome = await _incomeRepository.GetByIdAsync(incomeId);
 
-        if(existingIncome != null)
+        if (existingIncome == null)
         {
             throw new IncomeNotFoundException(incomeId);
         }
-            existingIncome.Amount = updatedIncome.Amount;
-            existingIncome.Source = updatedIncome.Source;
-            existingIncome.Date = updatedIncome.Date;
-            existingIncome.Monthly = updatedIncome.Monthly;
 
-            await _incomeRepository.SaveChangesAsync();
+        existingIncome.Amount = updatedIncome.Amount;
+        existingIncome.Source = updatedIncome.Source;
+        existingIncome.Date = updatedIncome.Date;
+        existingIncome.Monthly = updatedIncome.Monthly;
+
+        await _incomeRepository.SaveChangesAsync();
     }
 }

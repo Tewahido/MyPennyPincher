@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MyPennyPincher_API.Context;
+using MyPennyPincher_API.Exceptions;
 using MyPennyPincher_API.Models;
 using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
@@ -38,7 +39,6 @@ public class TokenServiceTest : IDisposable
 
         _tokenService = new TokenService(_config, _tokenRepository);
     }
-    
 
     [Fact]
     public void GIVEN_UserId_WHEN_GeneratingRefreshToken_THEN_ReturnRefreshToken()
@@ -64,7 +64,7 @@ public class TokenServiceTest : IDisposable
         var token = _tokenService.GenerateAccessToken(userId);
 
         var handler = new JwtSecurityTokenHandler();
-        var readToken = handler.ReadJwtToken(token);
+        var readToken = handler.ReadJwtToken(token.Token);
 
         //Assert
         Assert.Contains(readToken.Claims, claim => claim.Type == ClaimTypes.NameIdentifier && claim.Value == userId.ToString());
@@ -86,11 +86,10 @@ public class TokenServiceTest : IDisposable
         var refreshedToken = await _tokenService.RefreshToken(userId, generatedToken.Token);
 
         var handler = new JwtSecurityTokenHandler();
-        var readToken = handler.ReadJwtToken(refreshedToken);
+        var readToken = handler.ReadJwtToken(refreshedToken.Token);
 
         //Assert
         Assert.Contains(readToken.Claims, claim => claim.Type == ClaimTypes.NameIdentifier && claim.Value == userId.ToString());
-
         Assert.Equal(_config["Jwt:Issuer"], readToken.Issuer);
     }
 
@@ -99,16 +98,12 @@ public class TokenServiceTest : IDisposable
     {
         //Arrange
         var userId = Guid.NewGuid();
-
         var generatedToken = _tokenService.GenerateRefreshToken(userId);
 
         await _tokenService.AddRefreshToken(generatedToken);
 
-        //Act
-        var refreshedToken = await _tokenService.RefreshToken(userId, "invalidToken");
-
-        //Assert
-        Assert.Null(refreshedToken);
+        //Act & Assert
+        await Assert.ThrowsAsync<InvalidRefreshTokenException>(async () => await _tokenService.RefreshToken(userId, "invalidToken"));
     }
 
     [Fact]

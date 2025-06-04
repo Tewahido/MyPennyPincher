@@ -64,14 +64,24 @@ export default function Dashboard() {
               <h1 className="text-4xl md:text-6xl xl:text-8xl font-extrabold text-green-700">
                 MyDashboard
               </h1>
-              <input
-                type="month"
-                onChange={(event) => handleChangeMonth(event)}
-                value={month}
-                className=" text-md border-2 rounded-xl md:text-xl xl:text-3xl cursor-pointer font-extrabold p-2"
-                max={`${currentYear}-12`}
-                min="2025-01"
-              />
+              <div className="flex gap-2 items-center">
+                <select
+                  name="periodType"
+                  className="border-1 border-black p-2 rounded-md w-35 cursor-pointer bg-white text-black font-bold focus:outline-none"
+                  defaultValue="month"
+                >
+                  <option value="month">Month</option>
+                  <option value="range">Month Range</option>
+                </select>
+                <input
+                  type="month"
+                  onChange={(event) => handleChangeMonth(event)}
+                  value={month}
+                  className="text-md border-1 bg-white rounded-md md:text-md xl:text-xl cursor-pointer font-extrabold p-2"
+                  max={`${currentYear}-12`}
+                  min="2025-01"
+                />
+              </div>
             </div>
             <div className="w-full ">
               <DashboardSection

@@ -18,7 +18,6 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
         _client = factory.CreateClient();
     }
 
-
     [Fact]
     public async Task GIVEN_NewIncome_WHEN_AddingIncome_THEN_ReturnOkStatus()
     {
