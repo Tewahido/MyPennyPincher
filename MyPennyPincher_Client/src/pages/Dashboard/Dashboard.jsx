@@ -11,13 +11,17 @@ import LoadingAnimation from "../../assets/Dashboard_Loading_Animation.json";
 import Lottie from "lottie-react";
 import { motion } from "motion/react";
 import { dashboardFade } from "../../config/animationConfig.js";
+import { useState } from "react";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
 
+  const [transactionPeriod, setTransactionPeriod] = useState("month");
+
   const incomeData = useSelector((state) => state.income.incomes);
   const expenseData = useSelector((state) => state.expense.expenses);
   const month = useSelector((state) => state.month.month);
+  const monthRange = useSelector((state) => state.monthRange);
   const loading = useSelector((state) => state.loading);
 
   useFetchUserTransactions();
@@ -44,6 +48,10 @@ export default function Dashboard() {
     dispatch(setMonth(event.target.value));
   }
 
+  function handleTransactionPeriodChange(event) {
+    setTransactionPeriod(event.target.value);
+  }
+
   return (
     <>
       <div className="w-full h-full bg-green-100 flex flex-col p-10 overflow-x-hidden">
@@ -64,23 +72,43 @@ export default function Dashboard() {
               <h1 className="text-4xl md:text-6xl xl:text-8xl font-extrabold text-green-700">
                 MyDashboard
               </h1>
-              <div className="flex gap-2 items-center">
+              <div className="flex flex-col items-end gap-2 md:text-md xl:text-lg ">
                 <select
-                  name="periodType"
-                  className="border-1 border-black p-2 rounded-md w-35 cursor-pointer bg-white text-black font-bold focus:outline-none"
-                  defaultValue="month"
+                  name="transactionPeriod"
+                  className="border-1 border-black p-2 rounded-md w-40 cursor-pointer bg-white text-black font-bold focus:outline-none"
+                  value={transactionPeriod}
+                  onChange={handleTransactionPeriodChange}
                 >
                   <option value="month">Month</option>
-                  <option value="range">Month Range</option>
+                  <option value="monthRange">Month Range</option>
                 </select>
-                <input
-                  type="month"
-                  onChange={(event) => handleChangeMonth(event)}
-                  value={month}
-                  className="text-md border-1 bg-white rounded-md md:text-md xl:text-xl cursor-pointer font-extrabold p-2"
-                  max={`${currentYear}-12`}
-                  min="2025-01"
-                />
+                <div className="flex items-center gap-2">
+                  <input
+                    type="month"
+                    onChange={(event) => handleChangeMonth(event)}
+                    value={
+                      transactionPeriod == "month"
+                        ? month
+                        : monthRange.fromMonth
+                    }
+                    className="text-md border-1 bg-white rounded-md cursor-pointer font-extrabold p-2"
+                    max={`${currentYear}-12`}
+                    min="2025-01"
+                  />
+                  {transactionPeriod == "monthRange" && (
+                    <>
+                      <p className="font-bold text-xl">---</p>
+                      <input
+                        type="month"
+                        onChange={(event) => handleChangeMonth(event)}
+                        value={monthRange.toMonth}
+                        className="text-md border-1 bg-white rounded-md cursor-pointer font-extrabold p-2"
+                        max={`${currentYear}-12`}
+                        min="2025-01"
+                      />
+                    </>
+                  )}
+                </div>
               </div>
             </div>
             <div className="w-full ">

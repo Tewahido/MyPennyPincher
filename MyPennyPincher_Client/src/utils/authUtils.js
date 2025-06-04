@@ -1,10 +1,12 @@
 import { login, logout, setExpiryTime } from "../store/slices/userSlice";
 import { clearIncomes } from "../store/slices/incomeSlice";
 import { clearExpenses } from "../store/slices/expenseSlice";
+
 import { jwtDecode } from "jwt-decode";
 import { resetMonth } from "../store/slices/monthSlice";
 import { setLoading } from "../store/slices/loadingSlice";
 import { Logout } from "../services/authService";
+import { resetMonthRange } from "../store/slices/monthRangeSlice";
 
 export function extractTokenExpiryTime(token) {
   const decodedToken = jwtDecode(token);
@@ -33,6 +35,8 @@ export async function logoutUser(dispatch, navigate, location, userId) {
   dispatch(clearExpenses());
 
   dispatch(resetMonth());
+
+  dispatch(resetMonthRange());
 
   dispatch(setLoading(true));
 
