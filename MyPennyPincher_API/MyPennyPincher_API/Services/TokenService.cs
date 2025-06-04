@@ -31,7 +31,6 @@ public class TokenService : ITokenService
 
     public async Task DeleteRefreshToken(string userId)
     {
-
         var existingToken = await GetUserToken(userId);
 
         if (existingToken == null)
