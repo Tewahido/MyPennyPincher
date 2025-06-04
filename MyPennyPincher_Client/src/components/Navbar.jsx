@@ -25,9 +25,9 @@ export default function Navbar() {
     };
   }, []);
 
-  function handleLogout() {
+  async function handleLogout() {
     if (userLoggedIn) {
-      logoutUser(dispatch, navigate, location, userId.userId);
+      await logoutUser(dispatch, navigate, location, user.userId);
     }
   }
 
@@ -47,7 +47,7 @@ export default function Navbar() {
             MyPennyPincher
           </Link>
         </div>
-        {location.pathname !== "/login" && (
+        {location.pathname !== "/login" && location.pathname !== "/signup" && (
           <div className=" flex items-end h-full gap-10 mr-1 md:mr-3 lg:mr-5">
             {userLoggedIn && location.pathname !== "/dashboard" && (
               <Link
