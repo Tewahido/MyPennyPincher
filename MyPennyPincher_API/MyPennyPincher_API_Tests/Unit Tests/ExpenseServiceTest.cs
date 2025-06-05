@@ -88,8 +88,6 @@ public class ExpenseServiceTest : IDisposable
     public async Task GIVEN_UserId_WHEN_GettingUserExpenses_THEN_ReturnUsersExpenses()
     {
         //Arrange
-        Guid userId = Guid.NewGuid();
-
         Expense firstExpense = TestDataFactory.CreateExpense(2, _testUser);
         await _expenseService.AddAsync(firstExpense);
 
@@ -100,7 +98,7 @@ public class ExpenseServiceTest : IDisposable
         await _expenseService.AddAsync(thirdExpense);
 
         //Act
-        var expectedExpenses = await _expenseService.GetByUserIdAsync(userId.ToString());
+        var expectedExpenses = await _expenseService.GetByUserIdAsync(_testUser.UserId.ToString());
 
         //Assert
         Assert.Equal(3, expectedExpenses.Count);
