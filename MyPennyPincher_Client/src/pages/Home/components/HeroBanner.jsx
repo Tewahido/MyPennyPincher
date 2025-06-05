@@ -2,8 +2,11 @@ import DiagonalLine from "./DiagonalLine";
 import SniperReticle from "./SniperReticle";
 import MoneyImage from "../../../assets/background_image.jpeg";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function HeroBanner({ servicesRef }) {
+  const userLoggedIn = useSelector((state) => state.user.loggedIn);
+
   const handleClick = () => {
     const element = servicesRef.current;
 
@@ -31,7 +34,7 @@ export default function HeroBanner({ servicesRef }) {
 
         <div className="flex flex-row h-15 justify-center items-center w-full mt-10">
           <Link
-            to="/login"
+            to={!userLoggedIn ? "/login" : "/dashboard"}
             className="flex items-center justify-center h-full w-35 bg-white rounded-lg cursor-pointer text-green-800 font-bold border-2 border-green-850 transition-all duration-200 hover:bg-green-800 hover: hover:border-white hover:text-white"
           >
             Get Started
