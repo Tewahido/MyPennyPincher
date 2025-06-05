@@ -2,10 +2,32 @@ export function getMonthTransactions(transactions, currentYear, currentMonth) {
   return transactions
     ? transactions.filter((transaction) => {
         const transactionMonth = new Date(transaction.date).getMonth() + 1;
-        const trransactionYear = new Date(transaction.date).getFullYear();
+        const transactionYear = new Date(transaction.date).getFullYear();
 
         return (
-          transactionMonth == currentMonth && trransactionYear == currentYear
+          transactionMonth == currentMonth && transactionYear == currentYear
+        );
+      })
+    : null;
+}
+
+export function getMonthRangeTransactions(
+  transactions,
+  currentFromyear,
+  currentFromMonth,
+  currentToyear,
+  currentToMonth
+) {
+  return transactions
+    ? transactions.filter((transaction) => {
+        const transactionMonth = new Date(transaction.date).getMonth() + 1;
+        const transactionYear = new Date(transaction.date).getFullYear();
+
+        return (
+          transactionMonth >= currentFromMonth &&
+          transactionMonth <= currentToMonth &&
+          transactionYear >= currentFromyear &&
+          transactionYear <= currentToyear
         );
       })
     : null;
