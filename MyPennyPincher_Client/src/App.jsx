@@ -4,7 +4,7 @@ import Dashboard from "./pages/Dashboard/Dashboard.jsx";
 import "./App.css";
 import Login from "./pages/Login/Login.jsx";
 import SignUp from "./pages/SignUp/SignUp.jsx";
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence } from "framer-motion";
 
 function App() {
   return (

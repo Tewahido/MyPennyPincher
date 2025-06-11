@@ -1,20 +1,25 @@
-import { forwardRef, useRef, useImperativeHandle } from "react";
+import { forwardRef, useRef, useImperativeHandle, useState } from "react";
 import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AddIncome, EditIncome } from "../../../services/incomeService";
 import { addIncome, editIncome } from "../../../store/slices/incomeSlice.js";
 import { useNavigate } from "react-router-dom";
 import { addMonthlyIncome } from "../../../utils/recurringUtils.js";
+import ErrorMessage from "../../../components/ErrorMessage.jsx";
 
 const ManageIncomeModal = forwardRef(function ManageIncomeModal(
   { income },
   ref
 ) {
   const dialog = useRef(ref);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const user = useSelector((state) => state.user.user);
   const date = useSelector((state) => state.month.month) + "-01";
+
+  const [invalidInput, setInvalidInput] = useState(false);
 
   useImperativeHandle(ref, () => {
     return {
@@ -27,6 +32,15 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
   async function handleAddIncome(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
+
+    if (
+      formData.get("source") == "" ||
+      formData.get("source") == null ||
+      +formData.get("amount") == null
+    ) {
+      setInvalidInput(true);
+      return;
+    }
 
     const isMonthly = formData.has("monthly");
 
@@ -59,8 +73,18 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
 
   function handleClose(event) {
     event && event.preventDefault();
+
+    const form = dialog.current.querySelector("form");
+
+    if (form) {
+      form.reset();
+    }
+
+    setInvalidInput(false);
+
     dialog.current.close();
   }
+
   return createPortal(
     <dialog
       ref={dialog}
@@ -85,8 +109,8 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
             type="number"
             name="amount"
             className="h-full w-[60%] bg-gray-100 text-gray-900  rounded-lg mx-3 p-3 focus:outline-none"
-            defaultValue={income ? income.amount : 0}
-            min={0}
+            defaultValue={income ? income.amount : null}
+            min={1}
           />
         </label>
         <label className="flex h-10 p-1 items-center justify-start">
@@ -98,7 +122,11 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
             defaultChecked={income && income.monthly}
           />
         </label>
-
+        {invalidInput && (
+          <div className="flex justify-center">
+            <ErrorMessage text="Please fill all relevant fields" />
+          </div>
+        )}
         <div className="flex w-full justify-end gap-5 mt-10">
           <button
             onClick={handleClose}

@@ -1,5 +1,5 @@
 import SignUpForm from "./components/SignUpForm";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import Logo from "/GrabbingMoneyColor_Icon.png";
 import SignUpBg from "../../assets/sign_up_background_image.jpg";
 

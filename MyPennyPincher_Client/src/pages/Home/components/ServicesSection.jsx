@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { servicesFade } from "../../../config/animationConfig.js";
 import { services } from "../../../constants/services.js";
 import ServiceCard from "./ServiceCard.jsx";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 const ServicesSection = forwardRef(function ServicesSection(
   { ...props },

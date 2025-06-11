@@ -1,22 +1,18 @@
-import {
-  forwardRef,
-  useRef,
-  useImperativeHandle,
-  useEffect,
-  useState,
-} from "react";
+import { forwardRef, useRef, useImperativeHandle, useState } from "react";
 import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { GetExpenseCategories } from "../../../services/expenseCategoryService";
 import { addRecurringExpense } from "../../../utils/recurringUtils";
 import { EditExpense, AddExpense } from "../../../services/expenseService";
 import { editExpense, addExpense } from "../../../store/slices/expenseSlice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import ErrorMessage from "../../../components/ErrorMessage.jsx";
 
 const ManageExpenseModal = forwardRef(function ManageExpenseModal(
   { expense },
   ref
 ) {
+  const dialog = useRef(ref);
+
   const expenseCategories = useSelector(
     (state) => state.expense.expenseCategories
   );
@@ -25,7 +21,8 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const dialog = useRef(ref);
+
+  const [invalidInput, setInvalidInput] = useState(false);
 
   useImperativeHandle(ref, () => {
     return {
@@ -38,6 +35,15 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
   async function handleAddExpense(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
+
+    if (
+      formData.get("description") == "" ||
+      formData.get("description") == null ||
+      +formData.get("amount") == null
+    ) {
+      setInvalidInput(true);
+      return;
+    }
 
     const isRecurring = formData.has("recurring");
 
@@ -74,8 +80,17 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
   function handleClose(event) {
     event && event.preventDefault();
 
+    const form = dialog.current.querySelector("form");
+
+    if (form) {
+      form.reset();
+    }
+
+    setInvalidInput(false);
+
     dialog.current.close();
   }
+
   return createPortal(
     <dialog
       ref={dialog}
@@ -100,8 +115,8 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
             type="number"
             name="amount"
             className="h-full w-[60%] bg-gray-100 text-gray-900  rounded-lg mx-3 p-3 focus:outline-none"
-            defaultValue={expense ? expense.amount : 0}
-            min={0}
+            defaultValue={expense ? expense.amount : null}
+            min={1}
           />
         </label>
         <label className="flex h-10 p-1 items-center justify-between">
@@ -128,7 +143,11 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
             defaultChecked={expense && expense.recurring}
           />
         </label>
-
+        {invalidInput && (
+          <div className="flex justify-center">
+            <ErrorMessage text="Please fill all relevant fields" />
+          </div>
+        )}
         <div className="flex w-full justify-end gap-5 mt-10">
           <button
             onClick={handleClose}

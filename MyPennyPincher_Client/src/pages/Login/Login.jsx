@@ -1,7 +1,7 @@
 import LoginForm from "./components/LoginForm";
 import MoneyBg from "../../assets/background_image.jpeg";
 import Logo from "/GrabbingMoneyColor_Icon.png";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 const fadeInForm = {
   hidden: { opacity: 0, x: 50 },

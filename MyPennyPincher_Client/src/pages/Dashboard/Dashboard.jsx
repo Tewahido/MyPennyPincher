@@ -10,7 +10,7 @@ import {
 import { useFetchUserTransactions } from "../../hooks/useFetchUserTransactions";
 import LoadingAnimation from "../../assets/Dashboard_Loading_Animation.json";
 import Lottie from "lottie-react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { dashboardFade } from "../../config/animationConfig.js";
 import { useState } from "react";
 import {

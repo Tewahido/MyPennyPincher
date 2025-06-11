@@ -7,7 +7,7 @@ CREATE TABLE Users(
 
 CREATE TABLE ExpenseCategories(
 	ExpenseCategoryId INT IDENTITY(1,1) PRIMARY KEY,
-	Name VARCHAR(10) NOT NULL
+	Name VARCHAR(25) NOT NULL
 );
 
 CREATE TABLE Expenses(
