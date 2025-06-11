@@ -26,7 +26,7 @@ export function useFetchUserTransactions() {
 
     async function fetchIncomes() {
       const userIncomes = await GetUserIncomes(user.token);
-      if (userIncomes?.status === 401) {
+      if (userIncomes?.status != 200) {
         logoutUser(dispatch, navigate);
       } else {
         const data = await userIncomes.json();
@@ -38,7 +38,7 @@ export function useFetchUserTransactions() {
 
     async function fetchExpenses() {
       const userExpenses = await GetUserExpenses(user.token);
-      if (userExpenses?.status === 401) {
+      if (userExpenses?.status != 200) {
         logoutUser(dispatch, navigate);
       } else {
         const data = await userExpenses.json();
