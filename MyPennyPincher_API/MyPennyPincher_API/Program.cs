@@ -39,9 +39,7 @@ builder.Services.AddOpenApi();
 var jwtOptions = builder.Configuration.GetSection(JwtOptions.JwtSection)
                                       .Get<JwtOptions>();
 
-
-var jwtKey = builder.Configuration["Jwt:Key"];
-var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+builder.Services.AddSingleton(jwtOptions!);
 
 builder.Services.AddAuthentication(options =>
 {

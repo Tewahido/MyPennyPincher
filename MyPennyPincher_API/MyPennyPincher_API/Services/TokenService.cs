@@ -7,6 +7,7 @@ using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API.Models.DTO;
+using MyPennyPincher_API.Models.ConfigModels;
 using MyPennyPincher_API.Exceptions;
 
 namespace MyPennyPincher_API.Services;
@@ -15,11 +16,14 @@ public class TokenService : ITokenService
 {
     private readonly ITokenRepository _tokenRepository;
     private readonly IConfiguration _config;
+    private readonly JwtOptions _jwtOptions;
 
-    public TokenService(IConfiguration config, ITokenRepository tokenRepository)
+    public TokenService(IConfiguration config, ITokenRepository tokenRepository, JwtOptions jwtOptions)
     {
         _tokenRepository = tokenRepository;
         _config = config;
+        _jwtOptions = jwtOptions;
+
     }
 
     public async Task AddRefreshToken(RefreshToken refreshToken)
@@ -60,7 +64,7 @@ public class TokenService : ITokenService
     public UserAccessToken GenerateAccessToken(Guid userId)
     {
 
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var convertedUserId = userId.ToString();
@@ -73,8 +77,8 @@ public class TokenService : ITokenService
         var tokenValidityTime = DateTime.Now.AddMinutes(_config.GetValue<double>("Jwt:TokenValidityMins"));
 
         var token = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],
-            audience: _config["Jwt:Issuer"],
+            issuer: _jwtOptions.Issuer,
+            audience: _jwtOptions.Issuer,
             claims: claims,
             expires: tokenValidityTime,
             signingCredentials: credentials);
@@ -102,9 +106,9 @@ public class TokenService : ITokenService
 
     private async Task<bool> ValidateToken(Guid userId, string token)
     {
-        RefreshToken refreshToken = await _tokenRepository.GetTokenAsync(userId);
+        var refreshToken = await _tokenRepository.GetTokenAsync(userId);
 
-        bool tokenIsValid = refreshToken.ExpiryDate > DateTime.UtcNow 
+        bool tokenIsValid = refreshToken!.ExpiryDate > DateTime.UtcNow 
             && refreshToken != null 
             && token == refreshToken.Token;
 

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Exceptions;
+using MyPennyPincher_API.Models.ConfigModels;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
@@ -19,6 +20,7 @@ public class TokenServiceTest : IDisposable
     private readonly IConfiguration _config;
     private readonly MyPennyPincherDbContext _context;
     private readonly ITokenService _tokenService;
+    private readonly JwtOptions _jwtOptions;
 
     public TokenServiceTest()
     {
@@ -33,11 +35,13 @@ public class TokenServiceTest : IDisposable
             .AddInMemoryCollection(configData)
             .Build();
 
+        _jwtOptions = _config.GetSection("Jwt").Get<JwtOptions>();
+
         _context = DbContextFactory.GenerateInMemoryDB();
 
         _tokenRepository = new TokenRepository(_context);
 
-        _tokenService = new TokenService(_config, _tokenRepository);
+        _tokenService = new TokenService(_config, _tokenRepository, _jwtOptions);
     }
 
     [Fact]
