@@ -32,7 +32,6 @@ namespace MyPennyPincher_API.CustomExceptionMiddleware
                 {
                     UserAlreadyExistsException => StatusCodes.Status409Conflict,
                     InvalidCredentialsException => StatusCodes.Status401Unauthorized,
-                    RefreshTokenNotFoundException => StatusCodes.Status404NotFound,
                     InvalidRefreshTokenException => StatusCodes.Status401Unauthorized,
                     ExpensesNotFoundException => StatusCodes.Status404NotFound,
                     ExpenseNotFoundException => StatusCodes.Status404NotFound,

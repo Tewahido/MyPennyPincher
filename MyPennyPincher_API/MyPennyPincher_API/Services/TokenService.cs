@@ -35,7 +35,7 @@ public class TokenService : ITokenService
 
         if (existingToken == null)
         {
-            throw new RefreshTokenNotFoundException("User refresh token not found");
+            return;
         }
         
         await _tokenRepository.DeleteAsync(existingToken);
