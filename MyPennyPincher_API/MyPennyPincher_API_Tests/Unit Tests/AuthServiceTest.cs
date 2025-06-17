@@ -48,7 +48,7 @@ public class AuthServiceTest : IDisposable
         User? nullUser = null;
 
         //Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => _authService.Register(nullUser));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _authService.Register(nullUser!));
     }
 
     [Fact]

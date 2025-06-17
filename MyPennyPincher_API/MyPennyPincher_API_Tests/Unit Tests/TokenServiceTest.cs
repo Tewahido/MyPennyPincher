@@ -24,7 +24,7 @@ public class TokenServiceTest : IDisposable
 
     public TokenServiceTest()
     {
-        var configData = new Dictionary<string, string>
+        var configData = new Dictionary<string, string?>
         {
             { "Jwt:Key", "X2s#9f!zLq@84hT%vG^7Rb*eWkP$JmN+ZcA!uYdE6rOi$0MbTpLgVsWx1QdHzFnCy" },
             { "Jwt:Issuer", "https://localhost:7053" },
@@ -35,7 +35,7 @@ public class TokenServiceTest : IDisposable
             .AddInMemoryCollection(configData)
             .Build();
 
-        _jwtOptions = _config.GetSection("Jwt").Get<JwtOptions>();
+        _jwtOptions = _config.GetSection("Jwt").Get<JwtOptions>()!;
 
         _context = DbContextFactory.GenerateInMemoryDB();
 

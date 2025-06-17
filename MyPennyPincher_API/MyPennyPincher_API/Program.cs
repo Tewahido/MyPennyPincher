@@ -36,8 +36,8 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddOpenApi();
 
-var jwtOptions = builder.Configuration.GetSection(JwtOptions.JwtSection)
-                                      .Get<JwtOptions>();
+JwtOptions jwtOptions = builder.Configuration.GetSection(JwtOptions.JwtSection)
+                        .Get<JwtOptions>()!;
 
 builder.Services.AddSingleton(jwtOptions!);
 
