@@ -1,4 +1,4 @@
-﻿using MyPennyPincher_API.Models;
+﻿using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
 
 namespace MyPennyPincher_API_Tests.Test_Utilities;

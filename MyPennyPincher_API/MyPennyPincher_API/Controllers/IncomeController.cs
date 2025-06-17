@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Services.Interfaces;
 
 namespace MyPennyPincher_API.Controllers;

@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using Azure;
-using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API_Tests.Test_Utilities;
 using MyPennyPincher_API_Tests.WebApplicationFactory;
@@ -162,7 +162,7 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
         var responseString = await response.Content.ReadAsStringAsync();
         var loginResponse = JsonConvert.DeserializeObject<UserAccessToken>(responseString);
 
-        var userId = loginResponse.UserId.ToString();
+        var userId = loginResponse!.UserId.ToString();
 
         //Act
         var logoutResponse = await HttpRequestSender.PostAsync(_client, BaseRoute + "/logout", userId);

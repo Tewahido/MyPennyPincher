@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Models.DataModels;
 
 namespace MyPennyPincher_API.Context;
 

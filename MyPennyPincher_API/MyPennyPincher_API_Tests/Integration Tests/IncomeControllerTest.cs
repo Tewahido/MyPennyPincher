@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API_Tests.Test_Utilities;
 using MyPennyPincher_API_Tests.WebApplicationFactory;
@@ -130,7 +130,7 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
         }
 
         //Act
-        var response = await HttpRequestSender.GetAsync(_client, BaseRoute, token);
+        var response = await HttpRequestSender.GetAsync(_client, BaseRoute, token!);
         response.EnsureSuccessStatusCode();
 
         var json = await response.Content.ReadAsStringAsync();

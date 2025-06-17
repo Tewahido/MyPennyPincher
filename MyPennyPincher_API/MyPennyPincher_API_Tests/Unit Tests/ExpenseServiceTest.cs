@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
-using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
@@ -81,7 +81,7 @@ public class ExpenseServiceTest : IDisposable
         var expectedExpense = await _context.Expenses.FirstOrDefaultAsync(exp => exp.ExpenseId == editedExpense.ExpenseId);
        
         //Assert
-        Assert.Equal(editedExpense.Amount, expectedExpense.Amount);
+        Assert.Equal(editedExpense.Amount, expectedExpense!.Amount);
     }
 
     [Fact]

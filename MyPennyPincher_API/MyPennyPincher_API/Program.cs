@@ -10,6 +10,7 @@ using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Services.Interfaces;
 using System.Text.Json;
 using MyPennyPincher_API.CustomExceptionMiddleware;
+using MyPennyPincher_API.Models.ConfigModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,10 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddOpenApi();
 
+var jwtOptions = builder.Configuration.GetSection(JwtOptions.JwtSection)
+                                      .Get<JwtOptions>();
+
+
 var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 
@@ -51,9 +56,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtIssuer,
-        ValidAudience = jwtIssuer,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        ValidIssuer = jwtOptions.Issuer,
+        ValidAudience = jwtOptions.Issuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key))
     };
 
     options.Events = new JwtBearerEvents

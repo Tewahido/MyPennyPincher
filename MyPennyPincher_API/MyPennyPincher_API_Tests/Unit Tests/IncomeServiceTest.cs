@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
-using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
@@ -82,7 +82,7 @@ public class IncomeServiceTest
         var expectedIncome = await _context.Incomes.FirstOrDefaultAsync(exp => exp.IncomeId == editedIncome.IncomeId);
 
         //Assert
-        Assert.Equal(editedIncome.Amount, expectedIncome.Amount);
+        Assert.Equal(editedIncome.Amount, expectedIncome!.Amount);
     }
 
     [Fact]

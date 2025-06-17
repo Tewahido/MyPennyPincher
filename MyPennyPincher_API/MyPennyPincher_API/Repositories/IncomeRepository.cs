@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
-using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Repositories.Interfaces;
 
 namespace MyPennyPincher_API.Repositories;
@@ -19,9 +19,10 @@ public class IncomeRepository : IIncomeRepository
         await _context.Incomes.AddAsync(income);
     }
 
-    public async Task DeleteAsync(Income income)
+    public Task DeleteAsync(Income income)
     {
         _context.Incomes.Remove(income);
+        return Task.CompletedTask;
     }
 
     public async Task<Income?> GetByIdAsync(int incomeId)

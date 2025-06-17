@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Exceptions;
-using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
@@ -86,7 +86,7 @@ public class TokenServiceTest : IDisposable
         var refreshedToken = await _tokenService.RefreshToken(userId, generatedToken.Token);
 
         var handler = new JwtSecurityTokenHandler();
-        var readToken = handler.ReadJwtToken(refreshedToken.Token);
+        var readToken = handler.ReadJwtToken(refreshedToken!.Token);
 
         //Assert
         Assert.Contains(readToken.Claims, claim => claim.Type == ClaimTypes.NameIdentifier && claim.Value == userId.ToString());

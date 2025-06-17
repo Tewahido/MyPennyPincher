@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyPennyPincher_API.Models;
+using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Services.Interfaces;
 
@@ -41,9 +41,9 @@ public class AuthController : ControllerBase
 
         var user = await _authService.Login(login);
 
-        var userAccessToken = _tokenService.GenerateAccessToken(user.UserId);
+        var userAccessToken = _tokenService.GenerateAccessToken(user!.UserId);
 
-        var refreshToken = _tokenService.GenerateRefreshToken(user.UserId);
+        var refreshToken = _tokenService.GenerateRefreshToken(user!.UserId);
 
         await _tokenService.AddRefreshToken(refreshToken);
 

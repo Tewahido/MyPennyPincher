@@ -2,6 +2,6 @@
 
 public class ErrorResponse
 {
-    public int StatusCode { get; set; }
-    public string Message { get; set; }
+    public int StatusCode { get; set; } = 1;
+    public string Message { get; set; } = "";
 }

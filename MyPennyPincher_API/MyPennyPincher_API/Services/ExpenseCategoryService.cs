@@ -1,4 +1,4 @@
-﻿using MyPennyPincher_API.Models;
+﻿using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services.Interfaces;
 
