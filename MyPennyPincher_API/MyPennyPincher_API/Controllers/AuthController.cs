@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Services.Interfaces;
@@ -31,6 +32,7 @@ public class AuthController : ControllerBase
         return Ok();
     }
 
+    [EnableRateLimiting("sliding")]
     [HttpPost("login")]
     public async Task<ActionResult<UserAccessToken?>> Login([FromBody] Login login)
     {

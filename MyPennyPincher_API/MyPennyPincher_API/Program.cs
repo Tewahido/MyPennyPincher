@@ -11,6 +11,9 @@ using MyPennyPincher_API.Services.Interfaces;
 using System.Text.Json;
 using MyPennyPincher_API.CustomExceptionMiddleware;
 using MyPennyPincher_API.Models.ConfigModels;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+using MyPennyPincher_API.Models.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +42,7 @@ builder.Services.AddOpenApi();
 JwtOptions jwtOptions = builder.Configuration.GetSection(JwtOptions.JwtSection)
                         .Get<JwtOptions>()!;
 
-builder.Services.AddSingleton(jwtOptions!);
+builder.Services.AddSingleton(jwtOptions);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -79,6 +82,40 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+SlidingRateLimitOptions myOptions  = builder.Configuration.GetSection(SlidingRateLimitOptions.SlidingRateLimitSection)
+                                                    .Get<SlidingRateLimitOptions>()!;
+
+var slidingPolicy = "sliding";
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddSlidingWindowLimiter(policyName: slidingPolicy, options =>
+    {
+        options.PermitLimit = myOptions.PermitLimit;
+        options.Window = TimeSpan.FromSeconds(myOptions.Window);
+        options.SegmentsPerWindow = myOptions.SegmentsPerWindow;
+        options.QueueLimit = myOptions.QueueLimit;
+    });
+
+
+    options.OnRejected = async (context, cancellationToken) =>
+    {
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        context.HttpContext.Response.ContentType = "application/json";
+
+        var errorResponse = new ErrorResponse
+        {
+            StatusCode = StatusCodes.Status429TooManyRequests,
+            Message = "Too many attempts, try again later"
+        };
+
+        var json = JsonSerializer.Serialize(errorResponse);
+
+        await context.HttpContext.Response.WriteAsync(json, cancellationToken);
+    };
+    
+});
+
 builder.Services.AddOpenApi();
 
 builder.Services.AddAuthorization();
@@ -103,6 +140,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 
 }
+
+app.UseRateLimiter();
 
 app.UseCors("AllowFrontend");
 
