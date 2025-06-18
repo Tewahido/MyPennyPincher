@@ -12,6 +12,8 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
   ref
 ) {
   const dialog = useRef(ref);
+  
+  const reloadExpenses = useSelector((state) => state.expense.reloadExpenses);
 
   const expenseCategories = useSelector(
     (state) => state.expense.expenseCategories
@@ -66,6 +68,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
     if (status != 400 || status != 401) {
       if (!expense && isRecurring) {
         addRecurringExpense(currentExpense, user.token);
+        
       }
       expense
         ? dispatch(

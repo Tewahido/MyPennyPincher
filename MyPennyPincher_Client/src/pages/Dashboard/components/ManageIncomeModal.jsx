@@ -13,6 +13,8 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
 ) {
   const dialog = useRef(ref);
 
+  const reloadIncomes = useSelector((state) => state.income.reloadIncomes);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
