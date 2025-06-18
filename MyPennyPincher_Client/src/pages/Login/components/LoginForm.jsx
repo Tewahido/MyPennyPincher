@@ -32,11 +32,9 @@ export default function LoginForm() {
     event.preventDefault();
     
     const response = await Login(formData.email, formData.password);
-    console.log(response);
 
     if (response.status != 200) {
       setLoginFailed(true);
-      
       setErrorMessage(response.message);
       
       return;
