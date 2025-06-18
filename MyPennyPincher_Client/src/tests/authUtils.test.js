@@ -1,6 +1,5 @@
 import { describe, test } from "vitest";
 import { extractTokenExpiryTime, isValidPassword } from "../utils/authUtils";
-import { isValidElement } from "react";
 
 function generateMockJWT(expiryTime) {
   const jwt = require("jsonwebtoken");
