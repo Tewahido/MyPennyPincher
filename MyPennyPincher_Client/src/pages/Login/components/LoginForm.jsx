@@ -30,24 +30,18 @@ export default function LoginForm() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    let response;
+    
+    const response = await Login(formData.email, formData.password);
+    console.log(response);
 
-    try{
-      response = await Login(formData.email, formData.password);
-    }
-    catch (error){
-      console.log(error);
-      setErrorMessage("Too many requests");
-    }
     if (response.status != 200) {
       setLoginFailed(true);
-
-      if(response.status == 401){
-        setErrorMessage("Invalid credentials");
-      }
-
+      
+      setErrorMessage(response.message);
+      
       return;
     }
+
     const loggedInUser = await response.json();
 
     loginUser(dispatch, loggedInUser);

@@ -77,7 +77,7 @@ builder.Services.AddAuthentication(options =>
             };
 
             var json = JsonSerializer.Serialize(response);
-            return context.Response.WriteAsync(json);
+            return context.Response.WriteAsJsonAsync(json);
         }
     };
 });
@@ -102,16 +102,16 @@ builder.Services.AddRateLimiter(options =>
     {
         context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
         context.HttpContext.Response.ContentType = "application/json";
+        context.HttpContext.Response.Headers["Access-Control-Allow-Origin"] = "http://localhost:3000";
+        context.HttpContext.Response.Headers["Access-Control-Allow-Credentials"] = "true";
 
-        var errorResponse = new ErrorResponse
+        ErrorResponse errorResponse = new ErrorResponse
         {
             StatusCode = StatusCodes.Status429TooManyRequests,
             Message = "Too many attempts, try again later"
         };
 
-        var json = JsonSerializer.Serialize(errorResponse);
-
-        await context.HttpContext.Response.WriteAsync(json, cancellationToken);
+        await context.HttpContext.Response.WriteAsJsonAsync(errorResponse, cancellationToken);
     };
     
 });

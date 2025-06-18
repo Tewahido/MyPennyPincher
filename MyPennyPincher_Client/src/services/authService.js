@@ -32,6 +32,8 @@ export const Login = async (email, password) => {
   if (!response.ok) {
     const error = await response.json();
     console.error("Error:", error.message);
+
+    return error;
   }
 
   return response;

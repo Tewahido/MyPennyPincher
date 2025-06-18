@@ -26,7 +26,7 @@ namespace MyPennyPincher_API.CustomExceptionMiddleware
 
                 context.Response.ContentType = "application/json";
 
-                var response = new ErrorResponse();
+                ErrorResponse response = new ErrorResponse();
 
                 context.Response.StatusCode = ex switch
                 {
