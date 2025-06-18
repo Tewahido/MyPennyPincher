@@ -9,7 +9,7 @@ namespace MyPennyPincher_API_Tests.WebApplicationFactory
 {
     public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
     {
-        private readonly string InMemoryDbName = $"TestDb_{Guid.NewGuid().ToString()}";
+        private readonly string InMemoryDbName = $"TestDb_{Guid.NewGuid()}";
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.UseEnvironment("Testing");
