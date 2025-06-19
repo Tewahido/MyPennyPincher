@@ -106,7 +106,7 @@ builder.Services.AddRateLimiter(options =>
         ErrorResponse errorResponse = new ErrorResponse
         {
             StatusCode = StatusCodes.Status429TooManyRequests,
-            Message = "Too many attempts, try again later"
+            Message = "Too many attempts, try again shortly"
         };
 
         await context.HttpContext.Response.WriteAsJsonAsync(errorResponse, cancellationToken);
