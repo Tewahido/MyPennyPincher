@@ -12,7 +12,6 @@ using System.Text.Json;
 using MyPennyPincher_API.CustomExceptionMiddleware;
 using MyPennyPincher_API.Models.ConfigModels;
 using Microsoft.AspNetCore.RateLimiting;
-using System.Threading.RateLimiting;
 using MyPennyPincher_API.Models.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -96,7 +95,6 @@ builder.Services.AddRateLimiter(options =>
         options.SegmentsPerWindow = myOptions.SegmentsPerWindow;
         options.QueueLimit = myOptions.QueueLimit;
     });
-
 
     options.OnRejected = async (context, cancellationToken) =>
     {

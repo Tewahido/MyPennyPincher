@@ -34,18 +34,18 @@ public class AuthController : ControllerBase
 
     [EnableRateLimiting("sliding")]
     [HttpPost("login")]
-    public async Task<ActionResult<UserAccessToken?>> Login([FromBody] Login login)
+    public async Task<ActionResult<UserAccessToken>> Login([FromBody] Login login)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var user = await _authService.Login(login);
+        User user = await _authService.Login(login);
 
-        var userAccessToken = _tokenService.GenerateAccessToken(user!.UserId);
+        var userAccessToken = _tokenService.GenerateAccessToken(user.UserId);
 
-        var refreshToken = _tokenService.GenerateRefreshToken(user!.UserId);
+        var refreshToken = _tokenService.GenerateRefreshToken(user.UserId);
 
         await _tokenService.AddRefreshToken(refreshToken);
 

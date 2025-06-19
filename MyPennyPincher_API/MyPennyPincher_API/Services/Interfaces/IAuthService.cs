@@ -6,5 +6,5 @@ namespace MyPennyPincher_API.Services.Interfaces;
 public interface IAuthService
 {
     Task<User> Register(User user);
-    Task<User?> Login(Login login);
+    Task<User> Login(Login login);
 }

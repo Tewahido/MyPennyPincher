@@ -146,7 +146,7 @@ export default function Dashboard() {
                         max={`${currentYear}-12`}
                         min={
                           transactionPeriod == "month"
-                            ? "2025-01"
+                            ? `${currentYear}-01` 
                             : monthRange.fromMonth
                         }
                       />
