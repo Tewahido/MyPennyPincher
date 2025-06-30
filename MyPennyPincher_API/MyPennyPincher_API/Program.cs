@@ -81,7 +81,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-SlidingRateLimitOptions myOptions  = builder.Configuration.GetSection(SlidingRateLimitOptions.SlidingRateLimitSection)
+SlidingRateLimitOptions slidingRateOptions  = builder.Configuration.GetSection(SlidingRateLimitOptions.SlidingRateLimitSection)
                                                     .Get<SlidingRateLimitOptions>()!;
 
 var slidingPolicy = "sliding";
@@ -90,10 +90,10 @@ builder.Services.AddRateLimiter(options =>
 {
     options.AddSlidingWindowLimiter(policyName: slidingPolicy, options =>
     {
-        options.PermitLimit = myOptions.PermitLimit;
-        options.Window = TimeSpan.FromSeconds(myOptions.Window);
-        options.SegmentsPerWindow = myOptions.SegmentsPerWindow;
-        options.QueueLimit = myOptions.QueueLimit;
+        options.PermitLimit = slidingRateOptions.PermitLimit;
+        options.Window = TimeSpan.FromSeconds(slidingRateOptions.Window);
+        options.SegmentsPerWindow = slidingRateOptions.SegmentsPerWindow;
+        options.QueueLimit = slidingRateOptions.QueueLimit;
     });
 
     options.OnRejected = async (context, cancellationToken) =>
@@ -113,6 +113,12 @@ builder.Services.AddRateLimiter(options =>
     };
     
 });
+
+SmtpOptions smtpOptions = builder.Configuration.GetSection(SmtpOptions.SmtpSection)
+                                                    .Get<SmtpOptions>()!;
+builder.Services.Configure<SmtpOptions>(
+    builder.Configuration.GetSection(SmtpOptions.SmtpSection));
+
 
 builder.Services.AddOpenApi();
 

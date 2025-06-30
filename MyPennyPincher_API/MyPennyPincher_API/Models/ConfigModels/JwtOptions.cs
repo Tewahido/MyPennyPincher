@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MyPennyPincher_API.Models.ConfigModels;
+﻿namespace MyPennyPincher_API.Models.ConfigModels;
 
 public class JwtOptions
 {
