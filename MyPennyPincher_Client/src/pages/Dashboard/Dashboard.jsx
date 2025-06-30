@@ -105,7 +105,7 @@ export default function Dashboard() {
               <h1 className="text-4xl md:text-6xl xl:text-8xl font-extrabold text-green-700">
                 MyDashboard
               </h1>
-              <div className="flex flex-col items-end gap-2 md:text-md xl:text-lg ">
+              <div className="flex flex-col items-end gap-2 md:text-md xl:text-lg">
                 <div className="flex items-center gap-3">
                   <p className="font-bold">Transaction Period:</p>
                   <select
@@ -146,7 +146,7 @@ export default function Dashboard() {
                         max={`${currentYear}-12`}
                         min={
                           transactionPeriod == "month"
-                            ? `${currentYear}-01` 
+                            ? `${currentYear}-01`
                             : monthRange.fromMonth
                         }
                       />
@@ -170,7 +170,7 @@ export default function Dashboard() {
               <h1 className="text-6xl text-center font-extrabold text-green-700 mb-10">
                 My Transactions
               </h1>
-              <div className="flex flex-col items-center justify-evenly md:h-[825px] bg-white rounded-4xl ">
+              <div className="flex flex-col items-center justify-evenly md:h-[825px] bg-white rounded-4xl">
                 <TransactionsSection
                   incomes={currentPeriodIncomes}
                   expenses={currentPeriodExpenses}
