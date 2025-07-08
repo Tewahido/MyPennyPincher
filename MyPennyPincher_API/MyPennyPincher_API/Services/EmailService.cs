@@ -10,32 +10,34 @@ namespace MyPennyPincher_API.Services;
 public class EmailService : IEmailService
 {
     private readonly SmtpOptions _smtp;
+    private readonly SmtpClient _smtpClient;
 
-    public EmailService(IOptions<SmtpOptions> smtpOptions)
+    public EmailService(IOptions<SmtpOptions> smtpOptions, ILogger<EmailService> logger)
     {
         _smtp = smtpOptions.Value;
-    }
+        logger.LogInformation($"Smtp port: {_smtp.Port}");
 
-    public void Send2FAEmail(MFAEmail email)
-    {
-        var smtpClient = new SmtpClient(_smtp.Host)
+        _smtpClient = new SmtpClient(_smtp.Host)
         {
-            Port = 587,
-            Credentials = new NetworkCredential(_smtp.Username,_smtp.Password),
+            Port = _smtp.Port,
+            Credentials = new NetworkCredential(_smtp.Username, _smtp.Password),
             EnableSsl = _smtp.EnableSsl,
         };
+    }
 
+    public void Send2FAEmail(MFAEmail email, string toEmail)
+    {
         var mailMessage = new MailMessage
         {
             From = new MailAddress(_smtp.Username),
             Subject = email.Subject,
-            Body = "<h1>Hello</h1>",
+            Body = email.Body,
             IsBodyHtml = true,
         };
 
-        mailMessage.To.Add("recipient");
+        mailMessage.To.Add(toEmail);
 
-        smtpClient.Send(mailMessage);
+        _smtpClient.Send(mailMessage);
     }
 
     public void SendPasswordChangeEmail()

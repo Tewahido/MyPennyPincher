@@ -1,8 +1,9 @@
 ﻿using System.Net;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
+using MyPennyPincher_API_Tests.Factories.WebApplicationFactory;
+using MyPennyPincher_API_Tests.HttpUtils;
 using MyPennyPincher_API_Tests.Test_Utilities;
-using MyPennyPincher_API_Tests.WebApplicationFactory;
 using Newtonsoft.Json;
 
 namespace MyPennyPincher_API_Tests.Integration_Tests;

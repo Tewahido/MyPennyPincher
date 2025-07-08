@@ -1,4 +1,4 @@
-﻿namespace MyPennyPincher_API.Exceptions
+﻿namespace MyPennyPincher_API.Exceptions.ExpenseExceptions
 {
     public class ExpenseNotFoundException :Exception
     {

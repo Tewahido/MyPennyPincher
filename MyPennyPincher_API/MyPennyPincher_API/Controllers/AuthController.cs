@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.RateLimiting;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
+using MyPennyPincher_API.Services;
 using MyPennyPincher_API.Services.Interfaces;
 
 namespace MyPennyPincher_API.Controllers;
@@ -12,11 +13,13 @@ public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
     private readonly ITokenService _tokenService;
+    private readonly IEmailService _emailService;
 
-    public AuthController( IAuthService authService, ITokenService tokenService)
+    public AuthController( IAuthService authService, ITokenService tokenService, IEmailService emailService)
     {
         _authService = authService;
         _tokenService = tokenService;
+        _emailService = emailService;
     }
 
     [HttpPost("register")]

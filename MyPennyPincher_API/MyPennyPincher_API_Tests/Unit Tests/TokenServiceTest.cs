@@ -1,7 +1,6 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Exceptions;
 using MyPennyPincher_API.Models.ConfigModels;
@@ -11,6 +10,9 @@ using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
 using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API_Tests.Test_Utilities;
+using Plotly.NET;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace MyPennyPincher_API_Tests.Unit_Tests;
 
@@ -20,7 +22,6 @@ public class TokenServiceTest : IDisposable
     private readonly IConfiguration _config;
     private readonly MyPennyPincherDbContext _context;
     private readonly ITokenService _tokenService;
-    private readonly JwtOptions _jwtOptions;
 
     public TokenServiceTest()
     {
@@ -34,14 +35,16 @@ public class TokenServiceTest : IDisposable
         _config = new ConfigurationBuilder()
             .AddInMemoryCollection(configData)
             .Build();
-
-        _jwtOptions = _config.GetSection("Jwt").Get<JwtOptions>()!;
-
         _context = DbContextFactory.GenerateInMemoryDB();
+
+        var jwtOptions = new JwtOptions();
+        _config.GetSection("Jwt").Bind(jwtOptions);
+
+        var options = Options.Create(jwtOptions);
 
         _tokenRepository = new TokenRepository(_context);
 
-        _tokenService = new TokenService(_config, _tokenRepository, _jwtOptions);
+        _tokenService = new TokenService(_config, _tokenRepository, options);
     }
 
     [Fact]

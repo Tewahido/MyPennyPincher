@@ -29,6 +29,7 @@ builder.Services.AddScoped<IIncomeService, IncomeService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IIncomeRepository, IncomeRepository>();
@@ -40,8 +41,6 @@ builder.Services.AddOpenApi();
 
 JwtOptions jwtOptions = builder.Configuration.GetSection(JwtOptions.JwtSection)
                         .Get<JwtOptions>()!;
-
-builder.Services.AddSingleton(jwtOptions);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -114,11 +113,8 @@ builder.Services.AddRateLimiter(options =>
     
 });
 
-SmtpOptions smtpOptions = builder.Configuration.GetSection(SmtpOptions.SmtpSection)
-                                                    .Get<SmtpOptions>()!;
 builder.Services.Configure<SmtpOptions>(
-    builder.Configuration.GetSection(SmtpOptions.SmtpSection));
-
+    builder.Configuration.GetSection("SmtpSettings"));
 
 builder.Services.AddOpenApi();
 

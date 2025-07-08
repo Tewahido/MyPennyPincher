@@ -1,4 +1,5 @@
 ﻿using MyPennyPincher_API.Exceptions;
+using MyPennyPincher_API.Exceptions.ExpenseExceptions;
 using MyPennyPincher_API.Models.DTO;
 
 namespace MyPennyPincher_API.CustomExceptionMiddleware

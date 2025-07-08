@@ -9,6 +9,7 @@ using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Models.ConfigModels;
 using MyPennyPincher_API.Exceptions;
+using Microsoft.Extensions.Options;
 
 namespace MyPennyPincher_API.Services;
 
@@ -18,11 +19,11 @@ public class TokenService : ITokenService
     private readonly IConfiguration _config;
     private readonly JwtOptions _jwtOptions;
 
-    public TokenService(IConfiguration config, ITokenRepository tokenRepository, JwtOptions jwtOptions)
+    public TokenService(IConfiguration config, ITokenRepository tokenRepository, IOptions<JwtOptions> options)
     {
         _tokenRepository = tokenRepository;
         _config = config;
-        _jwtOptions = jwtOptions;
+        _jwtOptions = options.Value;
 
     }
 

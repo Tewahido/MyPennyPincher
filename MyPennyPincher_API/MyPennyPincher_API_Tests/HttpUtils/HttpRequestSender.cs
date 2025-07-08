@@ -2,7 +2,7 @@
 using System.Text;
 using Newtonsoft.Json;
 
-namespace MyPennyPincher_API_Tests.Test_Utilities;
+namespace MyPennyPincher_API_Tests.HttpUtils;
 
 public class HttpRequestSender
 {

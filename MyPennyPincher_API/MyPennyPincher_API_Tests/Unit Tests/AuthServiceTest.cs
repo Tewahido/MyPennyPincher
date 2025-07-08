@@ -5,13 +5,14 @@ using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
+using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API_Tests.Test_Utilities;
 
 namespace MyPennyPincher_API_Tests;
 
 public class AuthServiceTest : IDisposable
 {
-    private readonly AuthService _authService;
+    private readonly IAuthService _authService;
     private readonly MyPennyPincherDbContext _context;
     private readonly IAuthRepository _authRepository; 
 
