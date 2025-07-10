@@ -4,9 +4,9 @@ public class SmtpOptions
 {
     public const string SmtpSection = "SmtpSettings";
 
-    public string Host { get; }
-    public int Port { get; }
-    public bool EnableSsl { get;  }
-    public string Username { get; }
-    public string Password { get; }
+    public string Host { get; set; }
+    public int Port { get; set; }
+    public bool EnableSsl { get; set; }
+    public string Username { get; set; }
+    public string Password { get; set; }
 }

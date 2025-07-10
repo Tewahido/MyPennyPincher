@@ -6,7 +6,7 @@ public class MailHogManager
 {
     private readonly string _fileName = "docker";
     private readonly string _startCommandArgs = "run -d --name mailhog -p 1025:1025 -p 8025:8025 mailhog/mailhog";
-    private readonly string _stopCommandArgs = "docker rm -f mailhog";
+    private readonly string _stopCommandArgs = "rm -f mailhog";
 
     public MailHogManager(){}
 

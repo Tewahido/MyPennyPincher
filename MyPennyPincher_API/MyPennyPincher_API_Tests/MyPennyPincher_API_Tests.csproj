@@ -19,7 +19,8 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
+
+	<ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.5" />
@@ -35,5 +36,18 @@
   <ItemGroup>
     <ProjectReference Include="..\MyPennyPincher_API\MyPennyPincher_API.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\MyPennyPincher_API\Models\Emails\EmailTemplates\2FA_Email_Template.html">
+			<Link>2FA_Email_Template.html</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\MyPennyPincher_API\Models\Emails\EmailTemplates\Verification_Email_Template.html">
+			<Link>Verification_Email_Template.html</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

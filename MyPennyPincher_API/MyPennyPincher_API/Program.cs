@@ -39,6 +39,9 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddOpenApi();
 
+builder.Services.Configure<JwtOptions>(
+    builder.Configuration.GetSection(JwtOptions.JwtSection));
+
 JwtOptions jwtOptions = builder.Configuration.GetSection(JwtOptions.JwtSection)
                         .Get<JwtOptions>()!;
 
@@ -114,7 +117,7 @@ builder.Services.AddRateLimiter(options =>
 });
 
 builder.Services.Configure<SmtpOptions>(
-    builder.Configuration.GetSection("SmtpSettings"));
+    builder.Configuration.GetSection(SmtpOptions.SmtpSection));
 
 builder.Services.AddOpenApi();
 

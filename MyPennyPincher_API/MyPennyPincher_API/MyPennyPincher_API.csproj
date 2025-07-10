@@ -6,7 +6,24 @@
     <UserSecretsId>e49f17d4-12b5-4ca7-ae44-5fbac56c3cae</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
-  <ItemGroup>
+	<ItemGroup>
+		<None Remove="Models\Emails\EmailTemplates\2FA_Email_Template.html" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="Models\Emails\EmailTemplates\2FA_Email_Template.html">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+		<None Remove="Models\Emails\EmailTemplates\Verification_Email_Template.html" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="Models\Emails\EmailTemplates\Verification_Email_Template.html">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	
+	<ItemGroup>
     <PackageReference Include="AspNetCoreRateLimit" Version="5.0.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />

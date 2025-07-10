@@ -12,10 +12,9 @@ public class EmailService : IEmailService
     private readonly SmtpOptions _smtp;
     private readonly SmtpClient _smtpClient;
 
-    public EmailService(IOptions<SmtpOptions> smtpOptions, ILogger<EmailService> logger)
+    public EmailService(IOptions<SmtpOptions> smtpOptions)
     {
         _smtp = smtpOptions.Value;
-        logger.LogInformation($"Smtp port: {_smtp.Port}");
 
         _smtpClient = new SmtpClient(_smtp.Host)
         {
@@ -45,8 +44,18 @@ public class EmailService : IEmailService
         throw new NotImplementedException();
     }
 
-    public void SendVerificationEmail()
+    public void SendVerificationEmail(VerificationEmail email, string toEmail)
     {
-        throw new NotImplementedException();
+        var mailMessage = new MailMessage
+        {
+            From = new MailAddress(_smtp.Username),
+            Subject = email.Subject,
+            Body = email.Body,
+            IsBodyHtml = true,
+        };
+
+        mailMessage.To.Add(toEmail);
+
+        _smtpClient.Send(mailMessage);
     }
 }

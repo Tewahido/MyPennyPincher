@@ -3,7 +3,7 @@
 
 public class MFAEmail
 {
-    public readonly string Subject = "2-Factor Authentication";
+    public readonly string Subject = "MyPennyPincher - 2-Factor Authentication";
     
     public string Body { get; }
 
