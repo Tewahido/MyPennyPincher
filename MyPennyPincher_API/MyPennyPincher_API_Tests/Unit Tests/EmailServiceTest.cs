@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyPennyPincher_API.Models.ConfigModels;
 using MyPennyPincher_API.Models.Emails;

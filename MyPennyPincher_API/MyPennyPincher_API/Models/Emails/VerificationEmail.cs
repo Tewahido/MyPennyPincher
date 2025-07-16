@@ -5,8 +5,8 @@ public class VerificationEmail
     public readonly string Subject = "MyPennyPincher - Account Verification";
     public string Body { get; }
 
-    public VerificationEmail(int code)
+    public VerificationEmail(Uri link)
     {
-        Body = File.ReadAllText("Verification_Email_Template.html").Replace("{{CODE}}", code.ToString());
+        Body = File.ReadAllText("Verification_Email_Template.html").Replace("{{LINK}}", link.ToString());
     }
 }
