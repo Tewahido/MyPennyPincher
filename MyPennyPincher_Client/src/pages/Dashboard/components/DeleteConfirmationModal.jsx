@@ -1,9 +1,9 @@
 import { forwardRef, useRef, useImperativeHandle } from "react";
 import { createPortal } from "react-dom";
-import { DeleteIncome } from "../../../services/incomeService";
+import { DeleteIncome } from "../../../apiServices/incomeService";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteIncome } from "../../../store/slices/incomeSlice";
-import { DeleteExpense } from "../../../services/expenseService";
+import { DeleteExpense } from "../../../apiServices/expenseService";
 import { deleteExpense } from "../../../store/slices/expenseSlice";
 
 const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(

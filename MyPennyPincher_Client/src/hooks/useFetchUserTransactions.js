@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { GetUserExpenses } from "../services/expenseService";
+import { GetUserExpenses } from "../apiServices/expenseService";
 import { setExpenses } from "../store/slices/expenseSlice";
-import { GetUserIncomes } from "../services/incomeService";
+import { GetUserIncomes } from "../apiServices/incomeService";
 import { setIncomes } from "../store/slices/incomeSlice";
 import { setLoading } from "../store/slices/loadingSlice";
 import { logoutUser } from "../utils/authUtils";
-import { GetExpenseCategories } from "../services/expenseCategoryService";
+import { GetExpenseCategories } from "../apiServices/expenseCategoryService";
 import { setExpenseCategories } from "../store/slices/expenseSlice";
 
 export function useFetchUserTransactions() {

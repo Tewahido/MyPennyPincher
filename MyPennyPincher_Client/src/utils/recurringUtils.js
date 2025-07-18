@@ -1,5 +1,5 @@
-import { AddIncome } from "../services/incomeService";
-import { AddExpense } from "../services/expenseService";
+import { AddIncome } from "../apiServices/incomeService";
+import { AddExpense } from "../apiServices/expenseService";
 import { formatDate } from "./dateUtils";
 
 export function addMonthlyIncome(income, token) {

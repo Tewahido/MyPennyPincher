@@ -1,6 +1,6 @@
 import { BASE_URL } from "../config/apiConfig.js";
 
-export const SignUp = async (fullName, email, password) => {
+export const Register = async (fullName, email, password) => {
   const response = await fetch(`${BASE_URL}/auth/register`, {
     method: "POST",
     headers: {

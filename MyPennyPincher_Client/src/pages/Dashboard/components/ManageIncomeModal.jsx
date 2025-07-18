@@ -1,7 +1,7 @@
 import { forwardRef, useRef, useImperativeHandle, useState } from "react";
 import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { AddIncome, EditIncome } from "../../../services/incomeService";
+import { AddIncome, EditIncome } from "../../../apiServices/incomeService.js";
 import { addIncome, editIncome } from "../../../store/slices/incomeSlice.js";
 import { useNavigate } from "react-router-dom";
 import { addMonthlyIncome } from "../../../utils/recurringUtils.js";

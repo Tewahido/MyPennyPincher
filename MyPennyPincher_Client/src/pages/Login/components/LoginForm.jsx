@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { Login } from "../../../services/authService.js";
+import { Login } from "../../../apiServices/authService.js";
 import LoginInput from "./LoginInput.jsx";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
 import { loginUser } from "../../../utils/authUtils.js";
@@ -30,13 +30,13 @@ export default function LoginForm() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    
+
     const response = await Login(formData.email, formData.password);
 
     if (response.status != 200) {
       setLoginFailed(true);
       setErrorMessage(response.message);
-      
+
       return;
     }
 

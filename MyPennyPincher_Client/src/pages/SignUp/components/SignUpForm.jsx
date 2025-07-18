@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { SignUp } from "../../../services/authService.js";
+import { Register } from "../../../apiServices/authService.js";
 import { isValidElement, useState } from "react";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
 import SignUpInput from "./SignUpInput.jsx";
@@ -42,7 +42,7 @@ export default function SignUpForm() {
       return;
     }
 
-    const signUpStatus = await SignUp(
+    const signUpStatus = await Register(
       formData.fullName,
       formData.email,
       formData.password

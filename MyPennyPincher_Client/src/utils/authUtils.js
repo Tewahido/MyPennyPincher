@@ -5,7 +5,7 @@ import { clearExpenses } from "../store/slices/expenseSlice";
 import { jwtDecode } from "jwt-decode";
 import { resetMonth } from "../store/slices/monthSlice";
 import { setLoading } from "../store/slices/loadingSlice";
-import { Logout } from "../services/authService";
+import { Logout } from "../apiServices/authService";
 import { resetMonthRange } from "../store/slices/monthRangeSlice";
 
 export function extractTokenExpiryTime(token) {

@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, logoutUser } from "../utils/authUtils.js";
 import { useEffect } from "react";
-import { Refresh } from "../services/authService.js";
+import { Refresh } from "../apiServices/authService.js";
 
 export function useTokenChecker(interval = 60000) {
   const navigate = useNavigate();

@@ -2,7 +2,10 @@ import { forwardRef, useRef, useImperativeHandle, useState } from "react";
 import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addRecurringExpense } from "../../../utils/recurringUtils";
-import { EditExpense, AddExpense } from "../../../services/expenseService";
+import {
+  EditExpense,
+  AddExpense,
+} from "../../../apiServices/expenseService.js";
 import { editExpense, addExpense } from "../../../store/slices/expenseSlice";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
@@ -12,7 +15,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
   ref
 ) {
   const dialog = useRef(ref);
-  
+
   const reloadExpenses = useSelector((state) => state.expense.reloadExpenses);
 
   const expenseCategories = useSelector(
@@ -68,7 +71,6 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
     if (status != 400 || status != 401) {
       if (!expense && isRecurring) {
         addRecurringExpense(currentExpense, user.token);
-        
       }
       expense
         ? dispatch(
