@@ -2,7 +2,7 @@
 
 public class SmtpOptions
 {
-    public const string SmtpSection = "SmtpSettings";
+    public const string SectionName = "SmtpSettings";
 
     public required string Host { get; set; }
     public int Port { get; set; }

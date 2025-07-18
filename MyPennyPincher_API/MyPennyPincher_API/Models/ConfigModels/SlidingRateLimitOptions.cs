@@ -2,7 +2,7 @@ namespace MyPennyPincher_API.Models.ConfigModels;
 
 public class SlidingRateLimitOptions
 {
-    public const string SlidingRateLimitSection = "SlidingRateLimit";
+    public const string SectionName = "SlidingRateLimit";
 
     public int PermitLimit { get; set; }
     public int Window { get; set; }

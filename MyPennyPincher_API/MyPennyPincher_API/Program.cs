@@ -39,10 +39,13 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddOpenApi();
 
-builder.Services.Configure<JwtOptions>(
-    builder.Configuration.GetSection(JwtOptions.JwtSection));
+builder.Services.Configure<GeneralSettings>(
+    builder.Configuration.GetSection(GeneralSettings.SectionName));
 
-JwtOptions jwtOptions = builder.Configuration.GetSection(JwtOptions.JwtSection)
+builder.Services.Configure<JwtOptions>(
+    builder.Configuration.GetSection(JwtOptions.SectionName));
+
+JwtOptions jwtOptions = builder.Configuration.GetSection(JwtOptions.SectionName)
                         .Get<JwtOptions>()!;
 
 builder.Services.AddAuthentication(options =>
@@ -83,7 +86,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-SlidingRateLimitOptions slidingRateOptions  = builder.Configuration.GetSection(SlidingRateLimitOptions.SlidingRateLimitSection)
+SlidingRateLimitOptions slidingRateOptions  = builder.Configuration.GetSection(SlidingRateLimitOptions.SectionName)
                                                     .Get<SlidingRateLimitOptions>()!;
 
 var slidingPolicy = "sliding";
@@ -117,7 +120,7 @@ builder.Services.AddRateLimiter(options =>
 });
 
 builder.Services.Configure<SmtpOptions>(
-    builder.Configuration.GetSection(SmtpOptions.SmtpSection));
+    builder.Configuration.GetSection(SmtpOptions.SectionName));
 
 builder.Services.AddOpenApi();
 

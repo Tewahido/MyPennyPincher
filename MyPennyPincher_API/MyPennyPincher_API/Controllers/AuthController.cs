@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
@@ -45,6 +46,11 @@ public class AuthController : ControllerBase
         }
 
         User user = await _authService.Login(login);
+
+        if (!user.Verified) 
+        {
+            return Ok();
+        }
 
         var userAccessToken = _tokenService.GenerateAccessToken(user.UserId);
 

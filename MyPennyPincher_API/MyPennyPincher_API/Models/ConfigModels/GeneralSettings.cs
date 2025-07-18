@@ -2,5 +2,7 @@
 
 public class GeneralSettings
 {
+    public const string SectionName = "GeneralSettings";
+
     public required string FrontendBaseUrl { get; set; }
 }

@@ -86,8 +86,8 @@ public class EmailServiceTest : IDisposable
     public async void GIVEN_Verification_Email_WHEN_SendingEmail_THEN_ReceiveEmailInMailHog()
     {
         //Arrange
-        int code = 849509;
-        VerificationEmail verificationEmail = new VerificationEmail(code);
+        Uri link = new Uri("https://localhost:5173/verify");
+        VerificationEmail verificationEmail = new VerificationEmail(link);
         string toEmail = "test@email.com";
         _emailService.SendVerificationEmail(verificationEmail, toEmail);
 
