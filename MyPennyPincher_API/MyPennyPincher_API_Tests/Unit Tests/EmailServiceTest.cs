@@ -96,7 +96,8 @@ public class EmailServiceTest : IDisposable
 
         UserAccessToken userAccessToken = new UserAccessToken { UserId = Guid.NewGuid(), Token = "edjneieig" };
 
-        VerificationEmail verificationEmail = new VerificationEmail(options);
+        VerificationEmail verificationEmail = new VerificationEmail(userAccessToken, options);
+        
         string toEmail = "test@email.com";
         _emailService.SendVerificationEmail(verificationEmail, toEmail);
 
