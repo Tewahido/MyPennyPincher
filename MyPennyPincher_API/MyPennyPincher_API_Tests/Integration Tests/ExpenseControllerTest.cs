@@ -100,6 +100,9 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
         var registerUserResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
         registerUserResponse.EnsureSuccessStatusCode();
 
+        var verificationResult = await HttpRequestSender.PostAsync(_client, AuthRoute + "/verify", user.UserId.ToString());
+        verificationResult.EnsureSuccessStatusCode();
+
         Login login = TestDataFactory.CreateUserLogin(user);
 
         var loginUserResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/login", login);

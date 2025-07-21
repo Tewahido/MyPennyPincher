@@ -47,7 +47,9 @@ public class AuthController : ControllerBase
 
         User user = await _authService.Login(login);
 
-        if (!user.IsVerified) 
+        Console.WriteLine($"IsVerified: {user.IsVerified}");
+
+        if (!user.IsVerified)
         {
             return Ok();
         }
@@ -98,6 +100,8 @@ public class AuthController : ControllerBase
     [HttpPost("verify")]
     public async Task<ActionResult> VerifyUser([FromBody] string userId)
     {
+        await _authService.VerifyUser(userId);
 
+        return Ok();
     }
 }

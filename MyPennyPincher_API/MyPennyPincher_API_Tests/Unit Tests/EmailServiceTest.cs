@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MyPennyPincher_API.Models.ConfigModels;
+using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Models.Emails;
 using MyPennyPincher_API.Services;
 using MyPennyPincher_API.Services.Interfaces;
@@ -86,8 +87,16 @@ public class EmailServiceTest : IDisposable
     public async void GIVEN_Verification_Email_WHEN_SendingEmail_THEN_ReceiveEmailInMailHog()
     {
         //Arrange
-        Uri link = new Uri("https://localhost:5173/verify");
-        VerificationEmail verificationEmail = new VerificationEmail(link);
+        var generalSettings = new GeneralSettings
+        {
+            FrontendBaseUrl = "http://localhost:3000"
+        };
+
+        var options = Options.Create(generalSettings);
+
+        UserAccessToken userAccessToken = new UserAccessToken { UserId = Guid.NewGuid(), Token = "edjneieig" };
+
+        VerificationEmail verificationEmail = new VerificationEmail(options);
         string toEmail = "test@email.com";
         _emailService.SendVerificationEmail(verificationEmail, toEmail);
 

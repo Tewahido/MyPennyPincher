@@ -10,15 +10,17 @@ public class VerificationEmail
     public readonly string Subject = "MyPennyPincher - Account Verification";
 
     private readonly GeneralSettings _generalSettings;
-    public string Body { get; }
+    public string? Body { get; }
 
-    public VerificationEmail(UserAccessToken userAccessToken, IOptions<GeneralSettings> generalSettings)
+    public VerificationEmail(IOptions<GeneralSettings> generalSettings)
     {
         _generalSettings = generalSettings.Value;
+    }
 
+    public string Generate(UserAccessToken userAccessToken)
+    {
         var link = GenerateVerificationLink(userAccessToken);
-
-        Body = File.ReadAllText("Verification_Email_Template.html").Replace("{{LINK}}", link);
+        return File.ReadAllText("Verification_Email_Template.html").Replace("{{LINK}}", link);
     }
 
     private string GenerateVerificationLink(UserAccessToken userAccessToken)
