@@ -39,6 +39,8 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddOpenApi();
 
+builder.Services.AddMemoryCache();
+
 builder.Services.Configure<GeneralSettings>(
     builder.Configuration.GetSection(GeneralSettings.SectionName));
 

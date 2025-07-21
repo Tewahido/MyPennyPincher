@@ -64,6 +64,18 @@ public class AuthService : IAuthService
 
         return user;
     }
- 
 
+    public async Task VerifyUser(string userId)
+    {
+        var userToVerify = await _authRepository.FindByIdAsync(userId);
+
+        if (userToVerify == null) 
+        {
+            throw new InvalidCredentialsException("Invalid user credentials");
+        }
+
+        userToVerify.IsVerified = true;
+
+        await _authRepository.SaveChangesAsync();
+    }
 }

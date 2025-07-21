@@ -6,6 +6,8 @@ public interface IAuthRepository
 {
     Task AddAsync(User user);
     Task<User?> FindByEmailAsync(string email);
+    Task<User?> FindByIdAsync(string userId);
+    Task VerifyUser (string userId);
     Task SaveChangesAsync();
 
 }
