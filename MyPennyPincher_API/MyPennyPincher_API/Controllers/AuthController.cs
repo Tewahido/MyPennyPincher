@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
+using MyPennyPincher_API.Models.ConfigModels;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
+using MyPennyPincher_API.Models.Emails;
 using MyPennyPincher_API.Services;
 using MyPennyPincher_API.Services.Interfaces;
 
@@ -15,12 +19,16 @@ public class AuthController : ControllerBase
     private readonly IAuthService _authService;
     private readonly ITokenService _tokenService;
     private readonly IEmailService _emailService;
+    private readonly GeneralSettings _generalSettings;
+    private readonly IMemoryCache _memoryCache;
 
-    public AuthController( IAuthService authService, ITokenService tokenService, IEmailService emailService)
+    public AuthController(IAuthService authService, ITokenService tokenService, IEmailService emailService, IOptions<GeneralSettings> generalSettings, IMemoryCache memoryCache)
     {
         _authService = authService;
         _tokenService = tokenService;
         _emailService = emailService;
+        _generalSettings = generalSettings.Value;
+        _memoryCache = memoryCache;
     }
 
     [HttpPost("register")]
@@ -32,6 +40,17 @@ public class AuthController : ControllerBase
         }
 
         User? registredUser = await _authService.Register(user);
+
+        var userAccessToken = _tokenService.GenerateAccessToken(user.UserId);
+
+        var verificationEmail = new VerificationEmail(userAccessToken, _generalSettings);
+
+        _emailService.SendVerificationEmail(verificationEmail, user.Email);
+
+        _memoryCache.Set(userAccessToken.UserId, userAccessToken.Token, new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+        });
 
         return Ok();
     }
@@ -98,9 +117,9 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("verify")]
-    public async Task<ActionResult> VerifyUser([FromBody] string userId)
+    public async Task<ActionResult> VerifyUser([FromBody] UserAccessToken userAccessToken)
     {
-        await _authService.VerifyUser(userId);
+        await _authService.VerifyUser(userAccessToken);
 
         return Ok();
     }

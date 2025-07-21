@@ -11,9 +11,9 @@ public class VerificationEmail
     private readonly GeneralSettings _generalSettings;
     public string Body { get; }
 
-    public VerificationEmail(UserAccessToken userAccessToken, IOptions<GeneralSettings> generalSettings)
+    public VerificationEmail(UserAccessToken userAccessToken, GeneralSettings generalSettings)
     {
-        _generalSettings = generalSettings.Value;
+        _generalSettings = generalSettings;
 
         var link = GenerateVerificationLink(userAccessToken);
 

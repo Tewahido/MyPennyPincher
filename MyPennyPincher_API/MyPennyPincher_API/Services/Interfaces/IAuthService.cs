@@ -7,5 +7,5 @@ public interface IAuthService
 {
     Task<User> Register(User user);
     Task<User> Login(Login login);
-    Task VerifyUser(string userId);
+    Task VerifyUser(UserAccessToken userAccessToken);
 }

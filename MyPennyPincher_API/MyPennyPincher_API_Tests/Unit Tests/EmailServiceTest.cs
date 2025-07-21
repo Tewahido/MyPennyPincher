@@ -18,9 +18,15 @@ public class EmailServiceTest : IDisposable
     private readonly IEmailService _emailService;
     private readonly MailHogManager _mailHogManager;
     private readonly IConfiguration _config;
+    private readonly GeneralSettings _generalSettings;
 
     public EmailServiceTest() 
     {
+        _generalSettings = new GeneralSettings 
+        { 
+            FrontendBaseUrl = "http://localhost:3000" 
+        };
+
         var configData = new Dictionary<string, string?>
         {
             { "SmtpSettings:Host", "localhost" },
@@ -87,16 +93,9 @@ public class EmailServiceTest : IDisposable
     public async void GIVEN_Verification_Email_WHEN_SendingEmail_THEN_ReceiveEmailInMailHog()
     {
         //Arrange
-        var generalSettings = new GeneralSettings
-        {
-            FrontendBaseUrl = "http://localhost:3000"
-        };
-
-        var options = Options.Create(generalSettings);
-
         UserAccessToken userAccessToken = new UserAccessToken { UserId = Guid.NewGuid(), Token = "edjneieig" };
 
-        VerificationEmail verificationEmail = new VerificationEmail(userAccessToken, options);
+        VerificationEmail verificationEmail = new VerificationEmail(userAccessToken, _generalSettings);
         
         string toEmail = "test@email.com";
         _emailService.SendVerificationEmail(verificationEmail, toEmail);
