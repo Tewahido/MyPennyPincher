@@ -138,7 +138,6 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
         var incomes = JsonConvert.DeserializeObject<List<Income>>(json);
 
         //Assert
-
         Assert.NotNull(incomes);
         Assert.All(incomes, income => Assert.IsType<Income>(income));
         Assert.Equal(3, incomes.Count);

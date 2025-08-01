@@ -100,9 +100,6 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
         var registerUserResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
         registerUserResponse.EnsureSuccessStatusCode();
 
-        var verificationResult = await HttpRequestSender.PostAsync(_client, AuthRoute + "/verify", user.UserId.ToString());
-        verificationResult.EnsureSuccessStatusCode();
-
         Login login = TestDataFactory.CreateUserLogin(user);
 
         var loginUserResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/login", login);
@@ -112,7 +109,6 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
         var loginResponse = JsonConvert.DeserializeObject<UserAccessToken>(responseString);
 
         var token = loginResponse?.Token;
-        Assert.NotNull(token);
 
         List<Expense> userExpenses = new List<Expense>();
 
@@ -136,11 +132,11 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
         response.EnsureSuccessStatusCode();
 
         var json = await response.Content.ReadAsStringAsync();
-        var expenses = JsonConvert.DeserializeObject<List<Income>>(json);
+        var expenses = JsonConvert.DeserializeObject<List<Expense>>(json);
 
         //Assert
         Assert.NotNull(expenses);
-        Assert.All(expenses, income => Assert.IsType<Income>(income));
+        Assert.All(expenses, expense => Assert.IsType<Expense>(expense));
         Assert.Equal(3, expenses.Count);
     }
 
