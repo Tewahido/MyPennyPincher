@@ -16,12 +16,6 @@ using MyPennyPincher_API.Models.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (!builder.Environment.IsEnvironment("Testing"))
-{
-    builder.Services.AddDbContext<MyPennyPincherDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DbCon")));
-}
-
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -65,7 +59,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtOptions.Issuer,
         ValidAudience = jwtOptions.Issuer,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key!))
     };
 
     options.Events = new JwtBearerEvents
@@ -125,8 +119,6 @@ builder.Services.Configure<SmtpOptions>(
     builder.Configuration.GetSection(SmtpOptions.SectionName));
 
 builder.Services.AddOpenApi();
-
-builder.Services.AddAuthorization();
 
 builder.Services.AddAuthorization();
 

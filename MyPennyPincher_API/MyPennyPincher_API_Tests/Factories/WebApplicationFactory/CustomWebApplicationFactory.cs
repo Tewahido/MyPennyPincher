@@ -21,6 +21,8 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 options.UseInMemoryDatabase(InMemoryDbName);
             });
 
+            services.AddDistributedMemoryCache();
+
             services.AddAuthentication("TestScheme")
                 .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", options => { });
 

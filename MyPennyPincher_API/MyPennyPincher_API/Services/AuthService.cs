@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using MyPennyPincher_API.Exceptions;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
@@ -10,12 +11,12 @@ namespace MyPennyPincher_API.Services;
 public class AuthService : IAuthService
 {
     private readonly IAuthRepository _authRepository;
-    private readonly IMemoryCache _memoryCache;
+    private readonly IDistributedCache _distributedCache;
 
-    public AuthService(IAuthRepository authRepository, IMemoryCache memoryCache) 
+    public AuthService(IAuthRepository authRepository, IDistributedCache distributedCache) 
     {  
         _authRepository = authRepository;
-        _memoryCache = memoryCache;
+        _distributedCache = distributedCache;
     }
 
     public async Task<User> Register(User user)
@@ -70,24 +71,25 @@ public class AuthService : IAuthService
 
     public async Task VerifyUser(UserAccessToken userAccessToken)
     {
-        var storedToken = _memoryCache.Get(userAccessToken.UserId)?.ToString();
+        var userId = userAccessToken.UserId.ToString();
+        var storedToken = System.Text.Encoding.UTF8.GetString(_distributedCache.Get(userId)!);
 
         if (storedToken == null || storedToken != userAccessToken.Token) 
         {
             throw new InvalidCredentialsException("Invalid user credentials");
         }
 
-        var userToVerify = await _authRepository.FindByIdAsync(userAccessToken.UserId.ToString());
+        var userToVerify = await _authRepository.FindByIdAsync(userId);
 
         if (userToVerify == null) 
         {
             throw new InvalidCredentialsException("Invalid user credentials");
         }
 
-        userToVerify.IsVerified = true;
-
-        _memoryCache.Remove(userAccessToken.UserId);
+        userToVerify.Verify();
 
         await _authRepository.SaveChangesAsync();
+
+        _distributedCache.Remove(userId);
     }
 }

@@ -10,7 +10,7 @@ using MyPennyPincher_API_Tests.MailhogManager;
 using Newtonsoft.Json.Linq;
 using System.Text;
 
-namespace MyPennyPincher_API_Tests.Integration_Tests;
+namespace MyPennyPincher_API_Tests.Unit_Tests;
 
 public class EmailServiceTest : IDisposable
 {

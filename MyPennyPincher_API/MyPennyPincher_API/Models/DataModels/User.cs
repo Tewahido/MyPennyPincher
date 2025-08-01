@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.OpenApi.Validations.Rules;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 
 namespace MyPennyPincher_API.Models.DataModels;
 
@@ -19,4 +21,9 @@ public partial class User
     public virtual ICollection<Expense>? Expenses { get; set; } = new List<Expense>();
     
     public virtual ICollection<Income>? Incomes { get; set; } = new List<Income>();
+
+    public void Verify()
+    {
+        IsVerified = true;
+    }
 }

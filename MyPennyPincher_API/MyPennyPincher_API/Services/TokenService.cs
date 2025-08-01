@@ -16,13 +16,11 @@ namespace MyPennyPincher_API.Services;
 public class TokenService : ITokenService
 {
     private readonly ITokenRepository _tokenRepository;
-    private readonly IConfiguration _config;
     private readonly JwtOptions _jwtOptions;
 
-    public TokenService(IConfiguration config, ITokenRepository tokenRepository, IOptions<JwtOptions> options)
+    public TokenService(ITokenRepository tokenRepository, IOptions<JwtOptions> options)
     {
         _tokenRepository = tokenRepository;
-        _config = config;
         _jwtOptions = options.Value;
 
     }
@@ -65,7 +63,7 @@ public class TokenService : ITokenService
     public UserAccessToken GenerateAccessToken(Guid userId)
     {
 
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key!));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var convertedUserId = userId.ToString();
@@ -73,9 +71,10 @@ public class TokenService : ITokenService
         var claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier, convertedUserId),
+            new Claim("2FA","true")
         };
 
-        var tokenValidityTime = DateTime.Now.AddMinutes(_config.GetValue<double>("Jwt:TokenValidityMins"));
+        var tokenValidityTime = DateTime.Now.AddMinutes(_jwtOptions.TokenValidityMins);
 
         var token = new JwtSecurityToken(
             issuer: _jwtOptions.Issuer,
@@ -127,7 +126,7 @@ public class TokenService : ITokenService
 
         return new CookieOptions
         {
-            HttpOnly = false,
+            HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.None,
             Path = "/auth/refresh",

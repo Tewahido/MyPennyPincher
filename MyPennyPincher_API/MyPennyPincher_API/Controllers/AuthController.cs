@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using MyPennyPincher_API.Models.ConfigModels;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Models.Emails;
-using MyPennyPincher_API.Services;
 using MyPennyPincher_API.Services.Interfaces;
 
 namespace MyPennyPincher_API.Controllers;
@@ -20,15 +18,15 @@ public class AuthController : ControllerBase
     private readonly ITokenService _tokenService;
     private readonly IEmailService _emailService;
     private readonly GeneralSettings _generalSettings;
-    private readonly IMemoryCache _memoryCache;
+    private readonly IDistributedCache _distributedCache;
 
-    public AuthController(IAuthService authService, ITokenService tokenService, IEmailService emailService, IOptions<GeneralSettings> generalSettings, IMemoryCache memoryCache)
+    public AuthController(IAuthService authService, ITokenService tokenService, IEmailService emailService, IOptions<GeneralSettings> generalSettings, IDistributedCache distributedCache)
     {
         _authService = authService;
         _tokenService = tokenService;
         _emailService = emailService;
         _generalSettings = generalSettings.Value;
-        _memoryCache = memoryCache;
+        _distributedCache = distributedCache;
     }
 
     [HttpPost("register")]
@@ -47,7 +45,7 @@ public class AuthController : ControllerBase
 
         _emailService.SendVerificationEmail(verificationEmail, user.Email);
 
-        _memoryCache.Set(userAccessToken.UserId, userAccessToken.Token, new MemoryCacheEntryOptions
+        _distributedCache.Set(userAccessToken.UserId.ToString(), System.Text.Encoding.UTF8.GetBytes(userAccessToken.Token), new DistributedCacheEntryOptions
         {
             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
         });
@@ -65,8 +63,6 @@ public class AuthController : ControllerBase
         }
 
         User user = await _authService.Login(login);
-
-        Console.WriteLine($"IsVerified: {user.IsVerified}");
 
         if (!user.IsVerified)
         {
@@ -119,6 +115,11 @@ public class AuthController : ControllerBase
     [HttpPost("verify")]
     public async Task<ActionResult> VerifyUser([FromBody] UserAccessToken userAccessToken)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         await _authService.VerifyUser(userAccessToken);
 
         return Ok();

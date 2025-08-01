@@ -28,7 +28,7 @@ public class EmailService : IEmailService
     {
         var mailMessage = new MailMessage
         {
-            From = new MailAddress(_smtp.Username),
+            From = new MailAddress(_smtp.Username!),
             Subject = email.Subject,
             Body = email.Body,
             IsBodyHtml = true,
@@ -36,7 +36,7 @@ public class EmailService : IEmailService
 
         mailMessage.To.Add(toEmail);
 
-        _smtpClient.Send(mailMessage);
+        SendEmail(mailMessage);
     }
 
     public void SendPasswordChangeEmail()
@@ -48,7 +48,7 @@ public class EmailService : IEmailService
     {
         var mailMessage = new MailMessage
         {
-            From = new MailAddress(_smtp.Username),
+            From = new MailAddress(_smtp.Username!),
             Subject = email.Subject,
             Body = email.Body,
             IsBodyHtml = true,
@@ -56,6 +56,24 @@ public class EmailService : IEmailService
 
         mailMessage.To.Add(toEmail);
 
-        _smtpClient.Send(mailMessage);
+        SendEmail(mailMessage);
+    }
+
+    private async void SendEmail(MailMessage mailMessage) 
+    {
+        try
+        {
+            await _smtpClient.SendMailAsync(mailMessage);
+        }
+        catch (SmtpException smtpEx)
+        {
+            Console.WriteLine("SMTP error: " + smtpEx.ToString());
+            throw;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Unexpected error: " + ex.ToString());
+            throw;
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Options;
 using MyPennyPincher_API.Models.ConfigModels;
 using MyPennyPincher_API.Models.DTO;
 

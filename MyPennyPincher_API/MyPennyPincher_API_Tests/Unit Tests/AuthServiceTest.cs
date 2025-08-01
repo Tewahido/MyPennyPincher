@@ -1,4 +1,5 @@
-﻿using MyPennyPincher_API.Context;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Exceptions;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
@@ -7,20 +8,21 @@ using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
 using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API_Tests.Test_Utilities;
+using NSubstitute;
 
-namespace MyPennyPincher_API_Tests;
+namespace MyPennyPincher_API_Tests.Unit_Tests;
 
-public class AuthServiceTest : IDisposable
+public class AuthServiceTest
 {
     private readonly IAuthService _authService;
-    private readonly MyPennyPincherDbContext _context;
     private readonly IAuthRepository _authRepository; 
+    private readonly IDistributedCache _distributedCache;
 
     public AuthServiceTest() 
     {
-        _context = DbContextFactory.GenerateInMemoryDB();
-        _authRepository = new AuthRepository(_context);
-        _authService = new AuthService(_authRepository);
+        _authRepository = Substitute.For<IAuthRepository>();
+        _distributedCache = Substitute.For<IDistributedCache>();
+        _authService = new AuthService(_authRepository,_distributedCache);
     }
 
     [Fact]
@@ -34,12 +36,9 @@ public class AuthServiceTest : IDisposable
 
         bool passwordIsHashed = BCrypt.Net.BCrypt.Verify(user.Password, registeredUser.Password);
 
-        var expectedUser = _context.Users.FirstOrDefault(u => u.UserId == user.UserId);
-
         //Assert
-        Assert.NotNull(registeredUser);
         Assert.True(passwordIsHashed);
-        Assert.NotNull(expectedUser);
+        await _authRepository.Received().AddAsync(Arg.Is<User>(u => u.Email == user.Email && u.FullName == user.FullName && u.UserId == user.UserId));
     }
 
     [Fact]
@@ -57,17 +56,23 @@ public class AuthServiceTest : IDisposable
     {
         //Arrange
         User user = TestDataFactory.CreateTestUser();
-
-        User registeredUser = await _authService.Register(user);
-
         Login login = TestDataFactory.CreateUserLogin(user);
+
+        _authRepository.FindByEmailAsync(login.Email)
+            .Returns(new User
+            {
+                Email = user.Email,
+                FullName = user.FullName,
+                UserId = user.UserId,
+                Password = BCrypt.Net.BCrypt.HashPassword(user.Password)
+            });
 
         //Act
         var expectedUser = await _authService.Login(login);
 
         //Assert
-        Assert.NotNull(expectedUser);
-        Assert.Equal(user.Email, expectedUser.Email);
+        await _authRepository.Received().FindByEmailAsync(login.Email);
+
     }
 
     [Fact]
@@ -86,10 +91,5 @@ public class AuthServiceTest : IDisposable
 
         //Act & Assert
         await Assert.ThrowsAsync<InvalidCredentialsException>(async () => await _authService.Login(login));
-    }
-
-    public void Dispose()
-    {
-        _context?.Dispose();
     }
 }

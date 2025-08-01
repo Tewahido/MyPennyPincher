@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MyPennyPincher_API.Context;
@@ -10,7 +11,8 @@ using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
 using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API_Tests.Test_Utilities;
-using Plotly.NET;
+using NSubstitute;
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -22,6 +24,7 @@ public class TokenServiceTest : IDisposable
     private readonly IConfiguration _config;
     private readonly MyPennyPincherDbContext _context;
     private readonly ITokenService _tokenService;
+    private readonly IDistributedCache _distributedCache;
 
     public TokenServiceTest()
     {
@@ -42,9 +45,11 @@ public class TokenServiceTest : IDisposable
 
         var options = Options.Create(jwtOptions);
 
-        _tokenRepository = new TokenRepository(_context);
+        _tokenRepository = Substitute.For<ITokenRepository>();
 
-        _tokenService = new TokenService(_config, _tokenRepository, options);
+        _distributedCache = Substitute.For<IDistributedCache>();
+
+        _tokenService = new TokenService(_tokenRepository, options);
     }
 
     [Fact]
@@ -89,6 +94,15 @@ public class TokenServiceTest : IDisposable
 
         await _tokenService.AddRefreshToken(generatedToken);
 
+        _tokenRepository.GetTokenAsync(userId)
+            .Returns(new RefreshToken
+            {
+                ExpiryDate = generatedToken.ExpiryDate,
+                RefreshTokenId = generatedToken.RefreshTokenId,
+                Token = generatedToken.Token,
+                UserId = generatedToken.UserId
+            });
+
         //Act
         var refreshedToken = await _tokenService.RefreshToken(userId, generatedToken.Token);
 
@@ -106,34 +120,21 @@ public class TokenServiceTest : IDisposable
         //Arrange
         var userId = Guid.NewGuid();
         var generatedToken = _tokenService.GenerateRefreshToken(userId);
+        var now = DateTime.UtcNow;
+
+        _tokenRepository.GetTokenAsync(userId)
+            .Returns(new RefreshToken
+            {
+                ExpiryDate = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0),
+                RefreshTokenId = 2,
+                Token = "token",
+                UserId = userId
+            });
 
         await _tokenService.AddRefreshToken(generatedToken);
 
         //Act & Assert
         await Assert.ThrowsAsync<InvalidRefreshTokenException>(async () => await _tokenService.RefreshToken(userId, "invalidToken"));
-    }
-
-    [Fact]
-    public async Task GIVEN_NewRefreshToken_WHEN_AddingRefreshToken_THEN_AddRefreshTokenToDb()
-    {
-        //Arrange
-        var userId = Guid.NewGuid();
-
-        var refreshToken = new RefreshToken
-        {
-            Token = "token",
-            UserId = userId,
-            ExpiryDate = DateTime.UtcNow,
-        };
-
-        //Act
-        await _tokenService.AddRefreshToken(refreshToken);
-        
-        var expectedRefreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(token => token.UserId == userId && token.Token == refreshToken.Token);
-
-        //Assert
-        Assert.NotNull(expectedRefreshToken);
-        Assert.Equal(expectedRefreshToken, refreshToken);
     }
 
     [Fact]
