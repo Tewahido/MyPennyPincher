@@ -62,7 +62,6 @@ public class TokenService : ITokenService
 
     public UserAccessToken GenerateAccessToken(Guid userId)
     {
-
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key!));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 

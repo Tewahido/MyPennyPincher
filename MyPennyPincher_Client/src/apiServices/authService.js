@@ -70,3 +70,15 @@ export const Refresh = async (userId) => {
 
   return response;
 };
+
+export const Verify = (userId, token) => {
+  const response = fetch(`${BASE_URL}/auth/verify`, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({ userId, token }),
+  });
+
+  return response;
+};

@@ -5,6 +5,7 @@ import "./App.css";
 import Login from "./pages/Login/Login.jsx";
 import SignUp from "./pages/SignUp/SignUp.jsx";
 import { AnimatePresence } from "framer-motion";
+import Verification from "./pages/Verification/Verification.jsx";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/verify" element={<Verification />} />
         <Route
           path="*"
           element={<p className="errorMessage">404 - Page not found</p>}

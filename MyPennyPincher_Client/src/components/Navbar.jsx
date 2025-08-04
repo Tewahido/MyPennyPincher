@@ -41,31 +41,33 @@ export default function Navbar() {
             className="mb-3 md:mb-2 lg:mb-0 h-8 md:h-10 lg:h-15 cursor-pointer"
           />
           <Link
-            to="/"
+            to={location.pathname !== "/verify" && "/"}
             className="text-green-700 font-bold text-xl md:text-2xl lg:text-3xl mb-3 hover:text-green-600 transition duration-150"
           >
             MyPennyPincher
           </Link>
         </div>
-        {location.pathname !== "/login" && location.pathname !== "/signup" && (
-          <div className=" flex items-end h-full gap-10 mr-1 md:mr-3 lg:mr-5">
-            {userLoggedIn && location.pathname !== "/dashboard" && (
+        {location.pathname !== "/login" &&
+          location.pathname !== "/signup" &&
+          location.pathname !== "/verify" && (
+            <div className=" flex items-end h-full gap-10 mr-1 md:mr-3 lg:mr-5">
+              {userLoggedIn && location.pathname !== "/dashboard" && (
+                <Link
+                  to="/dashboard"
+                  className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
+                >
+                  Dashboard
+                </Link>
+              )}
               <Link
-                to="/dashboard"
+                to="/login"
                 className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
+                onClick={handleLogout}
               >
-                Dashboard
+                {userLoggedIn ? "Logout" : "Login"}
               </Link>
-            )}
-            <Link
-              to="/login"
-              className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
-              onClick={handleLogout}
-            >
-              {userLoggedIn ? "Logout" : "Login"}
-            </Link>
-          </div>
-        )}
+            </div>
+          )}
       </nav>
       {scrolled && <div className=" mx-auto h-0.5 w-[90vw] bg-green-700"></div>}
     </div>
