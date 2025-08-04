@@ -106,9 +106,6 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
         var registeredUserResult = await HttpRequestSender.PostAsync(_client, BaseRoute + "/register", user);
         registeredUserResult.EnsureSuccessStatusCode();
 
-        var verificationResult = await HttpRequestSender.PostAsync(_client, BaseRoute + "/verify", user.UserId.ToString());
-        verificationResult.EnsureSuccessStatusCode();
-
         Login login = TestDataFactory.CreateUserLogin(user);
 
         var response = await HttpRequestSender.PostAsync(_client, BaseRoute + "/login", login);

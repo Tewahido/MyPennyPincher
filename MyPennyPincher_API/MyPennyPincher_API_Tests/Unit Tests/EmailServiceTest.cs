@@ -55,7 +55,7 @@ public class EmailServiceTest : IDisposable
     }
 
     [Fact]
-    public async void GIVEN_MFAEmail_WHEN_SendingEmail_THEN_ReceiveEmailInMailHog()
+    public async Task GIVEN_MFAEmail_WHEN_SendingEmail_THEN_ReceiveEmailInMailHog()
     {
         //Arrange
         int code = 849509;
@@ -90,7 +90,7 @@ public class EmailServiceTest : IDisposable
     }
 
     [Fact]
-    public async void GIVEN_Verification_Email_WHEN_SendingEmail_THEN_ReceiveEmailInMailHog()
+    public async Task GIVEN_Verification_Email_WHEN_SendingEmail_THEN_ReceiveEmailInMailHog()
     {
         //Arrange
         UserAccessToken userAccessToken = new UserAccessToken { UserId = Guid.NewGuid(), Token = "edjneieig" };

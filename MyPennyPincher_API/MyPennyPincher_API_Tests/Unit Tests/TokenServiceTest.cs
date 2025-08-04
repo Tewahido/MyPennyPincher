@@ -6,13 +6,11 @@ using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Exceptions;
 using MyPennyPincher_API.Models.ConfigModels;
 using MyPennyPincher_API.Models.DataModels;
-using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
 using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API_Tests.Test_Utilities;
 using NSubstitute;
-using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -24,7 +22,6 @@ public class TokenServiceTest : IDisposable
     private readonly IConfiguration _config;
     private readonly MyPennyPincherDbContext _context;
     private readonly ITokenService _tokenService;
-    private readonly IDistributedCache _distributedCache;
 
     public TokenServiceTest()
     {
@@ -46,8 +43,6 @@ public class TokenServiceTest : IDisposable
         var options = Options.Create(jwtOptions);
 
         _tokenRepository = Substitute.For<ITokenRepository>();
-
-        _distributedCache = Substitute.For<IDistributedCache>();
 
         _tokenService = new TokenService(_tokenRepository, options);
     }

@@ -18,6 +18,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+builder.Services.AddDbContext<MyPennyPincherDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbCon")));
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IIncomeService, IncomeService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
@@ -32,8 +35,6 @@ builder.Services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddOpenApi();
-
-builder.Services.AddMemoryCache();
 
 builder.Services.Configure<GeneralSettings>(
     builder.Configuration.GetSection(GeneralSettings.SectionName));
@@ -126,12 +127,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
     });
 });
+
+builder.Services.AddDistributedMemoryCache();
 
 var app = builder.Build();
 
@@ -146,6 +149,8 @@ app.UseRateLimiter();
 app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

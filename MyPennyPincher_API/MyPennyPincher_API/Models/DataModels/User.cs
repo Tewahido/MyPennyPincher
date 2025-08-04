@@ -7,7 +7,7 @@ namespace MyPennyPincher_API.Models.DataModels;
 public partial class User
 {
     [Key]
-    public Guid UserId { get; set; } = new Guid();
+    public Guid UserId { get; set; } = Guid.NewGuid();
     
     public string FullName { get; set; } = null!;
 

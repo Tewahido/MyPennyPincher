@@ -16,7 +16,7 @@ public class VerificationEmail
 
         var link = GenerateVerificationLink(userAccessToken);
 
-        Body = File.ReadAllText("Verification_Email_Template.html").Replace("{{LINK}}", link);
+        Body = File.ReadAllText("Models/Emails/EmailTemplates/Verification_Email_Template.html").Replace("{{LINK}}", link);
     }
 
     private string GenerateVerificationLink(UserAccessToken userAccessToken)
