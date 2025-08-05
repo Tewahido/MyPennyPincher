@@ -16,6 +16,8 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
 ) {
   const dialog = useRef(ref);
 
+  const [loading, setLoading] = useState(false);
+
   const reloadExpenses = useSelector((state) => state.expense.reloadExpenses);
 
   const expenseCategories = useSelector(
@@ -39,6 +41,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
 
   async function handleAddExpense(event) {
     event.preventDefault();
+    setLoading(true);
     const formData = new FormData(event.target);
 
     if (
@@ -77,7 +80,12 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
             editExpense({ ...currentExpense, expenseId: expense.expenseId })
           )
         : dispatch(addExpense(currentExpense));
-      handleClose();
+
+      setTimeout(() => {
+        handleClose();
+        setLoading(false);
+      }, 750);
+
       navigate("/dashboard");
     }
   }
@@ -160,7 +168,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
           >
             Cancel
           </button>
-          <button className="h-10  bg-gray-800 text-gray-100 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-gray-950">
+          <button className="h-10 bg-gray-800 text-gray-100 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-gray-950">
             <p className="mx-2">{expense ? "Confirm" : "Add"}</p>
           </button>
         </div>

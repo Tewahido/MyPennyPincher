@@ -13,6 +13,8 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
 ) {
   const dialog = useRef(ref);
 
+  const [loading, setLoading] = useState(false);
+
   const reloadIncomes = useSelector((state) => state.income.reloadIncomes);
 
   const dispatch = useDispatch();
@@ -68,7 +70,12 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
       income
         ? dispatch(editIncome({ ...currentIncome, incomeId: income.incomeId }))
         : dispatch(addIncome(currentIncome));
-      handleClose();
+
+      setTimeout(() => {
+        handleClose();
+        setLoading(false);
+      }, 750);
+
       navigate("/dashboard");
     }
   }
@@ -132,13 +139,17 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
         <div className="flex w-full justify-end gap-5 mt-10">
           <button
             onClick={handleClose}
-            className="h-10 w-20 bg-gray-100 text-gray-900 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-white"
+            className={`${
+              loading && `disabled `
+            }h-10 w-20 bg-gray-100 text-gray-900 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-white`}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="h-10 p-2 bg-gray-800 text-gray-100 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-gray-950"
+            className={`${
+              loading && `disabled `
+            }h-10 p-2 bg-gray-800 text-gray-100 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-gray-950`}
           >
             <p className="mx-2">{income ? "Confirm" : "Add"}</p>
           </button>

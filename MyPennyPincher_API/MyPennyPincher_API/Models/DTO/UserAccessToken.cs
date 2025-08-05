@@ -5,4 +5,6 @@ public class UserAccessToken
     public Guid UserId { get; set; }
 
     public string Token { get; set; } = "";
+
+    public bool IsVerified { get; set; } = false;
 }

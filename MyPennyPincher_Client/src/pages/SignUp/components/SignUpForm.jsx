@@ -1,14 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Register } from "../../../apiServices/authService.js";
-import { isValidElement, useState } from "react";
+import { Login, Register } from "../../../apiServices/authService.js";
+import { useState } from "react";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
 import SignUpInput from "./SignUpInput.jsx";
 import { isValidPassword } from "../../../utils/authUtils.js";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../../utils/authUtils.js";
 
 const emailDomain = [".com", ".co.za", ".org"];
 
 export default function SignUpForm() {
   const [userExists, setUserExists] = useState(false);
+
+  const dispatch = useDispatch();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [isDataValid, setIsDataValid] = useState({
     email: true,
@@ -61,7 +66,18 @@ export default function SignUpForm() {
     }
 
     if (signUpStatus === 200) {
-      navigate("/login");
+      const response = await Login(formData.email, formData.password);
+
+      if (response.status != 200) {
+        setErrorMessage(response.message);
+
+        return;
+      }
+
+      const loggedInUser = await response.json();
+
+      loginUser(dispatch, loggedInUser);
+      navigate("/dashboard");
     }
   }
 

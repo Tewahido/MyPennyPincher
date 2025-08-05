@@ -14,6 +14,7 @@ export function extractTokenExpiryTime(token) {
 }
 
 export function loginUser(dispatch, userData) {
+  console.log(userData);
   const tokenExpiryTime = extractTokenExpiryTime(userData.token);
 
   dispatch(setExpiryTime(tokenExpiryTime.toISOString()));

@@ -42,7 +42,7 @@ builder.Services.Configure<GeneralSettings>(
 builder.Services.Configure<JwtOptions>(
     builder.Configuration.GetSection(JwtOptions.SectionName));
 
-JwtOptions jwtOptions = builder.Configuration.GetSection(JwtOptions.SectionName)
+var jwtOptions = builder.Configuration.GetSection(JwtOptions.SectionName)
                         .Get<JwtOptions>()!;
 
 builder.Services.AddAuthentication(options =>
@@ -83,7 +83,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-SlidingRateLimitOptions slidingRateOptions  = builder.Configuration.GetSection(SlidingRateLimitOptions.SectionName)
+var slidingRateOptions  = builder.Configuration.GetSection(SlidingRateLimitOptions.SectionName)
                                                     .Get<SlidingRateLimitOptions>()!;
 
 var slidingPolicy = "sliding";

@@ -60,7 +60,7 @@ public class TokenService : ITokenService
         return refreshToken;
     }
 
-    public UserAccessToken GenerateAccessToken(Guid userId)
+    public UserAccessToken GenerateAccessToken(Guid userId, bool isVerified)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key!));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -88,10 +88,11 @@ public class TokenService : ITokenService
         {
             UserId = userId,
             Token = userToken,
+            IsVerified = isVerified
         };
     }
 
-    public async Task<UserAccessToken?> RefreshToken(Guid userId, string refreshToken)
+    public async Task<UserAccessToken?> RefreshToken(Guid userId, string refreshToken, bool isVerified)
     {
         var tokenIsValid = await ValidateToken(userId, refreshToken);
 
@@ -100,7 +101,7 @@ public class TokenService : ITokenService
             throw new InvalidRefreshTokenException("Refresh token is invalid");
         }
         
-        return GenerateAccessToken(userId);
+        return GenerateAccessToken(userId, isVerified);
     }
 
     private async Task<bool> ValidateToken(Guid userId, string token)

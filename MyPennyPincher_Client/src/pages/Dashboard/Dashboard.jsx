@@ -49,7 +49,7 @@ export default function Dashboard() {
   const currentPeriodExpenses =
     transactionPeriod == "month"
       ? getMonthTransactions(expenseData, currentYear, currentMonth)
-      : getMondockerthRangeTransactions(
+      : getMonthRangeTransactions(
           expenseData,
           currentFromyear,
           currentFromMonth,

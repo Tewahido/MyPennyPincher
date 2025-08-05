@@ -39,7 +39,7 @@ public class AuthController : ControllerBase
 
         var registredUser = await _authService.Register(user);
 
-        var userAccessToken = _tokenService.GenerateAccessToken(user.UserId);
+        var userAccessToken = _tokenService.GenerateAccessToken(user.UserId, user.IsVerified);
 
         var verificationEmail = new VerificationEmail(userAccessToken, _generalSettings);
 
@@ -64,18 +64,13 @@ public class AuthController : ControllerBase
 
         var user = await _authService.Login(login);
 
-        if (!user.IsVerified)
-        {
-            return Ok();
-        }
-
-        var userAccessToken = _tokenService.GenerateAccessToken(user.UserId);
+        var userAccessToken = _tokenService.GenerateAccessToken(user.UserId, user.IsVerified);
 
         var refreshToken = _tokenService.GenerateRefreshToken(user.UserId);
 
         await _tokenService.AddRefreshToken(refreshToken);
 
-        CookieOptions refreshTokenCookieOptions = _tokenService.CreateRefreshTokenCookieOptions(refreshToken);
+        var refreshTokenCookieOptions = _tokenService.CreateRefreshTokenCookieOptions(refreshToken);
 
         Response.Cookies.Append("refreshToken", refreshToken.Token, refreshTokenCookieOptions);
 
@@ -102,7 +97,7 @@ public class AuthController : ControllerBase
 
         var convertedUserId = new Guid(userId);
 
-        var accessToken = await _tokenService.RefreshToken(convertedUserId, refreshToken);
+        var accessToken = await _tokenService.RefreshToken(convertedUserId, refreshToken, true);
 
         if (accessToken == null)
         {
