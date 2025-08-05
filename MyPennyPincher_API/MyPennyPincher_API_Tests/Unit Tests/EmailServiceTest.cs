@@ -59,7 +59,7 @@ public class EmailServiceTest : IDisposable
     {
         //Arrange
         int code = 849509;
-        MFAEmail mfaEmail = new MFAEmail(code);
+        var mfaEmail = new MFAEmail(code);
         string toEmail = "test@email.com";
         _emailService.Send2FAEmail(mfaEmail, toEmail);
 
@@ -93,9 +93,9 @@ public class EmailServiceTest : IDisposable
     public async Task GIVEN_Verification_Email_WHEN_SendingEmail_THEN_ReceiveEmailInMailHog()
     {
         //Arrange
-        UserAccessToken userAccessToken = new UserAccessToken { UserId = Guid.NewGuid(), Token = "edjneieig" };
+        var userAccessToken = new UserAccessToken { UserId = Guid.NewGuid(), Token = "edjneieig" };
 
-        VerificationEmail verificationEmail = new VerificationEmail(userAccessToken, _generalSettings);
+        var verificationEmail = new VerificationEmail(userAccessToken, _generalSettings);
         
         string toEmail = "test@email.com";
         _emailService.SendVerificationEmail(verificationEmail, toEmail);

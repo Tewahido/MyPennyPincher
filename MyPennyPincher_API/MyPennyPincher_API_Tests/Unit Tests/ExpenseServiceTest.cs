@@ -28,7 +28,7 @@ public class ExpenseServiceTest : IDisposable
     public async Task GIVEN_NewExpense_WHEN_AddignExpense_THEN_AddExpenseToDb() 
     {
         //Arrange
-        Expense expense = TestDataFactory.CreateExpense(1, _testUser);
+        var expense = TestDataFactory.CreateExpense(1, _testUser);
 
         //Act
         await _expenseService.AddAsync(expense);
@@ -43,7 +43,7 @@ public class ExpenseServiceTest : IDisposable
     public async Task GIVEN_ExistingExpense_WHEN_DeletingExpense_THEN_DeleteExpenseFromDb()
     {
         //Arrange
-        Expense expense = TestDataFactory.CreateExpense(1, _testUser);
+        var expense = TestDataFactory.CreateExpense(1, _testUser);
 
         await _expenseService.AddAsync(expense);
 
@@ -60,11 +60,11 @@ public class ExpenseServiceTest : IDisposable
     public async Task GIVEN_ExistingExpense_WHEN_EditingExpense_THEN_OverwriteExistingExpense()
     {
         //Arrange
-        Expense existingExpense = TestDataFactory.CreateExpense(1, _testUser);
+        var existingExpense = TestDataFactory.CreateExpense(1, _testUser);
 
         await _expenseService.AddAsync(existingExpense);
-        
-        Expense editedExpense = new Expense
+
+        var editedExpense = new Expense
         {
             ExpenseId = existingExpense.ExpenseId,
             Description = existingExpense.Description,
@@ -88,13 +88,13 @@ public class ExpenseServiceTest : IDisposable
     public async Task GIVEN_UserId_WHEN_GettingUserExpenses_THEN_ReturnUsersExpenses()
     {
         //Arrange
-        Expense firstExpense = TestDataFactory.CreateExpense(2, _testUser);
+        var firstExpense = TestDataFactory.CreateExpense(2, _testUser);
         await _expenseService.AddAsync(firstExpense);
 
-        Expense secondExpense = TestDataFactory.CreateExpense(3, _testUser);
+        var secondExpense = TestDataFactory.CreateExpense(3, _testUser);
         await _expenseService.AddAsync(secondExpense);
 
-        Expense thirdExpense = TestDataFactory.CreateExpense(4, _testUser);
+        var thirdExpense = TestDataFactory.CreateExpense(4, _testUser);
         await _expenseService.AddAsync(thirdExpense);
 
         //Act

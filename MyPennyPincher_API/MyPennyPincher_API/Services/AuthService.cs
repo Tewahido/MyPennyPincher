@@ -58,7 +58,7 @@ public class AuthService : IAuthService
             throw new InvalidCredentialsException("Invalid user credentials");
         }
 
-        bool isValid = BCrypt.Net.BCrypt.Verify(login.Password, user.Password);
+        var isValid = BCrypt.Net.BCrypt.Verify(login.Password, user.Password);
 
         if (!isValid)
         {

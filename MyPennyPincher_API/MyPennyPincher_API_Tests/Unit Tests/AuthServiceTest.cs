@@ -29,12 +29,12 @@ public class AuthServiceTest
     public async Task GIVEN_User_WHEN_Registering_THEN_ReturnNewUser()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         //Act
-        User registeredUser = await _authService.Register(user);
+        var registeredUser = await _authService.Register(user);
 
-        bool passwordIsHashed = BCrypt.Net.BCrypt.Verify(user.Password, registeredUser.Password);
+        var passwordIsHashed = BCrypt.Net.BCrypt.Verify(user.Password, registeredUser.Password);
 
         //Assert
         Assert.True(passwordIsHashed);
@@ -55,8 +55,8 @@ public class AuthServiceTest
     public async Task GIVEN_ValidLoginDetails_WHEN_LoggingIn_THEN_ReturnAuthenticatedUser()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
-        Login login = TestDataFactory.CreateUserLogin(user);
+        var user = TestDataFactory.CreateTestUser();
+        var login = TestDataFactory.CreateUserLogin(user);
 
         _authRepository.FindByEmailAsync(login.Email)
             .Returns(new User
@@ -76,10 +76,10 @@ public class AuthServiceTest
     }
 
     [Fact]
-    public async Task GIVEN_InvalidLoginDetails_WHEN_LoggingIn_THEN_ReturnNull()
+    public async Task GIVEN_InvalidLoginDetails_WHEN_LoggingIn_THEN_ThrowInvalidCredentialsException()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         await _authService.Register(user);
 

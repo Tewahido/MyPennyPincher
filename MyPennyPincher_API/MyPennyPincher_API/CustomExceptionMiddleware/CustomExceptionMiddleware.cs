@@ -27,7 +27,7 @@ namespace MyPennyPincher_API.CustomExceptionMiddleware
 
                 context.Response.ContentType = "application/json";
 
-                ErrorResponse response = new ErrorResponse();
+                var errorResponse = new ErrorResponse();
 
                 context.Response.StatusCode = ex switch
                 {
@@ -41,10 +41,10 @@ namespace MyPennyPincher_API.CustomExceptionMiddleware
                     _ => StatusCodes.Status500InternalServerError
                 };
 
-                response.StatusCode = context.Response.StatusCode;
-                response.Message = ex.Message;
+                errorResponse.StatusCode = context.Response.StatusCode;
+                errorResponse.Message = ex.Message;
 
-                await context.Response.WriteAsJsonAsync(response);
+                await context.Response.WriteAsJsonAsync(errorResponse);
             }
         }
     }

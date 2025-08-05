@@ -42,7 +42,7 @@ public class IncomeService : IIncomeService
 
     public async Task EditAsync(Income updatedIncome)
     {
-        int incomeId = updatedIncome.IncomeId;
+        var incomeId = updatedIncome.IncomeId;
 
         var existingIncome = await _incomeRepository.GetByIdAsync(incomeId);
 

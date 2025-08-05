@@ -22,7 +22,7 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
     public async Task GIVEN_NewUser_WHEN_Registering_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         //Act
         var response = await HttpRequestSender.PostAsync(_client, BaseRoute + "/register", user);
@@ -35,7 +35,7 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
     public async Task GIVEN_ExistingUser_WHEN_AttemptingToRegister_THEN_ReturnConflictStatus()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var firstResponse = await HttpRequestSender.PostAsync(_client, BaseRoute + "/register",  user);
         firstResponse.EnsureSuccessStatusCode();
@@ -51,7 +51,7 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
     public async Task GIVEN_ValidLoginDetails_WHEN_LoggingIn_THEN_ReturnLoginResponse()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var registeredUserResult = await HttpRequestSender.PostAsync(_client, BaseRoute + "/register", user);
         registeredUserResult.EnsureSuccessStatusCode();
@@ -59,7 +59,7 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
         var verificationResult = await HttpRequestSender.PostAsync(_client, BaseRoute + "/verify", user.UserId.ToString());
         verificationResult.EnsureSuccessStatusCode();
 
-        Login login = TestDataFactory.CreateUserLogin(user);
+        var login = TestDataFactory.CreateUserLogin(user);
 
         //Act
         var response = await HttpRequestSender.PostAsync(_client, BaseRoute + "/login", login);
@@ -78,13 +78,13 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
     public async Task GIVEN_InvalidLoginDetails_WHEN_AttemptingToLogin_THEN_ReturnUnauthorized()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var registeredUserResult = await HttpRequestSender.PostAsync(_client, BaseRoute + "/register", user);
 
         registeredUserResult.EnsureSuccessStatusCode();
 
-        Login login = new Login
+        var login = new Login
         {
             Email = user.Email,
             Password = "incorrectPassword"
@@ -101,12 +101,12 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
     public async Task GIVEN_UserIdAndValidRefreshTokenCookie_WHEN_RefreshingToken_THEN_ReturnNewAccessToken()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var registeredUserResult = await HttpRequestSender.PostAsync(_client, BaseRoute + "/register", user);
         registeredUserResult.EnsureSuccessStatusCode();
 
-        Login login = TestDataFactory.CreateUserLogin(user);
+        var login = TestDataFactory.CreateUserLogin(user);
 
         var response = await HttpRequestSender.PostAsync(_client, BaseRoute + "/login", login);
         response.EnsureSuccessStatusCode();
@@ -134,7 +134,7 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
     public async Task GIVEN_UserIdAndInvalidRefreshTokenCookie_WHEN_RefreshingToken_THEN_ReturnUnauthorized()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var registeredUserResult = await HttpRequestSender.PostAsync(_client, BaseRoute + "/register", user);
         registeredUserResult.EnsureSuccessStatusCode();
@@ -151,7 +151,7 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
     public async Task GIVEN_LoggedInUser_WHEN_LoggingOut_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var registeredUserResult = await HttpRequestSender.PostAsync(_client, BaseRoute + "/register", user);
         registeredUserResult.EnsureSuccessStatusCode();
@@ -159,7 +159,7 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
         var verificationResult = await HttpRequestSender.PostAsync(_client, BaseRoute + "/verify", user.UserId.ToString());
         verificationResult.EnsureSuccessStatusCode();
 
-        Login login = TestDataFactory.CreateUserLogin(user);
+        var login = TestDataFactory.CreateUserLogin(user);
 
         var response = await HttpRequestSender.PostAsync(_client, BaseRoute + "/login", login);
 

@@ -48,9 +48,9 @@ public class TokenService : ITokenService
 
     public RefreshToken GenerateRefreshToken(Guid userId)
     {
-        string generatedToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+        var generatedToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
 
-        RefreshToken refreshToken = new RefreshToken
+        var refreshToken = new RefreshToken
         {
             Token = generatedToken,
             UserId = userId,
@@ -93,7 +93,7 @@ public class TokenService : ITokenService
 
     public async Task<UserAccessToken?> RefreshToken(Guid userId, string refreshToken)
     {
-        bool tokenIsValid = await ValidateToken(userId, refreshToken);
+        var tokenIsValid = await ValidateToken(userId, refreshToken);
 
         if (!tokenIsValid)
         {
@@ -107,7 +107,7 @@ public class TokenService : ITokenService
     {
         var refreshToken = await _tokenRepository.GetTokenAsync(userId);
 
-        bool tokenIsValid = refreshToken!.ExpiryDate > DateTime.UtcNow 
+        var tokenIsValid = refreshToken!.ExpiryDate > DateTime.UtcNow 
             && refreshToken != null 
             && token == refreshToken.Token;
 
@@ -121,7 +121,7 @@ public class TokenService : ITokenService
 
     public CookieOptions CreateRefreshTokenCookieOptions(RefreshToken refreshToken)
     {
-        int tokenValiditySeconds = (int)(refreshToken.ExpiryDate - DateTime.UtcNow).TotalSeconds;
+        var tokenValiditySeconds = (int)(refreshToken.ExpiryDate - DateTime.UtcNow).TotalSeconds;
 
         return new CookieOptions
         {

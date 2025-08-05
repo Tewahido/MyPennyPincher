@@ -42,7 +42,7 @@ public class ExpenseService : IExpenseService
 
     public async Task EditAsync(Expense updatedExpense)
     {
-        int expenseId = updatedExpense.ExpenseId;
+        var expenseId = updatedExpense.ExpenseId;
 
         var existingExpense = await _expenseRepository.GetByIdAsync(expenseId);
 

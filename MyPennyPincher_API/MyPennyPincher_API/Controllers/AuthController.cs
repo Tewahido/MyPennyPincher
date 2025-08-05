@@ -37,7 +37,7 @@ public class AuthController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        User? registredUser = await _authService.Register(user);
+        var registredUser = await _authService.Register(user);
 
         var userAccessToken = _tokenService.GenerateAccessToken(user.UserId);
 
@@ -62,7 +62,7 @@ public class AuthController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        User user = await _authService.Login(login);
+        var user = await _authService.Login(login);
 
         if (!user.IsVerified)
         {

@@ -8,8 +8,8 @@ public class DbContextFactory
     public static MyPennyPincherDbContext GenerateInMemoryDB()
     {
         var options = new DbContextOptionsBuilder<MyPennyPincherDbContext>()
-       .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-        .Options;
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
 
         return new MyPennyPincherDbContext(options);
     }

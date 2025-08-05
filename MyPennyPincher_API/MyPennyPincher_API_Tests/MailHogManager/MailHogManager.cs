@@ -23,8 +23,8 @@ public class MailHogManager
         using var process = new Process { StartInfo = startInfo };
         process.Start();
 
-        string output = process.StandardOutput.ReadToEnd();
-        string error = process.StandardError.ReadToEnd();
+        var output = process.StandardOutput.ReadToEnd();
+        var error = process.StandardError.ReadToEnd();
         process.WaitForExit();
 
         if (process.ExitCode != 0)
