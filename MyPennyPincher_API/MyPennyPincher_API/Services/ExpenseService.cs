@@ -20,7 +20,7 @@ public class ExpenseService : IExpenseService
 
         if (expenses == null || expenses.Count() == 0)
         {
-            throw new ExpensesNotFoundException("No expenses found");
+            return new List<Expense>();
         }
 
         return expenses;

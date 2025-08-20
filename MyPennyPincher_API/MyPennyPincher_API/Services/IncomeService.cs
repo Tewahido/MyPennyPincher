@@ -20,7 +20,7 @@ public class IncomeService : IIncomeService
 
         if (incomes == null || incomes.Count() == 0)
         {
-            throw new IncomesNotFoundException("User incomes not found");
+            return new List<Income>();
         }
 
         return incomes;

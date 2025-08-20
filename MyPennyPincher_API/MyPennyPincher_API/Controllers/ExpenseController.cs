@@ -30,6 +30,11 @@ public class ExpenseController : ControllerBase
 
         var expenses = await _expenseService.GetByUserIdAsync(userId);
 
+        if(expenses.Count < 1)
+        {
+            return NoContent();
+        }
+
         return Ok(expenses);
     }
 

@@ -61,7 +61,7 @@ public class AuthController : ControllerBase
     {
         await _tokenService.DeleteRefreshToken(userId);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpPost("refresh")]

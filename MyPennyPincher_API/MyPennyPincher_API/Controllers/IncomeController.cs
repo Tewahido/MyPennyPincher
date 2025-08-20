@@ -30,6 +30,11 @@ public class IncomeController : ControllerBase
 
         var incomes = await _incomeService.GetByUserIdAsync(userId);
 
+        if (incomes.Count < 1)
+        {
+            return NoContent();
+        }
+
         return Ok(incomes);
     }
 
