@@ -70,7 +70,7 @@ public class AuthServiceTest : IDisposable
     }
 
     [Fact]
-    public async Task GIVEN_InvalidLoginDetails_WHEN_LoggingIn_THEN_ReturnNull()
+    public async Task GIVEN_InvalidLoginDetails_WHEN_LoggingIn_THEN_ThrowInvalidCredentialsError()
     {
         //Arrange
         var user = TestDataFactory.CreateTestUser();

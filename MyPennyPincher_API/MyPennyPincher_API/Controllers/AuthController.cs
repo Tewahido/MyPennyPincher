@@ -29,7 +29,7 @@ public class AuthController : ControllerBase
 
         User? registredUser = await _authService.Register(user);
 
-        return Ok();
+        return Created();
     }
 
     [EnableRateLimiting("sliding")]

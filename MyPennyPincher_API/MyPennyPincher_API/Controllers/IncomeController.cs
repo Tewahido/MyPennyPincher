@@ -43,7 +43,7 @@ public class IncomeController : ControllerBase
 
         await _incomeService.AddAsync(income);
 
-        return Ok();
+        return Created();
     }
 
     [HttpDelete]
@@ -56,7 +56,7 @@ public class IncomeController : ControllerBase
 
         await _incomeService.DeleteAsync(income);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpPut]
@@ -69,6 +69,6 @@ public class IncomeController : ControllerBase
 
         await _incomeService.EditAsync(income);
 
-        return Ok();
+        return NoContent();
     }
 }

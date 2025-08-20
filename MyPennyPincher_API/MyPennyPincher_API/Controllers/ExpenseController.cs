@@ -43,7 +43,7 @@ public class ExpenseController : ControllerBase
 
         await _expenseService.AddAsync(expense);
 
-        return Ok();
+        return Created();
     }
 
     [HttpDelete]
@@ -56,7 +56,7 @@ public class ExpenseController : ControllerBase
 
         await _expenseService.DeleteAsync(expense);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpPut]
@@ -69,6 +69,6 @@ public class ExpenseController : ControllerBase
 
         await _expenseService.EditAsync(expense);
 
-        return Ok();
+        return NoContent();
     }
 }
