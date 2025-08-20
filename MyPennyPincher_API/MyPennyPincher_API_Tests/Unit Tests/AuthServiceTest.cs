@@ -26,12 +26,12 @@ public class AuthServiceTest : IDisposable
     public async Task GIVEN_User_WHEN_Registering_THEN_ReturnNewUser()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var   user = TestDataFactory.CreateTestUser();
 
         //Act
-        User registeredUser = await _authService.Register(user);
+        var registeredUser = await _authService.Register(user);
 
-        bool passwordIsHashed = BCrypt.Net.BCrypt.Verify(user.Password, registeredUser.Password);
+        var passwordIsHashed = BCrypt.Net.BCrypt.Verify(user.Password, registeredUser.Password);
 
         var expectedUser = _context.Users.FirstOrDefault(u => u.UserId == user.UserId);
 
@@ -55,11 +55,11 @@ public class AuthServiceTest : IDisposable
     public async Task GIVEN_ValidLoginDetails_WHEN_LoggingIn_THEN_ReturnAuthenticatedUser()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
-        User registeredUser = await _authService.Register(user);
+        var registeredUser = await _authService.Register(user);
 
-        Login login = TestDataFactory.CreateUserLogin(user);
+        var login = TestDataFactory.CreateUserLogin(user);
 
         //Act
         var expectedUser = await _authService.Login(login);
@@ -73,11 +73,11 @@ public class AuthServiceTest : IDisposable
     public async Task GIVEN_InvalidLoginDetails_WHEN_LoggingIn_THEN_ReturnNull()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         await _authService.Register(user);
 
-        Login login = new Login
+        var login = new Login
         {
             Email = "invalidEmail",
             Password = "invalidPassword"

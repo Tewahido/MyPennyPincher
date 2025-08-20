@@ -1,5 +1,4 @@
-﻿using System.Net;
-using MyPennyPincher_API.Models.DataModels;
+﻿using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API_Tests.Test_Utilities;
 using MyPennyPincher_API_Tests.WebApplicationFactory;
@@ -22,12 +21,12 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
     public async Task GIVEN_NewIncome_WHEN_AddingIncome_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
         userResponse.EnsureSuccessStatusCode();
 
-        Expense expense = TestDataFactory.CreateExpense(1, user);
+        var expense = TestDataFactory.CreateExpense(1, user);
 
         //Act
         var response = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
@@ -40,12 +39,12 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
     public async Task GIVEN_ExistingIncome_WHEN_DeletingIncome_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
         userResponse.EnsureSuccessStatusCode();
 
-        Expense expense = TestDataFactory.CreateExpense(2, user);
+        var expense = TestDataFactory.CreateExpense(2, user);
 
         var addIncomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
         addIncomeResponse.EnsureSuccessStatusCode();
@@ -61,18 +60,18 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
     public async Task GIVEN_ExistingIncome_WHEN_EditingIncome_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
         userResponse.EnsureSuccessStatusCode();
 
-        Expense expense = TestDataFactory.CreateExpense(3, user);
+        var expense = TestDataFactory.CreateExpense(3, user);
 
 
         var addIncomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
         addIncomeResponse.EnsureSuccessStatusCode();
 
-        Expense editedExpense = new Expense
+        var editedExpense = new Expense
         {
             ExpenseId = 3,
             Description = "Test",
@@ -94,12 +93,12 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
     public async Task GIVEN_UserId_WHEN_GettingUserExpenses_THEN_ReturnUserExpenses()
     {
         //Arrange
-        User user = TestDataFactory.CreateAuthenticatedTestUser();
+        var user = TestDataFactory.CreateAuthenticatedTestUser();
 
         var registerUserResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
         registerUserResponse.EnsureSuccessStatusCode();
 
-        Login login = TestDataFactory.CreateUserLogin(user);
+        var login = TestDataFactory.CreateUserLogin(user);
 
         var loginUserResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/login", login);
         loginUserResponse.EnsureSuccessStatusCode();
@@ -110,15 +109,15 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
         var token = loginResponse?.Token;
         Assert.NotNull(token);
 
-        List<Expense> userExpenses = new List<Expense>();
+        var userExpenses = new List<Expense>();
 
-        Expense firstExpense = TestDataFactory.CreateExpense(4, user);
+        var firstExpense = TestDataFactory.CreateExpense(4, user);
         userExpenses.Add(firstExpense);
 
-        Expense secondExpense = TestDataFactory.CreateExpense(5, user);
+        var secondExpense = TestDataFactory.CreateExpense(5, user);
         userExpenses.Add(secondExpense);
 
-        Expense thirdExpense = TestDataFactory.CreateExpense(6, user);
+        var thirdExpense = TestDataFactory.CreateExpense(6, user);
         userExpenses.Add(thirdExpense);
 
         foreach(var expense in userExpenses)

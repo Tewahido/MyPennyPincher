@@ -28,7 +28,7 @@ public class IncomeServiceTest
     public async Task GIVEN_NewIncome_WHEN_AddingIncome_THEN_AddIncomeToDb()
     {
         //Arrange
-        Income income = TestDataFactory.CreateIncome(1, _testUser);
+        var income = TestDataFactory.CreateIncome(1, _testUser);
 
 
         //Act
@@ -44,7 +44,7 @@ public class IncomeServiceTest
     public async Task GIVEN_ExistingIncome_WHEN_DeletingIncome_THEN_DeleteIncomeFromDb()
     {
         //Arrange
-        Income income = TestDataFactory.CreateIncome(1, _testUser);
+        var income = TestDataFactory.CreateIncome(1, _testUser);
 
         await _incomeService.AddAsync(income);
 
@@ -62,11 +62,11 @@ public class IncomeServiceTest
     public async Task GIVEN_ExistingIncome_WHEN_EditingIncome_THEN_OverwriteExistingIncome()
     {
         //Arrange
-        Income existingIncome = TestDataFactory.CreateIncome(1, _testUser);
+        var existingIncome = TestDataFactory.CreateIncome(1, _testUser);
 
         await _incomeService.AddAsync(existingIncome);
 
-        Income editedIncome = new Income
+        var editedIncome = new Income
         {
             IncomeId = 1,
             Source = existingIncome.Source,
@@ -89,13 +89,13 @@ public class IncomeServiceTest
     public async Task GIVEN_UserId_WHEN_GettingUserIncomes_THEN_ReturnUserIncomes()
     {
         //Arrange
-        Income firstIncome = TestDataFactory.CreateIncome(2, _testUser);
+        var firstIncome = TestDataFactory.CreateIncome(2, _testUser);
         await _incomeService.AddAsync(firstIncome);
 
-        Income secondIncome = TestDataFactory.CreateIncome(3, _testUser);
+        var secondIncome = TestDataFactory.CreateIncome(3, _testUser);
         await _incomeService.AddAsync(secondIncome);
 
-        Income thirdIncome = TestDataFactory.CreateIncome(4, _testUser);
+        var thirdIncome = TestDataFactory.CreateIncome(4, _testUser);
         await _incomeService.AddAsync(thirdIncome);
 
         //Act
