@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
+using MyPennyPincher_API.Models.QueryParameters;
 using MyPennyPincher_API.Services.Interfaces;
 
 namespace MyPennyPincher_API.Controllers;
@@ -19,8 +20,8 @@ public class ExpenseController : ControllerBase
         _expenseService = expenseService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<ICollection<Income>>> GetUserExpensesForMonth()
+    [HttpGet("/month")]
+    public async Task<ActionResult<ICollection<Income>>> GetUserExpensesForMonth([FromQuery] TransactionQueryParams queryParams)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 

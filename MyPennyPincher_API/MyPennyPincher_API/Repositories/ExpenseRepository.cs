@@ -30,11 +30,13 @@ public class ExpenseRepository : IExpenseRepository
         return await _context.Expenses.FirstOrDefaultAsync(expense => expense.ExpenseId == expenseId);
     }
 
-    public async Task<ICollection<Expense>> GetByUserIdAsync(string userId)
+    public async Task<ICollection<Expense>> GetUserMonthlyExpenses(string userId, int year, int month)
     {
         return await _context.Expenses
-            .Where(user => user.UserId.ToString() == userId)
-            .ToListAsync();
+            .Where(expense => expense.UserId.ToString() == userId && 
+                    expense.Date.Year == year &&
+                    expense.Date.Month == month)
+                .ToListAsync();
     }
 
     public async Task SaveChangesAsync()
