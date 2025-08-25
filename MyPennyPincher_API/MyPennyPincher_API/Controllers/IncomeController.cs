@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyPennyPincher_API.Models.DataModels;
+using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Services.Interfaces;
 
 namespace MyPennyPincher_API.Controllers;
@@ -19,7 +20,7 @@ public class IncomeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ICollection<Income>>> GetUserIncomes()
+    public async Task<ActionResult<ICollection<Income>>> GetUserIncomesForMonth()
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         
@@ -35,7 +36,13 @@ public class IncomeController : ControllerBase
             return NoContent();
         }
 
-        return Ok(incomes);
+        var incomeResponse = new IncomeResponse
+        {
+            Data = incomes.ToList(),
+            Count = incomes.Count
+        };
+
+        return Ok(incomeResponse);
     }
 
     [HttpPost]
