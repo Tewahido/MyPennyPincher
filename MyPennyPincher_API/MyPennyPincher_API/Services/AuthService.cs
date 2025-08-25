@@ -3,6 +3,7 @@ using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace MyPennyPincher_API.Services;
 
@@ -20,6 +21,11 @@ public class AuthService : IAuthService
         if (user == null)
         {
             throw new ArgumentNullException();
+        }
+
+        if (!PasswordIsValid(user.Password))
+        {
+            throw new PasswordTooWeakException();
         }
 
         var existingUser = await _authRepository.FindByEmailAsync(user.Email);
@@ -65,5 +71,9 @@ public class AuthService : IAuthService
         return user;
     }
  
-
+    private bool PasswordIsValid(string password)
+    {
+        var passwordRegex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
+        return passwordRegex.IsMatch(password);
+    }
 }

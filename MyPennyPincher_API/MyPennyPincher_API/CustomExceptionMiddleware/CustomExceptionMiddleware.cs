@@ -37,6 +37,7 @@ namespace MyPennyPincher_API.CustomExceptionMiddleware
                     ExpenseNotFoundException => StatusCodes.Status404NotFound,
                     IncomesNotFoundException => StatusCodes.Status404NotFound,
                     IncomeNotFoundException => StatusCodes.Status404NotFound,
+                    PasswordTooWeakException => StatusCodes.Status406NotAcceptable,
                     _ => StatusCodes.Status500InternalServerError
                 };
 

@@ -7,7 +7,7 @@ using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
 using MyPennyPincher_API_Tests.Test_Utilities;
 
-namespace MyPennyPincher_API_Tests;
+namespace MyPennyPincher_API_Tests.Unit_Tests;
 
 public class AuthServiceTest : IDisposable
 {
@@ -49,6 +49,22 @@ public class AuthServiceTest : IDisposable
 
         //Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() => _authService.Register(nullUser!));
+    }
+
+    [Fact]
+    public async Task GIVEN_WeakPassword_WHEN_RegisteringUser_THEN_ThrowPasswordTooWeakException()
+    {
+        //Arrange
+        var weakPasswordUser = new User
+        {
+            UserId = Guid.NewGuid(),
+            Email = "test@gmail.com",
+            Password = "testPassword",
+            FullName = "Test User"
+        };
+
+        //Act & Assert
+        await Assert.ThrowsAsync<PasswordTooWeakException>(() => _authService.Register(weakPasswordUser));
     }
 
     [Fact]
