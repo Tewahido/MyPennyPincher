@@ -21,7 +21,7 @@ public class TestDataFactory
             UserId = userId,
             FullName = "Test User",
             Email = randomEmail,
-            Password = "password"
+            Password = "Password12#"
         };
     }
 
@@ -35,7 +35,7 @@ public class TestDataFactory
             UserId = userId,
             FullName = "Test User",
             Email = randomEmail,
-            Password = "password"
+            Password = "Password12#"
         };
     }
 

@@ -122,21 +122,26 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
 
         foreach(var expense in userExpenses)
         {
-            var expenseResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
-            expenseResponse.EnsureSuccessStatusCode();
+            var addExpenseResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
+            addExpenseResponse.EnsureSuccessStatusCode();
         }
 
         //Act
-        var response = await HttpRequestSender.GetAsync(_client, BaseRoute, token);
+        var response = await HttpRequestSender.GetAsync(_client, BaseRoute + "/month", token);
         response.EnsureSuccessStatusCode();
 
         var json = await response.Content.ReadAsStringAsync();
-        var expenses = JsonConvert.DeserializeObject<List<Income>>(json);
+        var expenseResponse = JsonConvert.DeserializeObject<ExpenseResponse>(json);
+        var expenses = expenseResponse.Data;
 
         //Assert
-        Assert.NotNull(expenses);
-        Assert.All(expenses, income => Assert.IsType<Income>(income));
-        Assert.Equal(3, expenses.Count);
+        Assert.Multiple(() =>
+        {
+            Assert.NotNull(expenses);
+            Assert.All(expenses, expense => Assert.IsType<Expense>(expense));
+            Assert.Equal(3, expenses.Count);
+            Assert.Equal(expenseResponse.Count, expenses.Count);
+        });
     }
 
     public void Dispose()

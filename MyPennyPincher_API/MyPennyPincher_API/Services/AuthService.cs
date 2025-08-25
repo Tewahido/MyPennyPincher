@@ -73,7 +73,16 @@ public class AuthService : IAuthService
  
     private bool PasswordIsValid(string password)
     {
-        var passwordRegex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
-        return passwordRegex.IsMatch(password);
+        if (string.IsNullOrWhiteSpace(password) || password.Length < 8)
+        {
+            return false;
+        }
+
+        bool hasUpper = password.Any(char.IsUpper);
+        bool hasLower = password.Any(char.IsLower);
+        bool hasDigit = password.Any(char.IsDigit);
+        bool hasSpecial = password.Any(ch => !char.IsLetterOrDigit(ch));
+
+        return hasUpper && hasLower && hasDigit && hasSpecial;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models.DataModels;
+using MyPennyPincher_API.Models.QueryParameters;
 using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
@@ -99,10 +100,10 @@ public class IncomeServiceTest
         await _incomeService.AddAsync(thirdIncome);
 
         //Act
-        var expectedIncomes = await _incomeService.GetByUserIdAsync(_testUser.UserId.ToString());
+        var expectedIncomes = await _incomeService.GetUserMonthlyIncomes(_testUser.UserId.ToString(), new TransactionQueryParams());
 
         //Assert
-        Assert.Equal(3, expectedIncomes.Count);
+        Assert.Equal(3, expectedIncomes.Count());
 
         Assert.Contains(firstIncome, expectedIncomes);
         Assert.Contains(secondIncome, expectedIncomes);

@@ -20,8 +20,8 @@ public class IncomeController : ControllerBase
         _incomeService = incomeService;
     }
 
-    [HttpGet("/month")]
-    public async Task<ActionResult<ICollection<Income>>> GetUserIncomesForMonth([FromQuery] TransactionQueryParams queryParams)
+    [HttpGet("month")]
+    public async Task<ActionResult<IEnumerable<Income>>> GetUserIncomesForMonth([FromQuery] TransactionQueryParams queryParams)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         
@@ -30,9 +30,9 @@ public class IncomeController : ControllerBase
             return Unauthorized();
         }
 
-        var incomes = await _incomeService.GetByUserIdAsync(userId);
+        var incomes = await _incomeService.GetUserMonthlyIncomes(userId, queryParams);
 
-        if (incomes.Count < 1)
+        if (incomes.Count() < 1)
         {
             return NoContent();
         }
@@ -40,7 +40,7 @@ public class IncomeController : ControllerBase
         var incomeResponse = new IncomeResponse
         {
             Data = incomes.ToList(),
-            Count = incomes.Count
+            Count = incomes.Count()
         };
 
         return Ok(incomeResponse);

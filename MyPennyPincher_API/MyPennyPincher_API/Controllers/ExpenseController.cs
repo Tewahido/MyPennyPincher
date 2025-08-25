@@ -20,8 +20,8 @@ public class ExpenseController : ControllerBase
         _expenseService = expenseService;
     }
 
-    [HttpGet("/month")]
-    public async Task<ActionResult<ICollection<Income>>> GetUserExpensesForMonth([FromQuery] TransactionQueryParams queryParams)
+    [HttpGet("month")]
+    public async Task<ActionResult<IEnumerable<Expense>>> GetUserExpensesForMonth([FromQuery] TransactionQueryParams queryParams)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -30,9 +30,9 @@ public class ExpenseController : ControllerBase
             return Unauthorized();
         }
 
-        var expenses = await _expenseService.GetByUserIdAsync(userId);
+        var expenses = await _expenseService.GetUserMonthlyExpenses(userId, queryParams);
 
-        if(expenses.Count < 1)
+        if(expenses.Count() < 1)
         {
             return NoContent();
         }
@@ -40,7 +40,7 @@ public class ExpenseController : ControllerBase
         var expenseResponse = new ExpenseResponse
         {
             Data = expenses.ToList(),
-            Count = expenses.Count
+            Count = expenses.Count()
         };
 
         return Ok(expenseResponse);

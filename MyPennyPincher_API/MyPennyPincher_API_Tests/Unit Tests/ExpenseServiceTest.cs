@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models.DataModels;
+using MyPennyPincher_API.Models.QueryParameters;
 using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
@@ -98,10 +99,10 @@ public class ExpenseServiceTest : IDisposable
         await _expenseService.AddAsync(thirdExpense);
 
         //Act
-        var expectedExpenses = await _expenseService.GetByUserIdAsync(_testUser.UserId.ToString());
+        var expectedExpenses = await _expenseService.GetUserMonthlyExpenses(_testUser.UserId.ToString(), new TransactionQueryParams());
 
         //Assert
-        Assert.Equal(3, expectedExpenses.Count);
+        Assert.Equal(3, expectedExpenses.Count());
 
         Assert.Contains(firstExpense, expectedExpenses);
         Assert.Contains(secondExpense, expectedExpenses);
