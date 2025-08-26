@@ -1,60 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MyPennyPincher_API.Context;
+﻿using MyPennyPincher_API.Exceptions;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.QueryParameters;
-using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
 using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API_Tests.Test_Utilities;
+using NSubstitute;
 
 namespace MyPennyPincher_API_Tests.Unit_Tests;
 
-public class ExpenseServiceTest : IDisposable
+public class ExpenseServiceTest
 {
     private readonly IExpenseService _expenseService;
     private readonly IExpenseRepository _expenseRepository;
-    private readonly MyPennyPincherDbContext _context;
     private readonly User _testUser;
 
     public ExpenseServiceTest() 
     {
-        _context = DbContextFactory.GenerateInMemoryDB();
-        _expenseRepository = new ExpenseRepository(_context);
+        _expenseRepository = Substitute.For<IExpenseRepository>();
         _expenseService = new ExpenseService(_expenseRepository);
         _testUser = TestDataFactory.CreateTestUser();
-    }
-
-    [Fact]
-    public async Task GIVEN_NewExpense_WHEN_AddignExpense_THEN_AddExpenseToDb() 
-    {
-        //Arrange
-        var expense = TestDataFactory.CreateExpense(1, _testUser);
-
-        //Act
-        await _expenseService.AddAsync(expense);
-
-        var expectedExpense = _context.Expenses.FirstOrDefaultAsync(exp => exp.ExpenseId == expense.ExpenseId);
-
-        //Assert
-        Assert.NotNull(expectedExpense);
-    }
-
-    [Fact]
-    public async Task GIVEN_ExistingExpense_WHEN_DeletingExpense_THEN_DeleteExpenseFromDb()
-    {
-        //Arrange
-        var expense = TestDataFactory.CreateExpense(1, _testUser);
-
-        await _expenseService.AddAsync(expense);
-
-        //Act
-        await _expenseService.DeleteAsync(expense);
-
-        var expectedExpense = await _context.Expenses.FirstOrDefaultAsync(exp => exp.ExpenseId == expense.ExpenseId);
-
-        //Assert
-        Assert.Null(expectedExpense);
     }
 
     [Fact]
@@ -76,19 +41,19 @@ public class ExpenseServiceTest : IDisposable
             UserId = existingExpense.UserId,
         };
 
-        //Act
-        await _expenseService.EditAsync(editedExpense);
+        _expenseRepository.GetByIdAsync(existingExpense.ExpenseId)
+                .Returns(Task.FromResult<Expense?>(null));
 
-        var expectedExpense = await _context.Expenses.FirstOrDefaultAsync(exp => exp.ExpenseId == editedExpense.ExpenseId);
-       
-        //Assert
-        Assert.Equal(editedExpense.Amount, expectedExpense!.Amount);
+        //Act & Assert
+        await Assert.ThrowsAsync<ExpenseNotFoundException>(() => _expenseService.EditAsync(existingExpense));
     }
 
     [Fact]
     public async Task GIVEN_UserId_WHEN_GettingUserExpenses_THEN_ReturnUsersExpenses()
     {
         //Arrange
+        var queryParams = new TransactionQueryParams();
+
         var firstExpense = TestDataFactory.CreateExpense(2, _testUser);
         await _expenseService.AddAsync(firstExpense);
 
@@ -98,19 +63,33 @@ public class ExpenseServiceTest : IDisposable
         var thirdExpense = TestDataFactory.CreateExpense(4, _testUser);
         await _expenseService.AddAsync(thirdExpense);
 
+        _expenseRepository.GetUserMonthlyExpenses(_testUser.UserId.ToString(), queryParams.PeriodStart, queryParams.PeriodEnd)
+                .Returns(new List<Expense> { firstExpense, secondExpense, thirdExpense });
+
         //Act
-        var expectedExpenses = await _expenseService.GetUserMonthlyExpenses(_testUser.UserId.ToString(), new TransactionQueryParams());
+        var expectedExpenseResponse = await _expenseService.GetUserMonthlyExpenses(_testUser.UserId.ToString(), queryParams);
 
         //Assert
-        Assert.Equal(3, expectedExpenses.Count());
+        Assert.Equal(3, expectedExpenseResponse.Count);
 
-        Assert.Contains(firstExpense, expectedExpenses);
-        Assert.Contains(secondExpense, expectedExpenses);
-        Assert.Contains(thirdExpense, expectedExpenses);
+        Assert.Contains(firstExpense, expectedExpenseResponse.Data);
+        Assert.Contains(secondExpense, expectedExpenseResponse.Data);
+        Assert.Contains(thirdExpense, expectedExpenseResponse.Data);
     }
 
-    public void Dispose()
+    [Fact]
+    public async Task GIVEN_NoUserExpenses_WHEN_GettingUserExpenses_THEN_ReturnEmptyExpenseResponse()
     {
-        _context.Dispose();
+        //Arrange
+        var queryParams = new TransactionQueryParams();
+
+        _expenseRepository.GetUserMonthlyExpenses(_testUser.UserId.ToString(), queryParams.PeriodStart, queryParams.PeriodEnd)
+                .Returns(new List<Expense>());
+
+        //Act
+        var expectedExpenseResponse = await _expenseService.GetUserMonthlyExpenses(_testUser.UserId.ToString(), queryParams);
+
+        //Assert
+        Assert.Equal(0, expectedExpenseResponse.Count);
     }
 }

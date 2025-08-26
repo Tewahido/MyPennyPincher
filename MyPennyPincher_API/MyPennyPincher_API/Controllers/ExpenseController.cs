@@ -30,18 +30,12 @@ public class ExpenseController : ControllerBase
             return Unauthorized();
         }
 
-        var expenses = await _expenseService.GetUserMonthlyExpenses(userId, queryParams);
+        var expenseResponse = await _expenseService.GetUserMonthlyExpenses(userId, queryParams);
 
-        if(expenses.Count() < 1)
+        if(expenseResponse.Count < 1)
         {
             return NoContent();
         }
-
-        var expenseResponse = new ExpenseResponse
-        {
-            Data = expenses.ToList(),
-            Count = expenses.Count()
-        };
 
         return Ok(expenseResponse);
     }
