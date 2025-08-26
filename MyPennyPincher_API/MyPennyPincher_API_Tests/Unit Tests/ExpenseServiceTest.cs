@@ -23,7 +23,7 @@ public class ExpenseServiceTest
     }
 
     [Fact]
-    public async Task GIVEN_ExistingExpense_WHEN_EditingExpense_THEN_OverwriteExistingExpense()
+    public async Task GIVEN_NonExistentExpense_WHEN_EditingExpense_THEN_ThrowExpenseNotFoundException()
     {
         //Arrange
         var existingExpense = TestDataFactory.CreateExpense(1, _testUser);

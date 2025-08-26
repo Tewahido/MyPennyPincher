@@ -30,18 +30,12 @@ public class IncomeController : ControllerBase
             return Unauthorized();
         }
 
-        var incomes = await _incomeService.GetUserMonthlyIncomes(userId, queryParams);
+        var incomeResponse = await _incomeService.GetUserMonthlyIncomes(userId, queryParams);
 
-        if (incomes.Count() < 1)
+        if (incomeResponse.Count < 1)
         {
             return NoContent();
         }
-
-        var incomeResponse = new IncomeResponse
-        {
-            Data = incomes.ToList(),
-            Count = incomes.Count()
-        };
 
         return Ok(incomeResponse);
     }

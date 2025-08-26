@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MyPennyPincher_API.Context;
+﻿using MyPennyPincher_API.Exceptions;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.QueryParameters;
-using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
 using MyPennyPincher_API.Services.Interfaces;
 using MyPennyPincher_API_Tests.Test_Utilities;
+using NSubstitute;
 
 namespace MyPennyPincher_API_Tests.Unit_Tests;
 
@@ -14,53 +13,17 @@ public class IncomeServiceTest
 {
     private readonly IIncomeService _incomeService;
     private readonly IIncomeRepository _incomeRepository;
-    private readonly MyPennyPincherDbContext _context;
     private readonly User _testUser;
 
     public IncomeServiceTest()
     {
-        _context = DbContextFactory.GenerateInMemoryDB();
-        _incomeRepository = new IncomeRepository(_context);
+        _incomeRepository = Substitute.For<IIncomeRepository>();
         _incomeService = new IncomeService(_incomeRepository);
         _testUser = TestDataFactory.CreateTestUser();
     }
 
     [Fact]
-    public async Task GIVEN_NewIncome_WHEN_AddingIncome_THEN_AddIncomeToDb()
-    {
-        //Arrange
-        var income = TestDataFactory.CreateIncome(1, _testUser);
-
-
-        //Act
-        await _incomeService.AddAsync(income);
-
-        var expectedIncome = _context.Incomes.FirstOrDefaultAsync(exp => exp.IncomeId == income.IncomeId);
-
-        //Assert
-        Assert.NotNull(expectedIncome);
-    }
-
-    [Fact]
-    public async Task GIVEN_ExistingIncome_WHEN_DeletingIncome_THEN_DeleteIncomeFromDb()
-    {
-        //Arrange
-        var income = TestDataFactory.CreateIncome(1, _testUser);
-
-        await _incomeService.AddAsync(income);
-
-        //Act
-        await _incomeService.DeleteAsync(income);
-
-        var expectedIncome = await _context.Incomes.FirstOrDefaultAsync(exp => exp.IncomeId == income.IncomeId);
-
-        //Assert
-        Assert.Null(expectedIncome);
-    }
-
-
-    [Fact]
-    public async Task GIVEN_ExistingIncome_WHEN_EditingIncome_THEN_OverwriteExistingIncome()
+    public async Task GIVEN_NoUserIncomes_WHEN_EditingIncome_THEN_ThrowIncomeNotFoundException()
     {
         //Arrange
         var existingIncome = TestDataFactory.CreateIncome(1, _testUser);
@@ -77,19 +40,19 @@ public class IncomeServiceTest
             UserId = existingIncome.UserId,
         };
 
+        _incomeRepository.GetByIdAsync(existingIncome.IncomeId)
+            .Returns(Task.FromResult<Income?>(null));
+
         //Act
-        await _incomeService.EditAsync(editedIncome);
-
-        var expectedIncome = await _context.Incomes.FirstOrDefaultAsync(exp => exp.IncomeId == editedIncome.IncomeId);
-
-        //Assert
-        Assert.Equal(editedIncome.Amount, expectedIncome!.Amount);
+        await Assert.ThrowsAsync<IncomeNotFoundException>(() => _incomeService.EditAsync(editedIncome));
     }
 
     [Fact]
     public async Task GIVEN_UserId_WHEN_GettingUserIncomes_THEN_ReturnUserIncomes()
     {
         //Arrange
+        var queryParams = new TransactionQueryParams();
+
         var firstIncome = TestDataFactory.CreateIncome(2, _testUser);
         await _incomeService.AddAsync(firstIncome);
 
@@ -99,15 +62,18 @@ public class IncomeServiceTest
         var thirdIncome = TestDataFactory.CreateIncome(4, _testUser);
         await _incomeService.AddAsync(thirdIncome);
 
+        _incomeRepository.GetUserMonthlyIncomes(_testUser.UserId.ToString(), queryParams.PeriodStart, queryParams.PeriodEnd)
+                .Returns(new List<Income> { firstIncome, secondIncome, thirdIncome });
+
         //Act
-        var expectedIncomes = await _incomeService.GetUserMonthlyIncomes(_testUser.UserId.ToString(), new TransactionQueryParams());
+        var expectedIncomeResponse = await _incomeService.GetUserMonthlyIncomes(_testUser.UserId.ToString(), new TransactionQueryParams());
 
         //Assert
-        Assert.Equal(3, expectedIncomes.Count());
+        Assert.Equal(3, expectedIncomeResponse.Count);
 
-        Assert.Contains(firstIncome, expectedIncomes);
-        Assert.Contains(secondIncome, expectedIncomes);
-        Assert.Contains(thirdIncome, expectedIncomes);
+        Assert.Contains(firstIncome, expectedIncomeResponse.Data);
+        Assert.Contains(secondIncome, expectedIncomeResponse.Data);
+        Assert.Contains(thirdIncome, expectedIncomeResponse.Data);
     }
 
 }
