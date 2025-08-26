@@ -46,8 +46,8 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
 
         var expense = TestDataFactory.CreateExpense(2, user);
 
-        var addIncomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
-        addIncomeResponse.EnsureSuccessStatusCode();
+        var addExpenseResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
+        addExpenseResponse.EnsureSuccessStatusCode();
 
         //Act
         var response = await HttpRequestSender.DeleteAsync(_client, BaseRoute, expense);
@@ -68,8 +68,8 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
         var expense = TestDataFactory.CreateExpense(3, user);
 
 
-        var addIncomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
-        addIncomeResponse.EnsureSuccessStatusCode();
+        var addExpenseResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
+        addExpenseResponse.EnsureSuccessStatusCode();
 
         var editedExpense = new Expense
         {
@@ -132,7 +132,7 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
 
         var json = await response.Content.ReadAsStringAsync();
         var expenseResponse = JsonConvert.DeserializeObject<ExpenseResponse>(json);
-        var expenses = expenseResponse.Data;
+        var expenses = expenseResponse!.Data;
 
         //Assert
         Assert.Multiple(() =>

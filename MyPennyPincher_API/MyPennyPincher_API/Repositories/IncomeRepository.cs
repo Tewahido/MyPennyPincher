@@ -30,12 +30,12 @@ public class IncomeRepository : IIncomeRepository
         return await _context.Incomes.FirstOrDefaultAsync(income => income.IncomeId == incomeId);
     }
 
-    public async Task<ICollection<Income>> GetUserMonthlyIncomes(string userId, int year, int month)
+    public async Task<ICollection<Income>> GetUserMonthlyIncomes(string userId, DateOnly periodStart, DateOnly periodEnd)
     {
         return await _context.Incomes
             .Where(income => income.UserId.ToString() == userId &&
-                    income.Date.Year == year &&
-                    income.Date.Month == month)
+                    income.Date >= periodStart&&
+                    income.Date <= periodEnd)
                 .ToListAsync();
     }
 

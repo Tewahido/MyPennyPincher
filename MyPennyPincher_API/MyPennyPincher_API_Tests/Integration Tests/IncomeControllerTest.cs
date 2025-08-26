@@ -24,7 +24,6 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
         var user = TestDataFactory.CreateTestUser();
 
         var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
-
         userResponse.EnsureSuccessStatusCode();
 
         var income = TestDataFactory.CreateIncome(1, user);
@@ -43,13 +42,11 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
         var user = TestDataFactory.CreateTestUser();
 
         var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
-
         userResponse.EnsureSuccessStatusCode();
 
         var income = TestDataFactory.CreateIncome(2, user);
 
         var addIncomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, income);
-
         addIncomeResponse.EnsureSuccessStatusCode();
 
         //Act
@@ -66,13 +63,11 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
         var user = TestDataFactory.CreateTestUser();
 
         var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
-
         userResponse.EnsureSuccessStatusCode();
 
         var income = TestDataFactory.CreateIncome(3, user);
 
         var addIncomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, income);
-
         addIncomeResponse.EnsureSuccessStatusCode();
 
         var editedIncome = new Income
@@ -134,7 +129,7 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
 
         var json = await response.Content.ReadAsStringAsync();
         var incomeResponse = JsonConvert.DeserializeObject<IncomeResponse>(json);
-        var incomes = incomeResponse.Data;
+        var incomes = incomeResponse!.Data;
 
         //Assert
         Assert.Multiple(() =>

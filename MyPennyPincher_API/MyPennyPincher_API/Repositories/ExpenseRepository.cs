@@ -30,12 +30,12 @@ public class ExpenseRepository : IExpenseRepository
         return await _context.Expenses.FirstOrDefaultAsync(expense => expense.ExpenseId == expenseId);
     }
 
-    public async Task<ICollection<Expense>> GetUserMonthlyExpenses(string userId, int year, int month)
+    public async Task<ICollection<Expense>> GetUserMonthlyExpenses(string userId, DateOnly periodStart, DateOnly periodEnd)
     {
         return await _context.Expenses
             .Where(expense => expense.UserId.ToString() == userId && 
-                    expense.Date.Year == year &&
-                    expense.Date.Month == month)
+                    expense.Date >= periodStart &&
+                    expense.Date <= periodEnd)
                 .ToListAsync();
     }
 

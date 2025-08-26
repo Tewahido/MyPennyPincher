@@ -17,7 +17,7 @@ public class IncomeService : IIncomeService
 
     public async Task<IEnumerable<Income>> GetUserMonthlyIncomes(string userId, TransactionQueryParams queryParams)
     {
-        var incomes = await _incomeRepository.GetUserMonthlyIncomes(userId, queryParams.Year, queryParams.Month);
+        var incomes = await _incomeRepository.GetUserMonthlyIncomes(userId, queryParams.PeriodStart, queryParams.PeriodEnd);
 
         if (incomes == null || incomes.Count() == 0)
         {

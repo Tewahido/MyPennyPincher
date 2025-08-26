@@ -17,7 +17,7 @@ public class ExpenseService : IExpenseService
 
     public async Task<IEnumerable<Expense>> GetUserMonthlyExpenses(string userId, TransactionQueryParams queryParams)
     {
-        var expenses = await _expenseRepository.GetUserMonthlyExpenses(userId, queryParams.Year, queryParams.Month);
+        var expenses = await _expenseRepository.GetUserMonthlyExpenses(userId, queryParams.PeriodStart, queryParams.PeriodEnd);
 
         if (expenses == null || expenses.Count() == 0)
         {
