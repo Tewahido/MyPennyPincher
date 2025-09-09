@@ -21,7 +21,7 @@ public class IncomeController : ControllerBase
     }
 
     [HttpGet("month")]
-    public async Task<ActionResult<IEnumerable<Income>>> GetUserIncomesForMonth([FromQuery] TransactionQueryParams queryParams)
+    public async Task<ActionResult<IncomeResponse>> GetUserIncomesForPeriod([FromQuery] TransactionQueryParams queryParams)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         

@@ -20,8 +20,8 @@ public class ExpenseController : ControllerBase
         _expenseService = expenseService;
     }
 
-    [HttpGet("month")]
-    public async Task<ActionResult<IEnumerable<Expense>>> GetUserExpensesForMonth([FromQuery] TransactionQueryParams queryParams)
+    [HttpGet]
+    public async Task<ActionResult<ExpenseResponse>> GetUserExpensesForPeriod([FromQuery] TransactionQueryParams queryParams)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
