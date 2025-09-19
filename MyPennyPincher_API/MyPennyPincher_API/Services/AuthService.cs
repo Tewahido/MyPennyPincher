@@ -51,7 +51,7 @@ public class AuthService : IAuthService
         return newUser;
     }
 
-    public async Task<User> Login(Login login)
+    public async Task<User> Login(LoginCredentials login)
     {
         var user = await _authRepository.FindByEmailAsync(login.Email);
 

@@ -79,7 +79,7 @@ public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Prog
 
         registeredUserResult.EnsureSuccessStatusCode();
 
-        var login = new Login
+        var login = new LoginCredentials
         {
             Email = user.Email,
             Password = "incorrectPassword"

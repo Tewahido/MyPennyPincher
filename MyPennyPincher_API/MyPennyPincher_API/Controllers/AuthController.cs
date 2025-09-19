@@ -34,7 +34,7 @@ public class AuthController : ControllerBase
 
     [EnableRateLimiting("sliding")]
     [HttpPost("login")]
-    public async Task<ActionResult<UserAccessToken>> Login([FromBody] Login login)
+    public async Task<ActionResult<UserAccessToken>> Login([FromBody] LoginCredentials login)
     {
         if (!ModelState.IsValid)
         {

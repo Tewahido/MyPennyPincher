@@ -109,7 +109,7 @@ public class AuthServiceTest
 
         await _authService.Register(user);
 
-        var login = new Login
+        var login = new LoginCredentials
         {
             Email = "invalidEmail",
             Password = "invalidPassword"
