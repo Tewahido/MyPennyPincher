@@ -32,7 +32,7 @@ public class ExpenseController : ControllerBase
 
         var expenseResponse = await _expenseService.GetUserMonthlyExpenses(userId, queryParams);
 
-        if(expenseResponse.Count < 1)
+        if (expenseResponse.Count < 1)
         {
             return NoContent();
         }

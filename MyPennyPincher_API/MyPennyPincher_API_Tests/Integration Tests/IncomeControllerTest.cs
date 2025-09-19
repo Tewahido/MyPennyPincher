@@ -1,5 +1,6 @@
 ﻿using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
+using MyPennyPincher_API.Models.QueryParameters;
 using MyPennyPincher_API_Tests.Test_Utilities;
 using MyPennyPincher_API_Tests.WebApplicationFactory;
 using Newtonsoft.Json;
@@ -123,8 +124,12 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
             addIncomeResponse.EnsureSuccessStatusCode();
         }
 
+        var queryParams = new TransactionQueryParams();
+
+        var queryString = $"?periodStart={queryParams.PeriodStart}&periodEnd={queryParams.PeriodEnd}&offset={queryParams.Offset}&limit={queryParams.Limit}";
+
         //Act
-        var response = await HttpRequestSender.GetAsync(_client, BaseRoute + "/month", token!);
+        var response = await HttpRequestSender.GetAsync(_client, BaseRoute + queryString, token!);
         response.EnsureSuccessStatusCode();
 
         var json = await response.Content.ReadAsStringAsync();

@@ -63,7 +63,7 @@ public class ExpenseServiceTest
         var thirdExpense = TestDataFactory.CreateExpense(4, _testUser);
         await _expenseService.AddAsync(thirdExpense);
 
-        _expenseRepository.GetUserMonthlyExpenses(_testUser.UserId.ToString(), queryParams.PeriodStart, queryParams.PeriodEnd)
+        _expenseRepository.GetUserMonthlyExpenses(_testUser.UserId.ToString(), queryParams)
                 .Returns(new List<Expense> { firstExpense, secondExpense, thirdExpense });
 
         //Act
@@ -83,7 +83,7 @@ public class ExpenseServiceTest
         //Arrange
         var queryParams = new TransactionQueryParams();
 
-        _expenseRepository.GetUserMonthlyExpenses(_testUser.UserId.ToString(), queryParams.PeriodStart, queryParams.PeriodEnd)
+        _expenseRepository.GetUserMonthlyExpenses(_testUser.UserId.ToString(), queryParams)
                 .Returns(new List<Expense>());
 
         //Act

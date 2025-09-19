@@ -20,7 +20,7 @@ public class IncomeController : ControllerBase
         _incomeService = incomeService;
     }
 
-    [HttpGet("month")]
+    [HttpGet]
     public async Task<ActionResult<IncomeResponse>> GetUserIncomesForPeriod([FromQuery] TransactionQueryParams queryParams)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

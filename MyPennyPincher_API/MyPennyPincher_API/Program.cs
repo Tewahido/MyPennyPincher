@@ -20,6 +20,8 @@ if (!builder.Environment.IsEnvironment("Testing"))
 {
     builder.Services.AddDbContext<MyPennyPincherDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbCon")));
+
+    builder.Configuration.AddUserSecrets<Program>(optional: true);
 }
 
 builder.Services.AddControllers();

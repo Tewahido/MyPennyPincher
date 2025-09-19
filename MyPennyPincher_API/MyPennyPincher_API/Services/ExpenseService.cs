@@ -18,7 +18,7 @@ public class ExpenseService : IExpenseService
 
     public async Task<ExpenseResponse> GetUserMonthlyExpenses(string userId, TransactionQueryParams queryParams)
     {
-        var expenses = await _expenseRepository.GetUserMonthlyExpenses(userId, queryParams.PeriodStart, queryParams.PeriodEnd);
+        var expenses = await _expenseRepository.GetUserMonthlyExpenses(userId, queryParams);
 
         if (expenses == null || expenses.Count() == 0)
         {
@@ -29,12 +29,9 @@ public class ExpenseService : IExpenseService
             };
         }
 
-        var returnedExpenses = expenses.Skip(queryParams.Offset)
-                                .Take(queryParams.Limit);
-
         return new ExpenseResponse
         {
-            Data = returnedExpenses.ToList(),
+            Data = expenses.ToList(),
             Count = expenses.Count
         };
     }

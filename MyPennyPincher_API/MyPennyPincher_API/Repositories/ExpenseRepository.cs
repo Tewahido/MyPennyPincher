@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models.DataModels;
+using MyPennyPincher_API.Models.QueryParameters;
 using MyPennyPincher_API.Repositories.Interfaces;
 
 namespace MyPennyPincher_API.Repositories;
@@ -30,13 +31,15 @@ public class ExpenseRepository : IExpenseRepository
         return await _context.Expenses.FirstOrDefaultAsync(expense => expense.ExpenseId == expenseId);
     }
 
-    public async Task<ICollection<Expense>> GetUserMonthlyExpenses(string userId, DateOnly periodStart, DateOnly periodEnd)
+    public async Task<ICollection<Expense>> GetUserMonthlyExpenses(string userId, TransactionQueryParams queryParams)
     {
         return await _context.Expenses
             .Where(expense => expense.UserId.ToString() == userId && 
-                    expense.Date >= periodStart &&
-                    expense.Date <= periodEnd)
-                .ToListAsync();
+                    expense.Date >= queryParams.PeriodStart &&
+                    expense.Date <= queryParams.PeriodEnd)
+            .Skip(queryParams.Offset)
+            .Take(queryParams.Limit)
+            .ToListAsync();
     }
 
     public async Task SaveChangesAsync()
