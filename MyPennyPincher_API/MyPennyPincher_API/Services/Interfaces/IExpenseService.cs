@@ -6,7 +6,7 @@ namespace MyPennyPincher_API.Services.Interfaces;
 
 public interface IExpenseService
 {
-    Task<ExpenseResponse> GetUserMonthlyExpenses(string userId, TransactionQueryParams queryParams);
+    Task<ExpenseResponse> GetUserExpensesForPeriod(string userId, TransactionQueryParams queryParams);
     Task AddAsync(Expense expense);
     Task DeleteAsync(Expense expense);
     Task EditAsync(Expense updatedExpense);

@@ -16,11 +16,13 @@ public class ExpenseService : IExpenseService
         _expenseRepository = expenseRepository;
     }
 
-    public async Task<ExpenseResponse> GetUserMonthlyExpenses(string userId, TransactionQueryParams queryParams)
+    public async Task<ExpenseResponse> GetUserExpensesForPeriod(string userId, TransactionQueryParams queryParams)
     {
-        var expenses = await _expenseRepository.GetUserMonthlyExpenses(userId, queryParams);
+        var expenses = await _expenseRepository.GetUserExpensesForPeriodAsync(userId, queryParams);
 
-        if (expenses == null || expenses.Count() == 0)
+        var totalCount = await _expenseRepository.GetUserExpensesForPeriodCountAsync(userId, queryParams);
+
+        if (expenses == null || totalCount == 0)
         {
             return new ExpenseResponse
             {
@@ -32,7 +34,7 @@ public class ExpenseService : IExpenseService
         return new ExpenseResponse
         {
             Data = expenses.ToList(),
-            Count = expenses.Count
+            Count = totalCount
         };
     }
 

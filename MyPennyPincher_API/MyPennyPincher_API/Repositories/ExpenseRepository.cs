@@ -31,7 +31,7 @@ public class ExpenseRepository : IExpenseRepository
         return await _context.Expenses.FirstOrDefaultAsync(expense => expense.ExpenseId == expenseId);
     }
 
-    public async Task<ICollection<Expense>> GetUserMonthlyExpenses(string userId, TransactionQueryParams queryParams)
+    public async Task<ICollection<Expense>> GetUserExpensesForPeriodAsync(string userId, TransactionQueryParams queryParams)
     {
         return await _context.Expenses
             .Where(expense => expense.UserId.ToString() == userId && 
@@ -39,7 +39,17 @@ public class ExpenseRepository : IExpenseRepository
                     expense.Date <= queryParams.PeriodEnd)
             .Skip(queryParams.Offset)
             .Take(queryParams.Limit)
+            .AsNoTracking()
             .ToListAsync();
+    }
+
+    public async Task<int> GetUserExpensesForPeriodCountAsync(string userId, TransactionQueryParams queryParams)
+    {
+        return await _context.Expenses
+            .Where(expense => expense.UserId.ToString() == userId &&
+                    expense.Date >= queryParams.PeriodStart &&
+                    expense.Date <= queryParams.PeriodEnd)
+            .CountAsync();
     }
 
     public async Task SaveChangesAsync()
