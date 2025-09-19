@@ -55,19 +55,19 @@ public class ExpenseServiceTest
         var queryParams = new TransactionQueryParams();
 
         var firstExpense = TestDataFactory.CreateExpense(2, _testUser);
-        await _expenseService.AddAsync(firstExpense);
 
         var secondExpense = TestDataFactory.CreateExpense(3, _testUser);
-        await _expenseService.AddAsync(secondExpense);
 
         var thirdExpense = TestDataFactory.CreateExpense(4, _testUser);
-        await _expenseService.AddAsync(thirdExpense);
 
-        _expenseRepository.GetUserMonthlyExpenses(_testUser.UserId.ToString(), queryParams)
-                .Returns(new List<Expense> { firstExpense, secondExpense, thirdExpense });
+        _expenseRepository.GetUserExpensesForPeriodAsync(_testUser.UserId.ToString(), queryParams)
+                .Returns(Task.FromResult<ICollection<Expense>>(new List<Expense> { firstExpense, secondExpense, thirdExpense }));
+
+        _expenseRepository.GetUserExpensesForPeriodCountAsync(_testUser.UserId.ToString(), queryParams)
+                .Returns(Task.FromResult(3));
 
         //Act
-        var expectedExpenseResponse = await _expenseService.GetUserMonthlyExpenses(_testUser.UserId.ToString(), queryParams);
+        var expectedExpenseResponse = await _expenseService.GetUserExpensesForPeriod(_testUser.UserId.ToString(), queryParams);
 
         //Assert
         Assert.Equal(3, expectedExpenseResponse.Count);
@@ -83,11 +83,11 @@ public class ExpenseServiceTest
         //Arrange
         var queryParams = new TransactionQueryParams();
 
-        _expenseRepository.GetUserMonthlyExpenses(_testUser.UserId.ToString(), queryParams)
+        _expenseRepository.GetUserExpensesForPeriodAsync(_testUser.UserId.ToString(), queryParams)
                 .Returns(new List<Expense>());
 
         //Act
-        var expectedExpenseResponse = await _expenseService.GetUserMonthlyExpenses(_testUser.UserId.ToString(), queryParams);
+        var expectedExpenseResponse = await _expenseService.GetUserExpensesForPeriod(_testUser.UserId.ToString(), queryParams);
 
         //Assert
         Assert.Equal(0, expectedExpenseResponse.Count);

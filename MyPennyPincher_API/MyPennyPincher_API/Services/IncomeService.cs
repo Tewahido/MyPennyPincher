@@ -16,11 +16,13 @@ public class IncomeService : IIncomeService
         _incomeRepository = incomeRepository;
     }
 
-    public async Task<IncomeResponse> GetUserMonthlyIncomes(string userId, TransactionQueryParams queryParams)
+    public async Task<IncomeResponse> GetUserIncomesForPeriod(string userId, TransactionQueryParams queryParams)
     {
-        var incomes = await _incomeRepository.GetUserMonthlyIncomes(userId, queryParams.PeriodStart, queryParams.PeriodEnd);
+        var incomes = await _incomeRepository.GetUserIncomesForPeriodAsync(userId, queryParams);
 
-        if (incomes == null || incomes.Count() == 0)
+        var totalCount = await _incomeRepository.GetUserIncomesForPeriodCountAsync(userId, queryParams);
+
+        if (incomes == null || totalCount == 0)
         {
             return new IncomeResponse
             {
@@ -29,13 +31,10 @@ public class IncomeService : IIncomeService
             };
         }
 
-        var returnedIncomes = incomes.Skip(queryParams.Offset)
-                                .Take(queryParams.Limit);
-
         return new IncomeResponse
         {
-            Data = returnedIncomes.ToList(),
-            Count = incomes.Count
+            Data = incomes.ToList(),
+            Count = totalCount
         };
     }
 

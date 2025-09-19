@@ -1,6 +1,7 @@
 ﻿using MyPennyPincher_API.Exceptions;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.QueryParameters;
+using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
 using MyPennyPincher_API.Services.Interfaces;
@@ -21,6 +22,23 @@ public class IncomeServiceTest
         _incomeService = new IncomeService(_incomeRepository);
         _testUser = TestDataFactory.CreateTestUser();
     }
+
+    [Fact]
+    public async Task GIVEN_NoUserExpenses_WHEN_GettingUserExpenses_THEN_ReturnEmptyExpenseResponse()
+    {
+        //Arrange
+        var queryParams = new TransactionQueryParams();
+
+        _incomeRepository.GetUserIncomesForPeriodAsync(_testUser.UserId.ToString(), queryParams)
+                .Returns(new List<Income>());
+
+        //Act
+        var expectedExpenseResponse = await _incomeService.GetUserIncomesForPeriod(_testUser.UserId.ToString(), queryParams);
+
+        //Assert
+        Assert.Equal(0, expectedExpenseResponse.Count);
+    }
+
 
     [Fact]
     public async Task GIVEN_NoUserIncomes_WHEN_EditingIncome_THEN_ThrowIncomeNotFoundException()
@@ -48,25 +66,25 @@ public class IncomeServiceTest
     }
 
     [Fact]
-    public async Task GIVEN_UserId_WHEN_GettingUserIncomes_THEN_ReturnUserIncomes()
+    public async Task GIVEN_UserId_WHEN_GettingUserIncomes_THEN_ReturnUserIncome()
     {
         //Arrange
         var queryParams = new TransactionQueryParams();
 
         var firstIncome = TestDataFactory.CreateIncome(2, _testUser);
-        await _incomeService.AddAsync(firstIncome);
 
         var secondIncome = TestDataFactory.CreateIncome(3, _testUser);
-        await _incomeService.AddAsync(secondIncome);
 
         var thirdIncome = TestDataFactory.CreateIncome(4, _testUser);
-        await _incomeService.AddAsync(thirdIncome);
 
-        _incomeRepository.GetUserMonthlyIncomes(_testUser.UserId.ToString(), queryParams.PeriodStart, queryParams.PeriodEnd)
-                .Returns(new List<Income> { firstIncome, secondIncome, thirdIncome });
+        _incomeRepository.GetUserIncomesForPeriodAsync(_testUser.UserId.ToString(), queryParams)
+                .Returns(Task.FromResult<ICollection<Income>>(new List<Income> { firstIncome, secondIncome, thirdIncome }));
+
+        _incomeRepository.GetUserIncomesForPeriodCountAsync(_testUser.UserId.ToString(), queryParams)
+                .Returns(Task.FromResult(3));
 
         //Act
-        var expectedIncomeResponse = await _incomeService.GetUserMonthlyIncomes(_testUser.UserId.ToString(), new TransactionQueryParams());
+        var expectedIncomeResponse = await _incomeService.GetUserIncomesForPeriod(_testUser.UserId.ToString(), queryParams);
 
         //Assert
         Assert.Equal(3, expectedIncomeResponse.Count);
