@@ -1,8 +1,10 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyPennyPincher_API.Models.DataModels;
+using MyPennyPincher_API.Models.DTO;
+using MyPennyPincher_API.Models.QueryParameters;
 using MyPennyPincher_API.Services.Interfaces;
+using System.Security.Claims;
 
 namespace MyPennyPincher_API.Controllers;
 
@@ -19,7 +21,7 @@ public class IncomeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ICollection<Income>>> GetUserIncomes()
+    public async Task<ActionResult<IncomeResponse>> GetUserIncomesForPeriod([FromQuery] TransactionQueryParams queryParams)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         
@@ -28,9 +30,14 @@ public class IncomeController : ControllerBase
             return Unauthorized();
         }
 
-        var incomes = await _incomeService.GetByUserIdAsync(userId);
+        var incomeResponse = await _incomeService.GetUserIncomesForPeriod(userId, queryParams);
 
-        return Ok(incomes);
+        if (incomeResponse.Count < 1)
+        {
+            return NoContent();
+        }
+
+        return Ok(incomeResponse);
     }
 
     [HttpPost]
@@ -43,7 +50,7 @@ public class IncomeController : ControllerBase
 
         await _incomeService.AddAsync(income);
 
-        return Ok();
+        return Created();
     }
 
     [HttpDelete]
@@ -56,7 +63,7 @@ public class IncomeController : ControllerBase
 
         await _incomeService.DeleteAsync(income);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpPut]
@@ -69,6 +76,6 @@ public class IncomeController : ControllerBase
 
         await _incomeService.EditAsync(income);
 
-        return Ok();
+        return NoContent();
     }
 }

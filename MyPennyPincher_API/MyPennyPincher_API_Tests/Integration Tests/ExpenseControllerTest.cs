@@ -1,6 +1,6 @@
-﻿using System.Net;
-using MyPennyPincher_API.Models.DataModels;
+﻿using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
+using MyPennyPincher_API.Models.QueryParameters;
 using MyPennyPincher_API_Tests.Test_Utilities;
 using MyPennyPincher_API_Tests.WebApplicationFactory;
 using Newtonsoft.Json;
@@ -22,12 +22,12 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
     public async Task GIVEN_NewIncome_WHEN_AddingIncome_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
         userResponse.EnsureSuccessStatusCode();
 
-        Expense expense = TestDataFactory.CreateExpense(1, user);
+        var expense = TestDataFactory.CreateExpense(1, user);
 
         //Act
         var response = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
@@ -40,15 +40,15 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
     public async Task GIVEN_ExistingIncome_WHEN_DeletingIncome_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
         userResponse.EnsureSuccessStatusCode();
 
-        Expense expense = TestDataFactory.CreateExpense(2, user);
+        var expense = TestDataFactory.CreateExpense(2, user);
 
-        var addIncomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
-        addIncomeResponse.EnsureSuccessStatusCode();
+        var addExpenseResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
+        addExpenseResponse.EnsureSuccessStatusCode();
 
         //Act
         var response = await HttpRequestSender.DeleteAsync(_client, BaseRoute, expense);
@@ -61,18 +61,18 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
     public async Task GIVEN_ExistingIncome_WHEN_EditingIncome_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
         userResponse.EnsureSuccessStatusCode();
 
-        Expense expense = TestDataFactory.CreateExpense(3, user);
+        var expense = TestDataFactory.CreateExpense(3, user);
 
 
-        var addIncomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
-        addIncomeResponse.EnsureSuccessStatusCode();
+        var addExpenseResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
+        addExpenseResponse.EnsureSuccessStatusCode();
 
-        Expense editedExpense = new Expense
+        var editedExpense = new Expense
         {
             ExpenseId = 3,
             Description = "Test",
@@ -94,12 +94,12 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
     public async Task GIVEN_UserId_WHEN_GettingUserExpenses_THEN_ReturnUserExpenses()
     {
         //Arrange
-        User user = TestDataFactory.CreateAuthenticatedTestUser();
+        var user = TestDataFactory.CreateAuthenticatedTestUser();
 
         var registerUserResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
         registerUserResponse.EnsureSuccessStatusCode();
 
-        Login login = TestDataFactory.CreateUserLogin(user);
+        var login = TestDataFactory.CreateUserLogin(user);
 
         var loginUserResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/login", login);
         loginUserResponse.EnsureSuccessStatusCode();
@@ -110,34 +110,43 @@ public class ExpenseControllerTest : IClassFixture<CustomWebApplicationFactory<P
         var token = loginResponse?.Token;
         Assert.NotNull(token);
 
-        List<Expense> userExpenses = new List<Expense>();
+        var userExpenses = new List<Expense>();
 
-        Expense firstExpense = TestDataFactory.CreateExpense(4, user);
+        var firstExpense = TestDataFactory.CreateExpense(4, user);
         userExpenses.Add(firstExpense);
 
-        Expense secondExpense = TestDataFactory.CreateExpense(5, user);
+        var secondExpense = TestDataFactory.CreateExpense(5, user);
         userExpenses.Add(secondExpense);
 
-        Expense thirdExpense = TestDataFactory.CreateExpense(6, user);
+        var thirdExpense = TestDataFactory.CreateExpense(6, user);
         userExpenses.Add(thirdExpense);
 
         foreach(var expense in userExpenses)
         {
-            var expenseResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
-            expenseResponse.EnsureSuccessStatusCode();
+            var addExpenseResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, expense);
+            addExpenseResponse.EnsureSuccessStatusCode();
         }
 
+        var queryParams = new TransactionQueryParams();
+
+        var queryString = $"?periodStart={queryParams.PeriodStart}&periodEnd={queryParams.PeriodEnd}&offset={queryParams.Offset}&limit={queryParams.Limit}";
+
         //Act
-        var response = await HttpRequestSender.GetAsync(_client, BaseRoute, token);
+        var response = await HttpRequestSender.GetAsync(_client, BaseRoute + queryString, token);
         response.EnsureSuccessStatusCode();
 
         var json = await response.Content.ReadAsStringAsync();
-        var expenses = JsonConvert.DeserializeObject<List<Income>>(json);
+        var expenseResponse = JsonConvert.DeserializeObject<ExpenseResponse>(json);
+        var expenses = expenseResponse!.Data;
 
         //Assert
-        Assert.NotNull(expenses);
-        Assert.All(expenses, income => Assert.IsType<Income>(income));
-        Assert.Equal(3, expenses.Count);
+        Assert.Multiple(() =>
+        {
+            Assert.NotNull(expenses);
+            Assert.All(expenses, expense => Assert.IsType<Expense>(expense));
+            Assert.Equal(3, expenses.Count);
+            Assert.Equal(expenseResponse.Count, expenses.Count);
+        });
     }
 
     public void Dispose()

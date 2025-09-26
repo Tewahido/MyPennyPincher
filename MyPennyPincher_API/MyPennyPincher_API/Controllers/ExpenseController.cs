@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyPennyPincher_API.Models.DataModels;
+using MyPennyPincher_API.Models.DTO;
+using MyPennyPincher_API.Models.QueryParameters;
 using MyPennyPincher_API.Services.Interfaces;
 
 namespace MyPennyPincher_API.Controllers;
@@ -19,7 +21,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ICollection<Income>>> GetUserExpenses()
+    public async Task<ActionResult<ExpenseResponse>> GetUserExpensesForPeriod([FromQuery] TransactionQueryParams queryParams)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -28,9 +30,14 @@ public class ExpenseController : ControllerBase
             return Unauthorized();
         }
 
-        var expenses = await _expenseService.GetByUserIdAsync(userId);
+        var expenseResponse = await _expenseService.GetUserExpensesForPeriod(userId, queryParams);
 
-        return Ok(expenses);
+        if (expenseResponse.Count < 1)
+        {
+            return NoContent();
+        }
+
+        return Ok(expenseResponse);
     }
 
     [HttpPost]
@@ -43,7 +50,7 @@ public class ExpenseController : ControllerBase
 
         await _expenseService.AddAsync(expense);
 
-        return Ok();
+        return Created();
     }
 
     [HttpDelete]
@@ -56,7 +63,7 @@ public class ExpenseController : ControllerBase
 
         await _expenseService.DeleteAsync(expense);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpPut]
@@ -69,6 +76,6 @@ public class ExpenseController : ControllerBase
 
         await _expenseService.EditAsync(expense);
 
-        return Ok();
+        return NoContent();
     }
 }

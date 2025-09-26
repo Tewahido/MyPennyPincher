@@ -1,6 +1,6 @@
-﻿using System.Net;
-using MyPennyPincher_API.Models.DataModels;
+﻿using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
+using MyPennyPincher_API.Models.QueryParameters;
 using MyPennyPincher_API_Tests.Test_Utilities;
 using MyPennyPincher_API_Tests.WebApplicationFactory;
 using Newtonsoft.Json;
@@ -22,13 +22,12 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
     public async Task GIVEN_NewIncome_WHEN_AddingIncome_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
-
         userResponse.EnsureSuccessStatusCode();
 
-        Income income = TestDataFactory.CreateIncome(1, user);
+        var income = TestDataFactory.CreateIncome(1, user);
 
         //Act
         var response = await HttpRequestSender.PostAsync(_client, BaseRoute, income);
@@ -41,16 +40,14 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
     public async Task GIVEN_ExistingIncome_WHEN_DeletingIncome_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
-
         userResponse.EnsureSuccessStatusCode();
 
-        Income income = TestDataFactory.CreateIncome(2, user);
+        var income = TestDataFactory.CreateIncome(2, user);
 
         var addIncomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, income);
-
         addIncomeResponse.EnsureSuccessStatusCode();
 
         //Act
@@ -64,19 +61,17 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
     public async Task GIVEN_ExistingIncome_WHEN_EditingIncome_THEN_ReturnOkStatus()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         var userResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
-
         userResponse.EnsureSuccessStatusCode();
 
-        Income income = TestDataFactory.CreateIncome(3, user);
+        var income = TestDataFactory.CreateIncome(3, user);
 
         var addIncomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, income);
-
         addIncomeResponse.EnsureSuccessStatusCode();
 
-        Income editedIncome = new Income
+        var editedIncome = new Income
         {
             IncomeId = 3,
             Source = "Test",
@@ -97,12 +92,12 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
     public async Task GIVEN_UserId_WHEN_GettingUserExpenses_THEN_ReturnOkAndUserExpenses()
     {
         //Arrange
-        User user = TestDataFactory.CreateAuthenticatedTestUser();
+        var user = TestDataFactory.CreateAuthenticatedTestUser();
 
         var registerUserResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/register", user);
         registerUserResponse.EnsureSuccessStatusCode();
 
-        Login login = TestDataFactory.CreateUserLogin(user);
+        var login = TestDataFactory.CreateUserLogin(user);
 
         var loginUserResponse = await HttpRequestSender.PostAsync(_client, AuthRoute + "/login", login);
         loginUserResponse.EnsureSuccessStatusCode();
@@ -112,35 +107,43 @@ public class IncomeControllerTest : IClassFixture<CustomWebApplicationFactory<Pr
 
         var token = loginResponse?.Token;
 
-        List<Income> userIncomes = new List<Income>();
+        var userIncomes = new List<Income>();
 
-        Income firstIncome = TestDataFactory.CreateIncome(4, user);
+        var firstIncome = TestDataFactory.CreateIncome(4, user);
         userIncomes.Add(firstIncome);
 
-        Income secondIncome = TestDataFactory.CreateIncome(5, user);
+        var secondIncome = TestDataFactory.CreateIncome(5, user);
         userIncomes.Add(secondIncome);
 
-        Income thirdIncome = TestDataFactory.CreateIncome(6, user);
+        var thirdIncome = TestDataFactory.CreateIncome(6, user);
         userIncomes.Add(thirdIncome);
 
         foreach (var income in userIncomes)
         {
-            var incomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, income);
-            incomeResponse.EnsureSuccessStatusCode();
+            var addIncomeResponse = await HttpRequestSender.PostAsync(_client, BaseRoute, income);
+            addIncomeResponse.EnsureSuccessStatusCode();
         }
 
+        var queryParams = new TransactionQueryParams();
+
+        var queryString = $"?periodStart={queryParams.PeriodStart}&periodEnd={queryParams.PeriodEnd}&offset={queryParams.Offset}&limit={queryParams.Limit}";
+
         //Act
-        var response = await HttpRequestSender.GetAsync(_client, BaseRoute, token!);
+        var response = await HttpRequestSender.GetAsync(_client, BaseRoute + queryString, token!);
         response.EnsureSuccessStatusCode();
 
         var json = await response.Content.ReadAsStringAsync();
-        var incomes = JsonConvert.DeserializeObject<List<Income>>(json);
+        var incomeResponse = JsonConvert.DeserializeObject<IncomeResponse>(json);
+        var incomes = incomeResponse!.Data;
 
         //Assert
-
-        Assert.NotNull(incomes);
-        Assert.All(incomes, income => Assert.IsType<Income>(income));
-        Assert.Equal(3, incomes.Count);
+        Assert.Multiple(() =>
+        {
+            Assert.NotNull(incomes);
+            Assert.All(incomes, income => Assert.IsType<Income>(income));
+            Assert.Equal(3, incomes.Count);
+            Assert.Equal(incomeResponse.Count, incomes.Count);
+        });
     }
 
     public void Dispose()

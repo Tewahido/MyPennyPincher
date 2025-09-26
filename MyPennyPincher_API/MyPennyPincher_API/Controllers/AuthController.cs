@@ -29,12 +29,12 @@ public class AuthController : ControllerBase
 
         User? registredUser = await _authService.Register(user);
 
-        return Ok();
+        return Created();
     }
 
     [EnableRateLimiting("sliding")]
     [HttpPost("login")]
-    public async Task<ActionResult<UserAccessToken>> Login([FromBody] Login login)
+    public async Task<ActionResult<UserAccessToken>> Login([FromBody] LoginCredentials login)
     {
         if (!ModelState.IsValid)
         {
@@ -61,7 +61,7 @@ public class AuthController : ControllerBase
     {
         await _tokenService.DeleteRefreshToken(userId);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpPost("refresh")]

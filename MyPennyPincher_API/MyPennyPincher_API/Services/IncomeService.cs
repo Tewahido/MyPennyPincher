@@ -1,5 +1,7 @@
 ﻿using MyPennyPincher_API.Exceptions;
 using MyPennyPincher_API.Models.DataModels;
+using MyPennyPincher_API.Models.DTO;
+using MyPennyPincher_API.Models.QueryParameters;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services.Interfaces;
 
@@ -14,16 +16,26 @@ public class IncomeService : IIncomeService
         _incomeRepository = incomeRepository;
     }
 
-    public async Task<ICollection<Income>> GetByUserIdAsync(string userId)
+    public async Task<IncomeResponse> GetUserIncomesForPeriod(string userId, TransactionQueryParams queryParams)
     {
-        var incomes = await _incomeRepository.GetByUserIdAsync(userId);
+        var incomes = await _incomeRepository.GetUserIncomesForPeriodAsync(userId, queryParams);
 
-        if (incomes == null || incomes.Count() == 0)
+        var totalCount = await _incomeRepository.GetUserIncomesForPeriodCountAsync(userId, queryParams);
+
+        if (incomes == null || totalCount == 0)
         {
-            throw new IncomesNotFoundException("User incomes not found");
+            return new IncomeResponse
+            {
+                Data = new List<Income>(),
+                Count = 0
+            };
         }
 
-        return incomes;
+        return new IncomeResponse
+        {
+            Data = incomes.ToList(),
+            Count = totalCount
+        };
     }
 
     public async Task AddAsync(Income income)

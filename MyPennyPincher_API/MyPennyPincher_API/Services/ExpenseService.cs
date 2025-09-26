@@ -1,5 +1,7 @@
 ﻿using MyPennyPincher_API.Exceptions;
 using MyPennyPincher_API.Models.DataModels;
+using MyPennyPincher_API.Models.DTO;
+using MyPennyPincher_API.Models.QueryParameters;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services.Interfaces;
 
@@ -14,16 +16,26 @@ public class ExpenseService : IExpenseService
         _expenseRepository = expenseRepository;
     }
 
-    public async Task<ICollection<Expense>> GetByUserIdAsync(string userId)
+    public async Task<ExpenseResponse> GetUserExpensesForPeriod(string userId, TransactionQueryParams queryParams)
     {
-        var expenses = await _expenseRepository.GetByUserIdAsync(userId);
+        var expenses = await _expenseRepository.GetUserExpensesForPeriodAsync(userId, queryParams);
 
-        if (expenses == null || expenses.Count() == 0)
+        var totalCount = await _expenseRepository.GetUserExpensesForPeriodCountAsync(userId, queryParams);
+
+        if (expenses == null || totalCount == 0)
         {
-            throw new ExpensesNotFoundException("No expenses found");
+            return new ExpenseResponse
+            {
+                Data = new List<Expense>(),
+                Count = 0
+            };
         }
 
-        return expenses;
+        return new ExpenseResponse
+        {
+            Data = expenses.ToList(),
+            Count = totalCount
+        };
     }
 
     public async Task AddAsync(Expense expense)

@@ -23,7 +23,6 @@ public class TokenService : ITokenService
         _tokenRepository = tokenRepository;
         _config = config;
         _jwtOptions = jwtOptions;
-
     }
 
     public async Task AddRefreshToken(RefreshToken refreshToken)

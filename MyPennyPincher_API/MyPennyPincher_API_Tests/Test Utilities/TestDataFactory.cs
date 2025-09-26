@@ -21,7 +21,7 @@ public class TestDataFactory
             UserId = userId,
             FullName = "Test User",
             Email = randomEmail,
-            Password = "password"
+            Password = "Password12#"
         };
     }
 
@@ -35,13 +35,13 @@ public class TestDataFactory
             UserId = userId,
             FullName = "Test User",
             Email = randomEmail,
-            Password = "password"
+            Password = "Password12#"
         };
     }
 
-    public static Login CreateUserLogin(User user)
+    public static LoginCredentials CreateUserLogin(User user)
     {
-        return new Login
+        return new LoginCredentials
         {
             Email = user.Email,
             Password = user.Password,

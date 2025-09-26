@@ -4,3 +4,11 @@ POST {{MyPennyPincher_API_HostAddress}}/Income/addIncome
 Accept: application/json
 
 ###
+POST {{MyPennyPincher_API_HostAddress}}/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "tewahidotefera42@gmail.com",
+  "password": "Addisababa1+"
+}

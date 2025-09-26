@@ -1,24 +1,21 @@
-﻿using MyPennyPincher_API.Context;
-using MyPennyPincher_API.Exceptions;
+﻿using MyPennyPincher_API.Exceptions;
 using MyPennyPincher_API.Models.DataModels;
 using MyPennyPincher_API.Models.DTO;
-using MyPennyPincher_API.Repositories;
 using MyPennyPincher_API.Repositories.Interfaces;
 using MyPennyPincher_API.Services;
 using MyPennyPincher_API_Tests.Test_Utilities;
+using NSubstitute;
 
-namespace MyPennyPincher_API_Tests;
+namespace MyPennyPincher_API_Tests.Unit_Tests;
 
-public class AuthServiceTest : IDisposable
+public class AuthServiceTest
 {
     private readonly AuthService _authService;
-    private readonly MyPennyPincherDbContext _context;
     private readonly IAuthRepository _authRepository; 
 
     public AuthServiceTest() 
     {
-        _context = DbContextFactory.GenerateInMemoryDB();
-        _authRepository = new AuthRepository(_context);
+        _authRepository = Substitute.For<IAuthRepository>();
         _authService = new AuthService(_authRepository);
     }
 
@@ -26,19 +23,32 @@ public class AuthServiceTest : IDisposable
     public async Task GIVEN_User_WHEN_Registering_THEN_ReturnNewUser()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
+
+        _authRepository.FindByEmailAsync(user.Email)
+            .Returns(Task.FromResult<User?>(null));
 
         //Act
-        User registeredUser = await _authService.Register(user);
+        var registeredUser = await _authService.Register(user);
 
-        bool passwordIsHashed = BCrypt.Net.BCrypt.Verify(user.Password, registeredUser.Password);
-
-        var expectedUser = _context.Users.FirstOrDefault(u => u.UserId == user.UserId);
+        var passwordIsHashed = BCrypt.Net.BCrypt.Verify(user.Password, registeredUser.Password);
 
         //Assert
         Assert.NotNull(registeredUser);
         Assert.True(passwordIsHashed);
-        Assert.NotNull(expectedUser);
+    }
+
+    [Fact]
+    public async Task GIVEN_ExistingUser_WHEN_Registering_THEN_ReturnUserAlreadyExistsException()
+    {
+        //Arrange
+        var user = TestDataFactory.CreateTestUser();
+
+        _authRepository.FindByEmailAsync(user.Email)
+            .Returns(user);
+
+        //Act & Assert
+        await Assert.ThrowsAsync<UserAlreadyExistsException>(() => _authService.Register(user));
     }
 
     [Fact]
@@ -52,14 +62,36 @@ public class AuthServiceTest : IDisposable
     }
 
     [Fact]
+    public async Task GIVEN_WeakPassword_WHEN_RegisteringUser_THEN_ThrowPasswordTooWeakException()
+    {
+        //Arrange
+        var weakPasswordUser = new User
+        {
+            UserId = Guid.NewGuid(),
+            Email = "test@gmail.com",
+            Password = "testPassword",
+            FullName = "Test User"
+        };
+
+        //Act & Assert
+        await Assert.ThrowsAsync<PasswordTooWeakException>(() => _authService.Register(weakPasswordUser));
+    }
+
+    [Fact]
     public async Task GIVEN_ValidLoginDetails_WHEN_LoggingIn_THEN_ReturnAuthenticatedUser()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
-        User registeredUser = await _authService.Register(user);
+        _authRepository.FindByEmailAsync(user.Email)
+           .Returns(Task.FromResult<User?>(null));
 
-        Login login = TestDataFactory.CreateUserLogin(user);
+        var registeredUser = await _authService.Register(user);
+
+        var login = TestDataFactory.CreateUserLogin(user);
+
+        _authRepository.FindByEmailAsync(login.Email)
+            .Returns(registeredUser);
 
         //Act
         var expectedUser = await _authService.Login(login);
@@ -70,14 +102,14 @@ public class AuthServiceTest : IDisposable
     }
 
     [Fact]
-    public async Task GIVEN_InvalidLoginDetails_WHEN_LoggingIn_THEN_ReturnNull()
+    public async Task GIVEN_InvalidLoginDetails_WHEN_LoggingIn_THEN_ThrowInvalidCredentialsError()
     {
         //Arrange
-        User user = TestDataFactory.CreateTestUser();
+        var user = TestDataFactory.CreateTestUser();
 
         await _authService.Register(user);
 
-        Login login = new Login
+        var login = new LoginCredentials
         {
             Email = "invalidEmail",
             Password = "invalidPassword"
@@ -85,10 +117,5 @@ public class AuthServiceTest : IDisposable
 
         //Act & Assert
         await Assert.ThrowsAsync<InvalidCredentialsException>(async () => await _authService.Login(login));
-    }
-
-    public void Dispose()
-    {
-        _context?.Dispose();
     }
 }

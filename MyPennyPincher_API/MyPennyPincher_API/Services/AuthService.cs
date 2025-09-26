@@ -22,6 +22,11 @@ public class AuthService : IAuthService
             throw new ArgumentNullException();
         }
 
+        if (!PasswordIsValid(user.Password))
+        {
+            throw new PasswordTooWeakException();
+        }
+
         var existingUser = await _authRepository.FindByEmailAsync(user.Email);
 
         if (existingUser != null)
@@ -46,7 +51,7 @@ public class AuthService : IAuthService
         return newUser;
     }
 
-    public async Task<User> Login(Login login)
+    public async Task<User> Login(LoginCredentials login)
     {
         var user = await _authRepository.FindByEmailAsync(login.Email);
 
@@ -65,5 +70,18 @@ public class AuthService : IAuthService
         return user;
     }
  
+    private bool PasswordIsValid(string password)
+    {
+        if (string.IsNullOrWhiteSpace(password) || password.Length < 8)
+        {
+            return false;
+        }
 
+        bool hasUpper = password.Any(char.IsUpper);
+        bool hasLower = password.Any(char.IsLower);
+        bool hasDigit = password.Any(char.IsDigit);
+        bool hasSpecial = password.Any(ch => !char.IsLetterOrDigit(ch));
+
+        return hasUpper && hasLower && hasDigit && hasSpecial;
+    }
 }

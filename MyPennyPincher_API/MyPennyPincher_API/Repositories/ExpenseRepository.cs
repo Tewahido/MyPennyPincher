@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyPennyPincher_API.Context;
 using MyPennyPincher_API.Models.DataModels;
+using MyPennyPincher_API.Models.QueryParameters;
 using MyPennyPincher_API.Repositories.Interfaces;
 
 namespace MyPennyPincher_API.Repositories;
@@ -30,11 +31,25 @@ public class ExpenseRepository : IExpenseRepository
         return await _context.Expenses.FirstOrDefaultAsync(expense => expense.ExpenseId == expenseId);
     }
 
-    public async Task<ICollection<Expense>> GetByUserIdAsync(string userId)
+    public async Task<ICollection<Expense>> GetUserExpensesForPeriodAsync(string userId, TransactionQueryParams queryParams)
     {
         return await _context.Expenses
-            .Where(user => user.UserId.ToString() == userId)
+            .Where(expense => expense.UserId.ToString() == userId && 
+                    expense.Date >= queryParams.PeriodStart &&
+                    expense.Date <= queryParams.PeriodEnd)
+            .Skip(queryParams.Offset)
+            .Take(queryParams.Limit)
+            .AsNoTracking()
             .ToListAsync();
+    }
+
+    public async Task<int> GetUserExpensesForPeriodCountAsync(string userId, TransactionQueryParams queryParams)
+    {
+        return await _context.Expenses
+            .Where(expense => expense.UserId.ToString() == userId &&
+                    expense.Date >= queryParams.PeriodStart &&
+                    expense.Date <= queryParams.PeriodEnd)
+            .CountAsync();
     }
 
     public async Task SaveChangesAsync()

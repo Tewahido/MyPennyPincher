@@ -20,6 +20,8 @@ if (!builder.Environment.IsEnvironment("Testing"))
 {
     builder.Services.AddDbContext<MyPennyPincherDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbCon")));
+
+    builder.Configuration.AddUserSecrets<Program>(optional: true);
 }
 
 builder.Services.AddControllers();
@@ -124,7 +126,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins("http://localhost:3000","http://localhost:5173")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
