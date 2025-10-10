@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser, logoutUser } from "../utils/authUtils.js";
 import { useEffect } from "react";
 import { Refresh } from "../services/authService.js";
+import { STATUS_CODES } from "../constants/statusCodes.js";
 
 export function useTokenChecker(interval = 60000) {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export function useTokenChecker(interval = 60000) {
         try {
           const response = await Refresh(user.userId);
 
-          if (response.status !== 200) {
+          if (response.status !== STATUS_CODES.OK) {
             await logoutUser(dispatch, navigate, location, user.userId);
             return;
           }

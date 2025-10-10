@@ -5,6 +5,7 @@ import { Login } from "../../../services/authService.js";
 import LoginInput from "./LoginInput.jsx";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
 import { loginUser } from "../../../utils/authUtils.js";
+import { STATUS_CODES } from "../../../constants/statusCodes.js";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -30,13 +31,13 @@ export default function LoginForm() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    
+
     const response = await Login(formData.email, formData.password);
 
-    if (response.status != 200) {
+    if (response.status != STATUS_CODES.OK) {
       setLoginFailed(true);
       setErrorMessage(response.message);
-      
+
       return;
     }
 

@@ -6,6 +6,7 @@ import { deleteIncome } from "../../../store/slices/incomeSlice";
 import { DeleteExpense } from "../../../services/expenseService";
 import { deleteExpense } from "../../../store/slices/expenseSlice";
 import { useQueryClient } from "@tanstack/react-query";
+import { STATUS_CODES } from "../../../constants/statusCodes";
 
 const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
   { entry, type },
@@ -36,7 +37,10 @@ const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
         ? await DeleteIncome(entry, token)
         : DeleteExpense(entry, token);
 
-    if (status != 400 || status != 401) {
+    if (
+      status != STATUS_CODES.BAD_REQUEST ||
+      status != STATUS_CODES.UNAUTHORIZED
+    ) {
       type === "income"
         ? dispatch(deleteIncome(entry))
         : dispatch(deleteExpense(entry));

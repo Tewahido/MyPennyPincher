@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { resetMonth } from "../store/slices/monthSlice";
 import { Logout } from "../services/authService";
 import { resetMonthRange } from "../store/slices/monthRangeSlice";
+import { STATUS_CODES } from "../constants/statusCodes";
 
 export function extractTokenExpiryTime(token) {
   const decodedToken = jwtDecode(token);
@@ -21,7 +22,7 @@ export function loginUser(dispatch, userData) {
 export async function logoutUser(dispatch, navigate, location, userId) {
   const response = await Logout(userId);
 
-  if (response != 204) {
+  if (response != STATUS_CODES.NO_CONTENT) {
     return;
   }
 

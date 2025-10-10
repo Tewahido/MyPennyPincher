@@ -35,7 +35,7 @@ public class IncomeRepository : IIncomeRepository
     {
         return await _context.Incomes
             .Where(income => income.UserId.ToString() == userId &&
-                    income.Date >= queryParams.PeriodStart&&
+                    income.Date >= queryParams.PeriodStart &&
                     income.Date <= queryParams.PeriodEnd)
             .Skip(queryParams.Offset)
             .Take(queryParams.Limit)

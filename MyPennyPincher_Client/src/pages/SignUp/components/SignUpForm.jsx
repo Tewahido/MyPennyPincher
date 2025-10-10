@@ -4,6 +4,7 @@ import { isValidElement, useState } from "react";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
 import SignUpInput from "./SignUpInput.jsx";
 import { isValidPassword } from "../../../utils/authUtils.js";
+import { STATUS_CODES } from "../../../constants/statusCodes.js";
 
 const emailDomain = [".com", ".co.za", ".org"];
 
@@ -48,9 +49,7 @@ export default function SignUpForm() {
       formData.password
     );
 
-    console.log(formData);
-
-    if (signUpStatus === 409) {
+    if (signUpStatus === STATUS_CODES.CONFLICT) {
       setUserExists(true);
       setFormData({
         fullName: "",
@@ -60,7 +59,7 @@ export default function SignUpForm() {
       });
     }
 
-    if (signUpStatus === 200) {
+    if (signUpStatus === STATUS_CODES.CREATED) {
       navigate("/login");
     }
   }

@@ -1,4 +1,5 @@
 import { BASE_URL } from "../config/apiConfig.js";
+import { STATUS_CODES } from "../constants/statusCodes.js";
 
 export const GetUserExpensesForPeriod = async (
   token,
@@ -22,7 +23,7 @@ export const GetUserExpensesForPeriod = async (
     },
   });
 
-  if (response.status === 204) {
+  if (response.status === STATUS_CODES.NO_CONTENT) {
     return { data: [], count: 0 };
   }
 

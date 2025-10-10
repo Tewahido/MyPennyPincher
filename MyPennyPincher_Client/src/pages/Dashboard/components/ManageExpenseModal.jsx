@@ -64,7 +64,10 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
         )
       : await AddExpense(currentExpense, user.token);
 
-    if (status != 400 || status != 401) {
+    if (
+      status != STATUS_CODES.BAD_REQUEST ||
+      status != STATUS_CODES.UNAUTHORIZED
+    ) {
       if (!expense && isRecurring) {
         addRecurringExpense(currentExpense, user.token);
       }
