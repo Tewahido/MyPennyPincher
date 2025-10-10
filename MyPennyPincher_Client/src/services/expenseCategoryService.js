@@ -9,5 +9,12 @@ export const GetExpenseCategories = async (token) => {
     },
   });
 
-  return response;
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(
+      `Error ${response.status}: ${text || "Failed to fetch categories"}`
+    );
+  }
+
+  return response.json();
 };

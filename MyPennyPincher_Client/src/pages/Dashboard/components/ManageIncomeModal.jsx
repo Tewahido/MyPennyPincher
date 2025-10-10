@@ -1,11 +1,11 @@
 import { forwardRef, useRef, useImperativeHandle, useState } from "react";
 import { createPortal } from "react-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { AddIncome, EditIncome } from "../../../services/incomeService";
-import { addIncome, editIncome } from "../../../store/slices/incomeSlice.js";
 import { useNavigate } from "react-router-dom";
 import { addMonthlyIncome } from "../../../utils/recurringUtils.js";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ManageIncomeModal = forwardRef(function ManageIncomeModal(
   { income },
@@ -13,9 +13,8 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
 ) {
   const dialog = useRef(ref);
 
-  const reloadIncomes = useSelector((state) => state.income.reloadIncomes);
+  const queryClient = useQueryClient();
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.user.user);
@@ -65,10 +64,11 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
       if (!income && isMonthly) {
         addMonthlyIncome(currentIncome, user.token);
       }
-      income
-        ? dispatch(editIncome({ ...currentIncome, incomeId: income.incomeId }))
-        : dispatch(addIncome(currentIncome));
+
       handleClose();
+
+      queryClient.invalidateQueries({ queryKey: ["Incomes"] });
+
       navigate("/dashboard");
     }
   }

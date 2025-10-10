@@ -1,27 +1,26 @@
-import { forwardRef, useRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useRef, useImperativeHandle, useState, use } from "react";
 import { createPortal } from "react-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { addRecurringExpense } from "../../../utils/recurringUtils";
 import { EditExpense, AddExpense } from "../../../services/expenseService";
-import { editExpense, addExpense } from "../../../store/slices/expenseSlice";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
+import useFetchExpenseCategories from "../../../hooks/useFetchExpenseCategories.js";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ManageExpenseModal = forwardRef(function ManageExpenseModal(
   { expense },
   ref
 ) {
   const dialog = useRef(ref);
-  
-  const reloadExpenses = useSelector((state) => state.expense.reloadExpenses);
+  const queryClient = useQueryClient();
 
-  const expenseCategories = useSelector(
-    (state) => state.expense.expenseCategories
-  );
+  const token = useSelector((state) => state.user.user.token);
+
+  const { expenseCategories } = useFetchExpenseCategories(token);
+
   const user = useSelector((state) => state.user.user);
   const date = useSelector((state) => state.month.month) + "-01";
-
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [invalidInput, setInvalidInput] = useState(false);
@@ -68,14 +67,10 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
     if (status != 400 || status != 401) {
       if (!expense && isRecurring) {
         addRecurringExpense(currentExpense, user.token);
-        
       }
-      expense
-        ? dispatch(
-            editExpense({ ...currentExpense, expenseId: expense.expenseId })
-          )
-        : dispatch(addExpense(currentExpense));
+
       handleClose();
+      queryClient.invalidateQueries({ queryKey: ["Expenses"] });
       navigate("/dashboard");
     }
   }
@@ -130,11 +125,12 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
             className=" h-full w-[60%] bg-gray-100 text-gray-900 rounded-lg mx-3 px-2 focus:outline-none"
             defaultValue={expense && expense.expenseCategoryId}
           >
-            {expenseCategories.map((category, index) => (
-              <option key={index} value={index + 1}>
-                {category}
-              </option>
-            ))}
+            {expenseCategories &&
+              expenseCategories.map((category, index) => (
+                <option key={index} value={index + 1}>
+                  {category.name}
+                </option>
+              ))}
           </select>
         </label>
         <label className="flex h-10 p-1 items-center justify-start">

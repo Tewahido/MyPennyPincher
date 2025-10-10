@@ -75,6 +75,10 @@ export function getTransactionsTotal(transactions) {
 }
 
 export function getCategoryTotals(expenses) {
+  if (!expenses || expenses.length === 0) {
+    return Array(15).fill(0);
+  }
+
   const rawTotals = expenses.reduce((categoryTotals, expense) => {
     categoryTotals[expense.expenseCategoryId] =
       (categoryTotals[expense.expenseCategoryId] || 0) + expense.amount;

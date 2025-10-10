@@ -1,10 +1,7 @@
 import { login, logout, setExpiryTime } from "../store/slices/userSlice";
-import { clearIncomes } from "../store/slices/incomeSlice";
-import { clearExpenses } from "../store/slices/expenseSlice";
 
 import { jwtDecode } from "jwt-decode";
 import { resetMonth } from "../store/slices/monthSlice";
-import { setLoading } from "../store/slices/loadingSlice";
 import { Logout } from "../services/authService";
 import { resetMonthRange } from "../store/slices/monthRangeSlice";
 
@@ -24,21 +21,15 @@ export function loginUser(dispatch, userData) {
 export async function logoutUser(dispatch, navigate, location, userId) {
   const response = await Logout(userId);
 
-  if (response != 200) {
+  if (response != 204) {
     return;
   }
 
   dispatch(logout());
 
-  dispatch(clearIncomes());
-
-  dispatch(clearExpenses());
-
   dispatch(resetMonth());
 
   dispatch(resetMonthRange());
-
-  dispatch(setLoading(true));
 
   if (location.pathname === "/dashboard") {
     navigate("/login");

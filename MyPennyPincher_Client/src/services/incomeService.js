@@ -1,7 +1,20 @@
 import { BASE_URL } from "../config/apiConfig.js";
 
-export const GetUserIncomes = async (token) => {
-  const response = await fetch(`${BASE_URL}/Income`, {
+export const GetUserIncomesForPeriod = async (
+  token,
+  periodStart,
+  periodEnd,
+  limit,
+  offset
+) => {
+  const queryString = new URLSearchParams({
+    periodStart,
+    periodEnd,
+    ...(limit && { limit }),
+    ...(offset && { offset }),
+  }).toString();
+
+  const response = await fetch(`${BASE_URL}/Income?${queryString}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -9,12 +22,16 @@ export const GetUserIncomes = async (token) => {
     },
   });
 
+  if (response.status === 204) {
+    return { data: [], count: 0 };
+  }
+
   if (!response.ok) {
     const error = await response.json();
     console.error("Error:", error.message);
   }
 
-  return response;
+  return response.json();
 };
 
 export const AddIncome = async (data, token) => {

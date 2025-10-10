@@ -26,6 +26,7 @@ import {
   categoryColours,
 } from "../../../config/chartConfig";
 import { useSelector } from "react-redux";
+import useFetchExpenseCategories from "../../../hooks/useFetchExpenseCategories";
 
 ChartJS.register(
   ArcElement,
@@ -69,10 +70,11 @@ function setBarGraphData(labels, incomes, expenses) {
 function setLineChartData(labels, incomes, expenses) {
   let netIncomes = [];
 
-  for (let i = 0; i < incomes.length; i++) {
-    netIncomes.push(incomes[i] - expenses[i]);
+  if (incomes && expenses) {
+    for (let i = 0; i < incomes.length; i++) {
+      netIncomes.push(incomes[i] - expenses[i]);
+    }
   }
-
   lineData = {
     labels: labels,
     datasets: [
@@ -123,7 +125,12 @@ export default function DashboardSection({
   currentMonthIncomes,
   currentMonthExpenses,
 }) {
-  const categoryNames = useSelector((state) => state.expense.expenseCategories);
+  const token = useSelector((state) => state.user.user.token);
+
+  const { expenseCategories } = useFetchExpenseCategories(token);
+
+  const categoryNames =
+    expenseCategories && expenseCategories.map((category) => category.name);
 
   const totalIncome = getTransactionsTotal(currentMonthIncomes);
 
@@ -131,12 +138,13 @@ export default function DashboardSection({
 
   let months = [];
 
-  if (yearlyTotals.incomes) {
-    yearlyTotals.incomes.map((income) => {
+  if (Array.isArray(yearlyTotals.incomes) && yearlyTotals.incomes.length > 0) {
+    yearlyTotals.incomes.forEach((income) => {
       const date = new Date(income.date);
 
-      if (!months.includes(monthNames[date.getMonth()])) {
-        months.push(monthNames[date.getMonth()]);
+      const monthName = monthNames[date.getMonth()];
+      if (!months.includes(monthName)) {
+        months.push(monthName);
       }
     });
   }

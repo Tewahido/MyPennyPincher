@@ -5,7 +5,7 @@ import { formatDate } from "./dateUtils";
 export function addMonthlyIncome(income, token) {
   let incomeMonth = new Date(income.date).getMonth() + 1;
 
-  for (incomeMonth; incomeMonth < 12; incomeMonth++) {
+  for (incomeMonth; incomeMonth < 13; incomeMonth++) {
     const newDate = new Date(income.date);
     newDate.setMonth(incomeMonth);
     const newIncome = { ...income, date: formatDate(newDate) };

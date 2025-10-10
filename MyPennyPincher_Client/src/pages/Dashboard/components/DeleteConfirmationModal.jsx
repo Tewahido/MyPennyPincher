@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteIncome } from "../../../store/slices/incomeSlice";
 import { DeleteExpense } from "../../../services/expenseService";
 import { deleteExpense } from "../../../store/slices/expenseSlice";
+import { useQueryClient } from "@tanstack/react-query";
 
 const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
   { entry, type },
@@ -12,6 +13,7 @@ const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
 ) {
   const token = useSelector((state) => state.user.user?.token);
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const dialog = useRef(ref);
 
@@ -39,6 +41,10 @@ const DeletConfirmationModal = forwardRef(function DeletConfirmationModal(
         ? dispatch(deleteIncome(entry))
         : dispatch(deleteExpense(entry));
       handleClose();
+
+      type === "income"
+        ? queryClient.invalidateQueries({ queryKey: ["Incomes"] })
+        : queryClient.invalidateQueries({ queryKey: ["Expenses"] });
     }
   }
 
