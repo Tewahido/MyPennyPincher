@@ -24,7 +24,7 @@ export function useTokenChecker(interval = 60000) {
         try {
           const response = await Refresh(user.userId);
 
-          if (response.status !== STATUS_CODES.OK) {
+          if (response.status !== STATUS_CODES.SUCCESS) {
             await logoutUser(dispatch, navigate, location, user.userId);
             return;
           }

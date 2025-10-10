@@ -34,7 +34,7 @@ export default function LoginForm() {
 
     const response = await Login(formData.email, formData.password);
 
-    if (response.status != STATUS_CODES.OK) {
+    if (response.status != STATUS_CODES.SUCCESS) {
       setLoginFailed(true);
       setErrorMessage(response.message);
 

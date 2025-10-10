@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
 import useFetchExpenseCategories from "../../../hooks/useFetchExpenseCategories.js";
 import { useQueryClient } from "@tanstack/react-query";
+import { STATUS_CODES } from "../../../constants/statusCodes.js";
 
 const ManageExpenseModal = forwardRef(function ManageExpenseModal(
   { expense },

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { SignUp } from "../../../services/authService.js";
-import { isValidElement, useState } from "react";
+import { useState } from "react";
 import ErrorMessage from "../../../components/ErrorMessage.jsx";
 import SignUpInput from "./SignUpInput.jsx";
 import { isValidPassword } from "../../../utils/authUtils.js";
