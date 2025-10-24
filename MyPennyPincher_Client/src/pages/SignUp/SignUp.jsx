@@ -17,7 +17,7 @@ const fadeInForm = {
 
 export default function SignUp() {
   return (
-    <div className="w-full h-[calc(100vh-57px)] bg-green-100 flex justify-center items-center ">
+    <div className=" h-[calc(100vh-57px)] pt-20 bg-green-100 flex justify-center items-center ">
       <motion.div
         variants={fadeInForm}
         initial="hidden"

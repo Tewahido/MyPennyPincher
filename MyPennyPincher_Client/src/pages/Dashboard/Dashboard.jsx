@@ -6,8 +6,14 @@ import { dashboardFade } from "../../config/animationConfig.js";
 import useTransactionPeriod from "../../hooks/useTransactionPeriod.js";
 import useFetchUserExpenses from "../../hooks/useFetchUserExpenses.js";
 import useFetchUserIncomes from "../../hooks/useFetchUserIncomes.js";
+import usePagination from "../../hooks/usePagination.js";
+import { useState } from "react";
 
 export default function Dashboard() {
+  const [incomeOffset, setIncomeOffset] = useState(0);
+  const [expenseOffset, setExpenseOffset] = useState(0);
+
+  const limit = 10;
   const {
     periodStart,
     periodEnd,
@@ -24,9 +30,6 @@ export default function Dashboard() {
 
   const token = useSelector((state) => state.user.user.token);
 
-  const limit = 10;
-  const offset = 0;
-
   const yearForTransactions =
     transactionPeriod == TransactionPeriod.MONTH
       ? currentYear
@@ -34,29 +37,43 @@ export default function Dashboard() {
 
   const {
     expensesForPeriod: expenseData,
+    expensesForPeriodCount,
     yearExpenses: currentYearExpenses,
     loading: loadingExpenses,
   } = useFetchUserExpenses(
     periodStart,
     periodEnd,
     limit,
-    offset,
+    expenseOffset,
     yearForTransactions,
     token
   );
 
   const {
     incomesForPeriod: incomeData,
+    incomesForPeriodCount,
     yearIncomes: currentYearIncomes,
     loading: loadingIncomes,
   } = useFetchUserIncomes(
     periodStart,
     periodEnd,
     limit,
-    offset,
+    incomeOffset,
     yearForTransactions,
     token
   );
+
+  const {
+    currentPage: currentIncomePage,
+    totalPages: totalIncomePages,
+    handlePageChange: handleIncomePageChange,
+  } = usePagination(incomesForPeriodCount, limit, setIncomeOffset);
+
+  const {
+    currentPage: currentExpensePage,
+    totalPages: totalExpensePages,
+    handlePageChange: handleExpensePageChange,
+  } = usePagination(expensesForPeriodCount, limit, setExpenseOffset);
 
   const loading = loadingExpenses || loadingIncomes;
 
@@ -104,7 +121,7 @@ export default function Dashboard() {
                 />
                 {transactionPeriod == TransactionPeriod.MONTH_RANGE && (
                   <>
-                    <p className="font-bold text-xl">---</p>
+                    <p className="font-bold text-xl">-</p>
                     <input
                       type="month"
                       onChange={(event) => handleToMonthChange(event)}
@@ -141,6 +158,10 @@ export default function Dashboard() {
               <TransactionsSection
                 incomes={incomeData}
                 expenses={expenseData}
+                incomePageCount={totalIncomePages}
+                expensePageCount={totalExpensePages}
+                handleIncomePageClick={handleIncomePageChange}
+                handleExpensePageClick={handleExpensePageChange}
               />
             </div>
           </div>

@@ -154,8 +154,7 @@ export default function SignUpForm() {
               isDataValid.password
                 ? ""
                 : `Password must be 8 characters long and include:
-                  -An uppercase letter
-                  -A lowercase letter
+                  -An upper & lower case letter
                   -A number
                   -A special character`
             }

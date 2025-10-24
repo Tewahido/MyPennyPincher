@@ -4,11 +4,21 @@ import ManageExpenseModal from "./ManageExpenseModal";
 import AddIncomeIcon from "../../../assets/add_income_icon.png";
 import AddExpenseIcon from "../../../assets/add_expense_icon.png";
 import { useRef } from "react";
+import ReactPaginate from "react-paginate";
 
-export default function TransactionsSection({ incomes, expenses }) {
+export default function TransactionsSection({
+  incomes,
+  expenses,
+  incomePageCount,
+  expensePageCount,
+  handleIncomePageClick,
+  handleExpensePageClick,
+}) {
   const manageIncomeDialog = useRef();
   const manageExpenseDialog = useRef();
 
+  console.log("Income Page Count:", incomePageCount);
+  console.log("Expense Page Count:", expensePageCount);
   function handleAddIncome() {
     manageIncomeDialog.current.open();
   }
@@ -51,6 +61,27 @@ export default function TransactionsSection({ incomes, expenses }) {
               </span>
             </div>
           </div>
+          {incomePageCount > 1 && (
+            <ReactPaginate
+              previousLabel={"❮"}
+              nextLabel={"❯"}
+              breakLabel={"..."}
+              pageCount={incomePageCount}
+              marginPagesDisplayed={1}
+              pageRangeDisplayed={3}
+              onPageChange={handleIncomePageClick}
+              containerClassName={"flex gap-2 justify-center mt-4"}
+              pageClassName={
+                "px-3 py-1 rounded cursor-pointer text-green-500 underline"
+              }
+              activeClassName={"bg-green-500 text-white"}
+              previousClassName={
+                " px-3 py-1 rounded cursor-pointer text-green-500"
+              }
+              nextClassName={" px-3 py-1 rounded cursor-pointer text-green-500"}
+              disabledClassName={"opacity-50 cursor-not-allowed"}
+            />
+          )}
         </div>
         <div className="w-[80%] h-0.5 md:h-[80%] my-auto md:w-0.5 bg-green-700"></div>
         <div className="md:h-full w-full md:w-[50%] gap-2">
@@ -83,6 +114,27 @@ export default function TransactionsSection({ incomes, expenses }) {
               </span>
             </div>
           </div>
+          {expensePageCount > 1 && (
+            <ReactPaginate
+              previousLabel={"❮"}
+              nextLabel={"❯"}
+              breakLabel={"..."}
+              pageCount={expensePageCount}
+              marginPagesDisplayed={1}
+              pageRangeDisplayed={3}
+              onPageChange={handleExpensePageClick}
+              containerClassName={"flex gap-2 justify-center mt-4"}
+              pageClassName={
+                "px-3 py-1 rounded cursor-pointer text-red-500 underline"
+              }
+              activeClassName={"bg-red-500 text-white"}
+              previousClassName={
+                " px-3 py-1 rounded cursor-pointer text-red-500"
+              }
+              nextClassName={" px-3 py-1 rounded cursor-pointer text-red-500"}
+              disabledClassName={"opacity-50 cursor-not-allowed"}
+            />
+          )}
         </div>
       </div>
     </>

@@ -97,6 +97,13 @@ public class TokenService : ITokenService
 
         if (!tokenIsValid)
         {
+            var currentToken = await GetUserToken(userId.ToString());
+
+            if (currentToken != null)
+            {
+                await _tokenRepository.DeleteAsync(currentToken);
+            }
+
             throw new InvalidRefreshTokenException("Refresh token is invalid");
         }
         
@@ -109,7 +116,7 @@ public class TokenService : ITokenService
 
         bool tokenIsValid = refreshToken!.ExpiryDate > DateTime.UtcNow 
             && refreshToken != null 
-            && token == refreshToken.Token;
+            && token.Equals(refreshToken!.Token);
 
         return tokenIsValid;
     }

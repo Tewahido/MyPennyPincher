@@ -17,12 +17,12 @@ const fadeInForm = {
 
 export default function Login() {
   return (
-    <div className=" w-screen h-[calc(100vh-57px)] bg-green-100 flex justify-center items-center overflow-x-hidden">
+    <div className=" h-[calc(100vh-57px)] pt-20 bg-green-100 flex justify-center items-center overflow-x-hidden">
       <motion.div
         variants={fadeInForm}
         initial="hidden"
         animate="visible"
-        className="flex flex-row capitalize justify-center w-full h-150"
+        className="flex flex-row capitalize justify-center w-full h-130"
       >
         <div
           className=" hidden lg:flex w-120 bg-cover  rounded-ss-4xl rounded-es-4xl "
