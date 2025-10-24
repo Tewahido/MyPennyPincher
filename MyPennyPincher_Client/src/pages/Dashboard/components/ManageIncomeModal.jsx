@@ -93,6 +93,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
 
   return createPortal(
     <dialog
+      id="manageIncomeModal"
       ref={dialog}
       className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop:bg-black/50 p-6 rounded-lg bg-gray-300 shadow-lg min-w-100"
     >
@@ -103,6 +104,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
         <label className="flex h-10 p-1 items-center justify-between">
           <p className="font-bold ">Source:</p>
           <input
+            id="sourceInput"
             type="text"
             name="source"
             className="h-full w-[60%] bg-gray-100 text-gray-900 rounded-lg mx-3 p-3 focus:outline-none"
@@ -112,6 +114,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
         <label className="flex h-10 p-1 items-center justify-between">
           <p className="font-bold">Amount:</p>
           <input
+            id="incomeAmountInput"
             type="number"
             name="amount"
             className="h-full w-[60%] bg-gray-100 text-gray-900  rounded-lg mx-3 p-3 focus:outline-none"
@@ -122,6 +125,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
         <label className="flex h-10 p-1 items-center justify-start">
           <p className="font-bold">Monthly :</p>
           <input
+            id="monthlyInput"
             type="checkbox"
             name="monthly"
             className="mx-5"
@@ -141,6 +145,7 @@ const ManageIncomeModal = forwardRef(function ManageIncomeModal(
             Cancel
           </button>
           <button
+            id="submitIncomeBtn"
             type="submit"
             className="h-10 p-2 bg-gray-800 text-gray-100 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-gray-950"
           >

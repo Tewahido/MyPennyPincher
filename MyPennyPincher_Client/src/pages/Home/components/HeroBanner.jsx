@@ -42,6 +42,7 @@ export default function HeroBanner({ servicesRef }) {
 
           <p
             onClick={handleClick}
+            id="servicesLink"
             className="underline underline-offset-2 decoration-0 m-5 text-center cursor-pointer transition-all duration-300 hover:scale-105 hover:text-white hover:underline-offset-4"
           >
             View our services

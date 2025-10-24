@@ -48,7 +48,10 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center m-10 ">
+    <div
+      id="loginForm"
+      className="flex flex-col justify-center items-center m-10 "
+    >
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <LoginInput
           type="text"

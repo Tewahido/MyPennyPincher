@@ -59,6 +59,7 @@ export default function Navbar() {
             )}
             <Link
               to="/login"
+              id={userLoggedIn ? "logoutLink" : "loginLink"}
               className="text-green-700 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-green-600 transition duration-300"
               onClick={handleLogout}
             >

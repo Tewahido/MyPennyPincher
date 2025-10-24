@@ -47,6 +47,7 @@ export default function TransactionsSection({
               ))}
             <div className="flex justify-center relative group h-15 my-5 w-21 z-1">
               <img
+                id="addIncomeBtn"
                 src={AddIncomeIcon}
                 alt="Plus Icon"
                 className="mx-1 h-full cursor-pointer transition duration-300 hover:scale-110 z-10"
@@ -100,6 +101,7 @@ export default function TransactionsSection({
               ))}
             <div className="flex justify-center relative group h-15 my-5 w-22">
               <img
+                id="addExpenseBtn"
                 src={AddExpenseIcon}
                 alt="Plus Icon"
                 className="mx-1 h-full cursor-pointer transition duration-300 hover:scale-110"

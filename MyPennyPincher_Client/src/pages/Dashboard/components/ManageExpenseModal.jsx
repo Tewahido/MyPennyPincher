@@ -95,6 +95,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
 
   return createPortal(
     <dialog
+      id="manageExpenseModal"
       ref={dialog}
       className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop:bg-black/50 p-6 rounded-lg bg-gray-300 shadow-lg min-w-100"
     >
@@ -105,6 +106,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
         <label className="flex h-10 p-1 items-center justify-between">
           <p className="font-bold ">Description:</p>
           <input
+            id="descriptionInput"
             type="text"
             name="description"
             className="h-full w-[60%] bg-gray-100 text-gray-900 rounded-lg mx-3 p-3 focus:outline-none"
@@ -114,6 +116,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
         <label className="flex h-10 p-1 items-center justify-between">
           <p className="font-bold ">Amount:</p>
           <input
+            id="expenseAmountInput"
             type="number"
             name="amount"
             className="h-full w-[60%] bg-gray-100 text-gray-900  rounded-lg mx-3 p-3 focus:outline-none"
@@ -125,6 +128,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
           <p className="font-bold ">Category:</p>
 
           <select
+            id="expenseCategoryInput"
             name="expenseCategory"
             className=" h-full w-[60%] bg-gray-100 text-gray-900 rounded-lg mx-3 px-2 focus:outline-none"
             defaultValue={expense && expense.expenseCategoryId}
@@ -140,6 +144,7 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
         <label className="flex h-10 p-1 items-center justify-start">
           <p className="font-bold ">Recurring :</p>
           <input
+            id="recurringInput"
             type="checkbox"
             name="recurring"
             className="mx-8"
@@ -158,7 +163,10 @@ const ManageExpenseModal = forwardRef(function ManageExpenseModal(
           >
             Cancel
           </button>
-          <button className="h-10  bg-gray-800 text-gray-100 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-gray-950">
+          <button
+            id="submitExpenseBtn"
+            className="h-10  bg-gray-800 text-gray-100 font-bold rounded-lg italic cursor-pointer transition duration-100 hover:bg-gray-950"
+          >
             <p className="mx-2">{expense ? "Confirm" : "Add"}</p>
           </button>
         </div>

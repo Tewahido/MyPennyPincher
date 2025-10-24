@@ -57,6 +57,7 @@ export default function Navbar() {
           {userIsLoggedIn && (
             <Link
               to="/dashboard"
+              id="dashboardLink"
               className="text-gray-100 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
             >
               Dashboard
@@ -64,6 +65,7 @@ export default function Navbar() {
           )}
           <Link
             to="/login"
+            id={userIsLoggedIn ? "logoutLink" : "loginLink"}
             className="text-gray-100 font-bold sm:text-lg lg:text-xl mb-3 hover:underline hover:text-white transition duration-300"
             onClick={handleLogout}
           >
