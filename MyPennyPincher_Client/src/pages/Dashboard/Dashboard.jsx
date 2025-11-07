@@ -160,6 +160,8 @@ export default function Dashboard() {
                 expenses={expenseData}
                 incomePageCount={totalIncomePages}
                 expensePageCount={totalExpensePages}
+                currentIncomePage={currentIncomePage}
+                currentExpensePage={currentExpensePage}
                 handleIncomePageClick={handleIncomePageChange}
                 handleExpensePageClick={handleExpensePageChange}
               />

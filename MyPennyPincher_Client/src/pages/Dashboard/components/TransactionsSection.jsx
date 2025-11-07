@@ -5,20 +5,21 @@ import AddIncomeIcon from "../../../assets/add_income_icon.png";
 import AddExpenseIcon from "../../../assets/add_expense_icon.png";
 import { useRef } from "react";
 import ReactPaginate from "react-paginate";
+import { current } from "@reduxjs/toolkit";
 
 export default function TransactionsSection({
   incomes,
   expenses,
   incomePageCount,
   expensePageCount,
+  currentIncomePage,
+  currentExpensePage,
   handleIncomePageClick,
   handleExpensePageClick,
 }) {
   const manageIncomeDialog = useRef();
   const manageExpenseDialog = useRef();
 
-  console.log("Income Page Count:", incomePageCount);
-  console.log("Expense Page Count:", expensePageCount);
   function handleAddIncome() {
     manageIncomeDialog.current.open();
   }
@@ -64,6 +65,7 @@ export default function TransactionsSection({
           </div>
           {incomePageCount > 1 && (
             <ReactPaginate
+              forcePage={currentIncomePage}
               previousLabel={"❮"}
               nextLabel={"❯"}
               breakLabel={"..."}
@@ -118,6 +120,7 @@ export default function TransactionsSection({
           </div>
           {expensePageCount > 1 && (
             <ReactPaginate
+              forcePage={currentExpensePage}
               previousLabel={"❮"}
               nextLabel={"❯"}
               breakLabel={"..."}

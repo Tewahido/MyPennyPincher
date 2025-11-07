@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setMonth } from "../store/slices/monthSlice.js";
 import { setFromMonth, setToMonth } from "../store/slices/monthRangeSlice.js";
+import { getCurrentMonthAsString } from "../utils/dateUtils.js";
 
 const TransactionPeriod = {
   MONTH: "month",
@@ -43,26 +44,36 @@ export default function useTransactionPeriod() {
         ).padStart(2, "0")}`;
 
   function firstMonthPickerHandleChange(event) {
+    let newMonth = event.target.value;
+
+    if (!newMonth || newMonth === null) {
+      newMonth = getCurrentMonthAsString();
+    }
+
     if (transactionPeriod === TransactionPeriod.MONTH) {
-      handleChangeMonth(event);
+      handleChangeMonth(newMonth);
     } else {
-      handleFromMonthChange(event);
+      handleFromMonthChange(newMonth);
     }
   }
 
-  function handleChangeMonth(event) {
-    dispatch(setMonth(event.target.value));
+  function handleChangeMonth(newMonth) {
+    dispatch(setMonth(newMonth));
   }
 
   function handleTransactionPeriodChange(event) {
     setTransactionPeriod(event.target.value);
   }
 
-  function handleFromMonthChange(event) {
-    dispatch(setFromMonth(event.target.value));
+  function handleFromMonthChange(newMonth) {
+    dispatch(setFromMonth(newMonth));
   }
 
   function handleToMonthChange(event) {
+    if (!event.target.value || event.target.value === null) {
+      dispatch(setToMonth(getCurrentMonthAsString()));
+      return;
+    }
     dispatch(setToMonth(event.target.value));
   }
 
